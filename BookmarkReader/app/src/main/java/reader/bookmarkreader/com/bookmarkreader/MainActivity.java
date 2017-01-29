@@ -21,7 +21,6 @@ public class MainActivity extends Activity {
         toolbar = (Toolbar)findViewById(R.id.toolBar);
         toolbar.setTitle("Bookmark Reader");
         this.toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
-//        toggle.syncState();
     }
 
     @Override
