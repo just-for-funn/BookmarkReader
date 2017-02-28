@@ -29,6 +29,7 @@ public class MainActivity extends FragmentActivity {
         FragmentManager manager =  getSupportFragmentManager();
         manager.beginTransaction()
                 .add(R.id.main_view_content , fragment)
+                .add(R.id.settings_container , new SettingsFragment())
                 .commit();
     }
 

@@ -22,15 +22,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"></FrameLayout>
     </RelativeLayout>
-
-    <LinearLayout
+    
+    
+    <FrameLayout android:id="@+id/settings_container"
         android:layout_gravity="start"
-        android:layout_width="240dp"
+        android:layout_width="250dp"
         android:layout_height="match_parent"
         android:background="#0000FF">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Hellow World" />
-    </LinearLayout>
+    </FrameLayout>
 </android.support.v4.widget.DrawerLayout>
