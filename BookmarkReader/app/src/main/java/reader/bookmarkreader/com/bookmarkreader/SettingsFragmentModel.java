@@ -17,4 +17,14 @@ public class SettingsFragmentModel {
     }
 
     ObservableField<String> name = new ObservableField<String>("initial");
+
+    public ObservableField<String> getUserName() {
+        return userName;
+    }
+
+    public void setUserName(ObservableField<String> userName) {
+        this.userName = userName;
+    }
+
+    ObservableField<String> userName = new ObservableField<String>("Davut Ozcan");
 }
