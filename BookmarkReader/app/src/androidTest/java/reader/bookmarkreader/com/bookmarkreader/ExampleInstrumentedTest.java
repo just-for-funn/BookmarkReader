@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("reader.bookmarkreader.com.bookmarkreader", appContext.getPackageName());
+        assertEquals("reader.com.codezilla.bookmarkreader.com.com.codezilla.bookmarkreader", appContext.getPackageName());
     }
 }

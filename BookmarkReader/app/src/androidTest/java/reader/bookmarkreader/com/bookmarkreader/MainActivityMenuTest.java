@@ -1,11 +1,12 @@
 package reader.bookmarkreader.com.bookmarkreader;
 
-import android.app.Instrumentation;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
 import android.widget.RelativeLayout;
+
+import com.codezilla.bookmarkreader.MainActivity;
+import com.codezilla.bookmarkreader.R;
 
 import org.junit.Before;
 import org.junit.Rule;

@@ -1,4 +1,4 @@
-package reader.bookmarkreader.com.bookmarkreader.settings;
+package com.codezilla.bookmarkreader.settings;
 
 /**
  * Created by davut on 20.02.2017.

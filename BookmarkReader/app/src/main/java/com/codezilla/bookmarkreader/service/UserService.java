@@ -1,6 +1,6 @@
-package reader.bookmarkreader.com.bookmarkreader.service;
+package com.codezilla.bookmarkreader.service;
 
-import reader.bookmarkreader.com.bookmarkreader.settings.Settings;
+import com.codezilla.bookmarkreader.settings.Settings;
 
 /**
  * Created by davut on 20.02.2017.

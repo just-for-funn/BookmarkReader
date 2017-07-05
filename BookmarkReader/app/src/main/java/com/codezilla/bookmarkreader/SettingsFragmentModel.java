@@ -1,4 +1,4 @@
-package reader.bookmarkreader.com.bookmarkreader;
+package com.codezilla.bookmarkreader;
 
 import android.databinding.ObservableField;
 

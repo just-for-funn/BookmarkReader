@@ -1,4 +1,4 @@
-package reader.bookmarkreader.com.bookmarkreader;
+package com.codezilla.bookmarkreader;
 
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -7,7 +7,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import reader.bookmarkreader.com.bookmarkreader.weblist.WebListView;
+import com.codezilla.bookmarkreader.R;
+
+import com.codezilla.bookmarkreader.weblist.WebListView;
 
 
 public class MainActivity extends FragmentActivity {

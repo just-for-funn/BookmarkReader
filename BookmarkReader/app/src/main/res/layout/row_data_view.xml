@@ -3,7 +3,7 @@
     <data>
         <variable
             name="rowData"
-            type="reader.bookmarkreader.com.bookmarkreader.weblist.WebListRowModel"></variable>
+            type="com.codezilla.bookmarkreader.weblist.WebListRowModel"></variable>
     </data>
     <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

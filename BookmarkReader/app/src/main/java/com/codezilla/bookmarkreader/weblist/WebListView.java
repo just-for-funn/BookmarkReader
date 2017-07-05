@@ -1,4 +1,4 @@
-package reader.bookmarkreader.com.bookmarkreader.weblist;
+package com.codezilla.bookmarkreader.weblist;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -9,13 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import com.codezilla.bookmarkreader.R;
+import com.codezilla.bookmarkreader.databinding.RowDataViewBinding;
 
 import java.util.Arrays;
 import java.util.List;
 
-import reader.bookmarkreader.com.bookmarkreader.R;
-import reader.bookmarkreader.com.bookmarkreader.databinding.RowDataViewBinding;
+import static com.codezilla.bookmarkreader.R.*;
 
 /**
  * Created by davut on 15.02.2017.
@@ -28,8 +29,8 @@ public class WebListView extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View w =  inflater.inflate(R.layout.website_list_fragment , container , false);
-        this.recyclerView = (RecyclerView) w.findViewById(R.id.web_site_list_fragment);
+        View w =  inflater.inflate(layout.website_list_fragment , container , false);
+        this.recyclerView = (RecyclerView) w.findViewById(id.web_site_list_fragment);
         recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
         recyclerView.setAdapter( new WebListViewFragmentAdapter( getRows()));
         return w;
@@ -53,7 +54,7 @@ public class WebListView extends Fragment
         @Override
         public WebListViewRowDataHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater li = LayoutInflater.from(parent.getContext());
-            RowDataViewBinding rdwb= DataBindingUtil.inflate(li , R.layout.row_data_view , parent , false);
+            RowDataViewBinding rdwb= DataBindingUtil.inflate(li , layout.row_data_view , parent , false);
             return new WebListViewRowDataHolder(rdwb);
         }
 

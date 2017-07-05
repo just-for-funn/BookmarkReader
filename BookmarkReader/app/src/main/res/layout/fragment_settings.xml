@@ -3,7 +3,7 @@
     <data>
         <variable
             name="model"
-            type="reader.bookmarkreader.com.bookmarkreader.SettingsFragmentModel" >
+            type="com.codezilla.bookmarkreader.SettingsFragmentModel" >
         </variable>
     </data>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

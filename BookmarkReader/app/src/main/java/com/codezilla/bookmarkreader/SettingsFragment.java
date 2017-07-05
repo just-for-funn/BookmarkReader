@@ -1,16 +1,14 @@
-package reader.bookmarkreader.com.bookmarkreader;
+package com.codezilla.bookmarkreader;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import reader.bookmarkreader.com.bookmarkreader.databinding.FragmentSettingsBinding;
+import com.codezilla.bookmarkreader.databinding.*;
+import com.codezilla.bookmarkreader.databinding.FragmentSettingsBinding;
 
 /**
  * Created by davut on 28.02.2017.

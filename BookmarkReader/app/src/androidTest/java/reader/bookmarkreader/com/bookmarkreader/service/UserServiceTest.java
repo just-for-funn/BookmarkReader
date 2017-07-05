@@ -5,11 +5,11 @@ package reader.bookmarkreader.com.bookmarkreader.service;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import reader.bookmarkreader.com.bookmarkreader.settings.Settings;
+import com.codezilla.bookmarkreader.service.UserService;
+import com.codezilla.bookmarkreader.settings.Settings;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.*;
