@@ -1,13 +1,13 @@
 package reader.bookmarkreader.com.bookmarkreader;
 
-import android.app.Activity;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+
+import reader.bookmarkreader.com.bookmarkreader.weblist.WebListView;
 
 
 public class MainActivity extends FragmentActivity {
@@ -25,7 +25,7 @@ public class MainActivity extends FragmentActivity {
         this.toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
 
 
-        WebSiteListFragment fragment = new WebSiteListFragment();
+        WebListView fragment = new WebListView();
         FragmentManager manager =  getSupportFragmentManager();
         manager.beginTransaction()
                 .add(R.id.main_view_content , fragment)
