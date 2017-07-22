@@ -4,4 +4,5 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="settings_horizontal_margin">10dp</dimen>
     <dimen name="settings_vertical_margin">5dp</dimen>
+    <dimen name="login_text_input_height">35dp</dimen>
 </resources>

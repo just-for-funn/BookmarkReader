@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary">
+        <EditText
+            android:id="@+id/login_username"
+            android:layout_width="200dp"
+            android:layout_height="@dimen/login_text_input_height"
+            android:background="@color/edittext_background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:hint="Enter User Name"
+            />
+    </android.support.constraint.ConstraintLayout>
+</layout>

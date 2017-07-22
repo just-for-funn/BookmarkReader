@@ -48,7 +48,7 @@ public class MainActivityMenuTest {
     public void shouldOpenMenuWhenClickToolBarButton() throws InterruptedException {
         ViewInteraction appCompatImageButton = onView(allOf(withContentDescription("BookmarkReader"), withParent(withId(R.id.toolBar)), isDisplayed()));
         appCompatImageButton.perform(click());
-        ViewInteraction textView = onView(withText("Hellow World"));
+        ViewInteraction textView = onView(withId(R.id.settings_container));
         textView.check(matches(isDisplayed()));
     }
 }
