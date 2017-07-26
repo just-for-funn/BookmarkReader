@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BookmarkReader</string>
+    <string name="login_screen_title">Please Login</string>
+</resources>
