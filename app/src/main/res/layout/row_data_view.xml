@@ -3,7 +3,12 @@
     <data>
         <variable
             name="rowData"
-            type="com.codezilla.bookmarkreader.weblist.WebListRowModel"></variable>
+            type="com.codezilla.bookmarkreader.weblist.WebListRowModel">
+        </variable>
+        <variable
+            name="handler"
+            type="com.codezilla.bookmarkreader.weblist.WebListRowItemEventHandler">
+        </variable>
     </data>
     <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -12,6 +17,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/container"
         android:background="#FFFFFF"
+        android:onClick="@{()->handler.onItemSelected(rowData)}"
         >
         <android.support.constraint.Guideline
             android:layout_width="match_parent"
@@ -29,11 +35,10 @@
             android:id="@+id/thumbnail"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/circular_user"
+            android:scaleType="centerCrop"
             app:layout_constraintTop_toTopOf="@id/guidelineHorizontal"
             app:layout_constraintLeft_toRightOf="@id/guideline"
-
+            app:imageUrl="@{rowData.iconUrl}"
             />
         <TextView
             android:id="@+id/title"

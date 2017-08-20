@@ -1,4 +1,4 @@
-package reader.bookmarkreader.com.bookmarkreader;
+package com.codezilla.bookmarkreader;
 
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
@@ -28,27 +28,20 @@ import static org.hamcrest.Matchers.allOf;
  * Created by davut on 29.01.2017.
  */
 @RunWith(AndroidJUnit4.class)
-public class MainActivityMenuTest {
-    @Rule
-    public ActivityTestRule<MainActivity> activityTestRule = new ActivityTestRule<MainActivity>(MainActivity.class);
-
-    @Before
-    public void setUp()
-    {
-
-    }
+public class MainActivityMenuTest extends MainActivityTestBase {
 
     @Test
     public void shouldOpenActivity() throws InterruptedException {
+        launch();
         RelativeLayout layout = (RelativeLayout) activityTestRule.getActivity().findViewById(R.id.drawerContentLayout);
         assertTrue(layout.isShown());
     }
 
     @Test
     public void shouldOpenMenuWhenClickToolBarButton() throws InterruptedException {
-        ViewInteraction appCompatImageButton = onView(allOf(withContentDescription("BookmarkReader"), withParent(withId(R.id.toolBar)), isDisplayed()));
-        appCompatImageButton.perform(click());
-        ViewInteraction textView = onView(withId(R.id.settings_container));
-        textView.check(matches(isDisplayed()));
+        launch();
+        mainActivityPage
+                .clickToggeButton()
+                .assertDisplaying();
     }
 }

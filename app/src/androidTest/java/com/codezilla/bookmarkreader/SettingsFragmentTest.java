@@ -38,8 +38,8 @@ import static org.junit.Assert.*;
  * Created by davut on 7/24/2017.
  */
 @RunWith(AndroidJUnit4.class)
-public class SettingsFragmentTest {
-    ActivityTestRule<MainActivity> mainActivityActivityTestRule = new ActivityTestRule<MainActivity>(MainActivity.class , true , false);
+public class SettingsFragmentTest extends MainActivityTestBase {
+
     @Mock
     IUserService userService;
     User user = new User("testName","testSurname");
@@ -51,19 +51,11 @@ public class SettingsFragmentTest {
         BookmarkReaderApplication.getInstance().setUserService(userService);
     }
 
-    @After
-    public void destroyTests()
-    {
-    }
-
     @Test
     public void shouldDisplayUserName() throws InterruptedException {
         launch();
-        onView(withContentDescription(R.string.app_name)).perform(click());
-        onView(withText("testName testSurname")).check(ViewAssertions.matches(isDisplayed()));
-    }
-
-    private void launch() {
-        mainActivityActivityTestRule.launchActivity(new Intent());
+        mainActivityPage
+                .clickToggeButton()
+                .assertNameSurnameDisplaying("testName" , "testSurname");
     }
 }

@@ -11,4 +11,8 @@
         <!--<item name="android:textStyle">italic</item>-->
         <item name="android:typeface">serif</item>
     </style>
+    <style name="LinearProgress" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/indigo</item>
+        <item name="android:progressBackgroundTint">@color/pink</item>
+    </style>
 </resources>

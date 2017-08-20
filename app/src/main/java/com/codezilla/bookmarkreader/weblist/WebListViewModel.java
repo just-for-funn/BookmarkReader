@@ -1,10 +1,73 @@
 package com.codezilla.bookmarkreader.weblist;
 
+import android.databinding.ObservableBoolean;
+import android.util.Log;
+
+import com.codezilla.bookmarkreader.async.CustomAsyncTaskExecutor;
+import com.codezilla.bookmarkreader.exception.DomainException;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+
+import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.myApp;
+
 /**
  * Created by davut on 7/5/2017.
  */
 
-public class WebListViewModel
+public class WebListViewModel implements CustomAsyncTaskExecutor.TaskExecuteOwner<List<WebSiteInfo>> , WebListRowItemEventHandler
 {
+    WeakReference<IWebListView> weblistView;
 
+    public WebListViewModel(IWebListView weblistView) {
+        this.weblistView = new WeakReference<IWebListView>(weblistView);
+    }
+
+    public final ObservableBoolean isBusy = new ObservableBoolean(false);
+    List<WebSiteInfo> webSiteInfos = new ArrayList<>();
+    public void loadRows()
+    {
+        this.isBusy.set(true);
+        new CustomAsyncTaskExecutor<List<WebSiteInfo>>(this, new Callable<List<WebSiteInfo>>() {
+            @Override
+            public List<WebSiteInfo> call() throws Exception {
+                return myApp().getWebListService().getWebSitesInfos();
+            }
+        }).execute();
+    }
+
+    @Override
+    public void onFinish(List<WebSiteInfo> webListViews) {
+        isBusy.set(false);
+        if(webListViews == null)
+            this.webSiteInfos = new ArrayList<>();
+        else
+            this.webSiteInfos = webListViews;
+        if(this.weblistView.get()!= null)
+            this.weblistView.get().onListChanged(this.webSiteInfos);
+    }
+
+    @Override
+    public void onError(DomainException domainException) {
+        isBusy.set(false);
+    }
+
+    @Override
+    public void onItemSelected(WebListRowModel webListRowModel) {
+        Log.i("Bookmarkreader" , "item selected "+webListRowModel.getTitle());
+        if(weblistView.get()!= null)
+            weblistView.get().notifyItemClick(webListRowModel);
+    }
+
+    public boolean isLoaded() {
+        return webSiteInfos.size() > 0;
+    }
+
+    static interface IWebListView
+    {
+        void onListChanged(List<WebSiteInfo> webSiteInfos);
+        void notifyItemClick(WebListRowModel webListRowModel);
+    }
 }
