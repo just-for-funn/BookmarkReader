@@ -1,9 +1,12 @@
 package com.codezilla.bookmarkreader.weblist;
 
+import android.content.res.ColorStateList;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,12 +35,8 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
     RecyclerView recyclerView;
     WebsiteListFragmentBinding binding;
     private WebListViewModel model;
+    private WeblistViewHandler handler;
 
-    private RowItemSelectedCallBack callBack;
-
-    public void setCallBack(RowItemSelectedCallBack callBack) {
-        this.callBack = callBack;
-    }
 
     @Nullable
     @Override
@@ -49,8 +48,10 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
             this.recyclerView = (RecyclerView) binding.getRoot().findViewById(id.web_site_list_fragment);
             recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
             this.model = new WebListViewModel(this);
-            recyclerView.setAdapter( new WebListViewFragmentAdapter( Collections.<WebListRowModel>emptyList() , model));
+            this.handler = new WeblistViewHandler(getFragmentManager() , model, binding.getRoot());
+            recyclerView.setAdapter( new WebListViewFragmentAdapter( Collections.<WebListRowModel>emptyList() , handler));
             this.binding.setModel(model);
+            this.binding.setHandler(handler);
         }
         return binding.getRoot();
     }
@@ -69,22 +70,16 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
         {
             rowElements.add(new WebListRowModel(w.getUrl() , w.getSummary()));
         }
-        recyclerView.setAdapter( new WebListViewFragmentAdapter( rowElements , this.model));
+        recyclerView.setAdapter( new WebListViewFragmentAdapter(rowElements , this.handler));
     }
-
-    @Override
-    public void notifyItemClick(WebListRowModel webListRowModel) {
-        this.callBack.onRowItemSelected(webListRowModel);
-    }
-
 
     static class WebListViewFragmentAdapter extends RecyclerView.Adapter<WebListViewRowDataHolder>
     {
 
         private final List<WebListRowModel> rows;
-        private final WebListRowItemEventHandler handler;
+        private WeblistViewHandler handler;
 
-        public WebListViewFragmentAdapter(List<WebListRowModel> rows , WebListRowItemEventHandler handler)
+        public WebListViewFragmentAdapter(List<WebListRowModel> rows , WeblistViewHandler handler)
         {
             this.rows = rows;
             this.handler = handler;
@@ -99,7 +94,7 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
 
         @Override
         public void onBindViewHolder(WebListViewRowDataHolder holder, int position) {
-            holder.setWebListRowModel(rows.get(position) , handler);
+            holder.setWebListRowModel(rows.get(position),handler );
         }
 
         @Override
@@ -117,7 +112,7 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
             this.binding = binding;
         }
 
-        public void setWebListRowModel(WebListRowModel wlrm , WebListRowItemEventHandler handler)
+        public void setWebListRowModel(WebListRowModel wlrm , WeblistViewHandler handler)
         {
             Log.i("Bookmark","creating view");
             binding.setRowData(wlrm);

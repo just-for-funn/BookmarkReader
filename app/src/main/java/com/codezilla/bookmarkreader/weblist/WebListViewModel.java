@@ -17,7 +17,7 @@ import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication
  * Created by davut on 7/5/2017.
  */
 
-public class WebListViewModel implements CustomAsyncTaskExecutor.TaskExecuteOwner<List<WebSiteInfo>> , WebListRowItemEventHandler
+public class WebListViewModel implements CustomAsyncTaskExecutor.TaskExecuteOwner<List<WebSiteInfo>>
 {
     WeakReference<IWebListView> weblistView;
 
@@ -54,12 +54,7 @@ public class WebListViewModel implements CustomAsyncTaskExecutor.TaskExecuteOwne
         isBusy.set(false);
     }
 
-    @Override
-    public void onItemSelected(WebListRowModel webListRowModel) {
-        Log.i("Bookmarkreader" , "item selected "+webListRowModel.getTitle());
-        if(weblistView.get()!= null)
-            weblistView.get().notifyItemClick(webListRowModel);
-    }
+
 
     public boolean isLoaded() {
         return webSiteInfos.size() > 0;
@@ -68,6 +63,5 @@ public class WebListViewModel implements CustomAsyncTaskExecutor.TaskExecuteOwne
     static interface IWebListView
     {
         void onListChanged(List<WebSiteInfo> webSiteInfos);
-        void notifyItemClick(WebListRowModel webListRowModel);
     }
 }

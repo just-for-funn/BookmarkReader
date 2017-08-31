@@ -10,7 +10,7 @@ public class UnexpectedException extends DomainException {
     private final Exception wrappedException;
 
     public UnexpectedException(Exception e) {
-        super();
+        super(null);
         this.wrappedException = e;
     }
 }

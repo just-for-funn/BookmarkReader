@@ -5,4 +5,13 @@ package com.codezilla.bookmarkreader.exception;
  */
 
 public class DomainException extends RuntimeException {
+    String msg;
+    public DomainException(String message) {
+        super(message);
+        this.msg = message;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
 }

@@ -68,5 +68,8 @@ public class CustomAsyncTaskExecutorTest
     static class MyUniqueDomainException extends DomainException
     {
 
+        public MyUniqueDomainException() {
+            super(null);
+        }
     }
 }

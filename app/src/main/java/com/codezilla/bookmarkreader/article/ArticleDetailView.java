@@ -35,7 +35,6 @@ public class ArticleDetailView extends Fragment {
         binding = DataBindingUtil.inflate(inflater , R.layout.fragment_article_detail , container , false);
         webView = (WebView) binding.getRoot().findViewById(R.id.article_webview);
         binding.setModel(model);
-        model.setWebView(webView);
         webView.getSettings().setJavaScriptEnabled(true);
     }
 

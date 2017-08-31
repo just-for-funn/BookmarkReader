@@ -22,17 +22,12 @@ public class ArticleDetailViewModel
     public final ObservableField<String> url = new ObservableField<>("");
     public final ObservableBoolean isBusy = new ObservableBoolean(true);
     public final ObservableInt progress = new ObservableInt(0);
+    public final ObservableField<String> content = new ObservableField<>();
     private final IArticleService articleService;
-    private WebView webView;
     private CustomAsyncTaskExecutor.TaskExecuteOwner<String> articleServiceCallback;
 
     public ArticleDetailViewModel(IArticleService articleService) {
         this.articleService = articleService;
-    }
-
-    public void setWebView(WebView webView) {
-        this.webView = webView;
-        this.webView.setWebChromeClient(new ProgressNotifierChromeClient());
     }
 
     public void load(String url) {
@@ -54,7 +49,8 @@ public class ArticleDetailViewModel
         return new CustomAsyncTaskExecutor.TaskExecuteOwner<String>() {
             @Override
             public void onFinish(String s) {
-                webView.loadData( s, "text/html" , "utf-8");
+                 content.set(s);
+                 isBusy.set(false);
             }
 
             @Override
@@ -65,9 +61,8 @@ public class ArticleDetailViewModel
         };
     }
 
-    private void showErrorMessage(DomainException domainException)
-    {
-        Toast.makeText(webView.getContext(), "Failed to load article" , Toast.LENGTH_SHORT );
+    private void showErrorMessage(DomainException domainException) {
+        throw new RuntimeException("NOtImplementedYet");
     }
 
     @NonNull
@@ -78,18 +73,5 @@ public class ArticleDetailViewModel
                 return articleService.getArticleDetail(url.get());
             }
         };
-    }
-
-
-    class ProgressNotifierChromeClient extends WebChromeClient
-    {
-        @Override
-        public void onProgressChanged(WebView view, int newProgress) {
-            super.onProgressChanged(view, newProgress);
-            progress.set(newProgress);
-            if(progress.get() == 100)
-                isBusy.set(false);
-        }
-
     }
 }

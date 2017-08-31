@@ -10,6 +10,8 @@ import com.codezilla.bookmarkreader.MainActivity;
 import com.codezilla.bookmarkreader.R;
 import java.util.concurrent.Callable;
 
+import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.myApp;
+
 public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +54,23 @@ public class SplashActivity extends Activity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                Thread.sleep(1000);
+                if(!myApp().getState().isAppInitlized())
+                {
+                    initWebSites();
+                    myApp().getState().saveAppInitilized(true);
+                }
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             return null;
+        }
+
+        private void initWebSites() {
+            myApp().getWebListService().add("https://cleancoders.com");
+            myApp().getWebListService().add("http://devnot.com");
+            myApp().getWebListService().add("http://www.javaworld.com");
+            myApp().getWebListService().add("https://www.androidexperiments.com");
         }
 
         @Override

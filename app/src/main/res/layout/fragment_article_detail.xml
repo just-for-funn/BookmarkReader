@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="model"
@@ -8,7 +9,8 @@
         <import type="android.view.View"/>
     </data>
     <LinearLayout
-        android:orientation="vertical" android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/article_detail_view_container">
         <ProgressBar
@@ -17,13 +19,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-7dp"
+            android:layout_marginBottom="-7dp"
             android:visibility="@{model.isBusy ? View.VISIBLE:View.GONE}"
             android:progress="@{model.progress}"
+            android:indeterminate="true"
            />
         <WebView
             android:id="@+id/article_webview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:webContent="@{model.content}"
+            >
         </WebView>
     </LinearLayout>
 </layout>

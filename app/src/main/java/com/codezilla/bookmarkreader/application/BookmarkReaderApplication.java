@@ -5,6 +5,7 @@ import android.app.Application;
 import com.codezilla.bookmarkreader.article.IArticleService;
 import com.codezilla.bookmarkreader.cache.ICacheService;
 import com.codezilla.bookmarkreader.cache.SimpleLruCache;
+import com.codezilla.bookmarkreader.domainmodel.RealmFacade;
 import com.codezilla.bookmarkreader.login.IUserService;
 import com.codezilla.bookmarkreader.weblist.IWebListService;
 
@@ -19,15 +20,24 @@ public class BookmarkReaderApplication extends Application
     IWebListService webListService;
     ICacheService cacheService;
     IArticleService articleService;
-
+    private RealmFacade realmFacade;
+    private IApplicationState applicationState;
     @Override
     public void onCreate() {
         super.onCreate();
         self = this;
+        this.realmFacade = new RealmFacade(getApplicationContext());
         userService = new MockUserService();
-        webListService = new MockWebListService();
+        webListService = new UserServiceAdapter(realmFacade);
         cacheService = new SimpleLruCache();
         articleService = new MockArticleService();
+        applicationState = new ApplicationStateSharedPrefencesImp(getApplicationContext());
+    }
+
+    @Override
+    public void onTerminate() {
+        realmFacade.close();
+        super.onTerminate();
     }
 
     public static BookmarkReaderApplication getInstance()
@@ -82,4 +92,11 @@ public class BookmarkReaderApplication extends Application
     {
         return getInstance();
     }
+
+    public IApplicationState getState()
+    {
+        return this.applicationState;
+    }
+
+
 }

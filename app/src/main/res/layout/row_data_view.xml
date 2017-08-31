@@ -7,7 +7,7 @@
         </variable>
         <variable
             name="handler"
-            type="com.codezilla.bookmarkreader.weblist.WebListRowItemEventHandler">
+            type="com.codezilla.bookmarkreader.weblist.WeblistViewHandler">
         </variable>
     </data>
     <android.support.constraint.ConstraintLayout
@@ -56,7 +56,7 @@
             android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{rowData.description}"
+            android:text="@{rowData.description == null ?  @string/not_evaluated:rowData.description}"
             app:layout_constraintLeft_toLeftOf="@id/title"
             app:layout_constraintTop_toBottomOf="@id/title"
             app:layout_constraintRight_toRightOf="@id/title"

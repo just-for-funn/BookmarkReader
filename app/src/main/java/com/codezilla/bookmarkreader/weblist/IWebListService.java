@@ -9,4 +9,5 @@ import java.util.List;
 public interface IWebListService
 {
     List<WebSiteInfo> getWebSitesInfos();
+    void add(String url);
 }
