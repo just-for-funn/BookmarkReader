@@ -6,7 +6,7 @@ package com.codezilla.bookmarkreader.application;
 
 class MockArticleService implements com.codezilla.bookmarkreader.article.IArticleService {
     @Override
-    public String getArticleDetail(String url) {
+    public String getArticle(String url) {
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {

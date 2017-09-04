@@ -1,0 +1,36 @@
+package com.codezilla.bookmarkreader.application;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+/**
+ * Created by davut on 9/3/2017.
+ */
+
+class OkHttpClientImp implements IHttpClient {
+
+    public static final String MOBILE_USER_AGENT = "Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3";
+
+    @Override
+    public String getHtmlContent(String url)
+    {
+        OkHttpClient client = new OkHttpClient.Builder().build();
+        Call call =  client.newCall(new Request.Builder().header("User-Agent", MOBILE_USER_AGENT).url(url).build());
+        try {
+            Response response =  call.execute();
+            if(!response.isSuccessful())
+                throw new RuntimeException("Web request failed");
+            return response.body().string();
+        } catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+}

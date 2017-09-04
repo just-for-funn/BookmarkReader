@@ -1,5 +1,6 @@
 package com.codezilla.bookmarkreader.application;
 
+import com.codezilla.bookmarkreader.domainmodel.IRealmFacade;
 import com.codezilla.bookmarkreader.domainmodel.RealmFacade;
 import com.codezilla.bookmarkreader.domainmodel.WebUnit;
 import com.codezilla.bookmarkreader.exception.RecordExistsException;
@@ -13,10 +14,10 @@ import java.util.List;
  * Created by davut on 8/27/2017.
  */
 
-public class UserServiceAdapter implements IWebListService {
-    RealmFacade realmFacade;
+public class WeblistServiceAdapter implements IWebListService {
+    IRealmFacade realmFacade;
 
-    public UserServiceAdapter(RealmFacade realmFacade) {
+    public WeblistServiceAdapter(IRealmFacade realmFacade) {
         this.realmFacade = realmFacade;
     }
 

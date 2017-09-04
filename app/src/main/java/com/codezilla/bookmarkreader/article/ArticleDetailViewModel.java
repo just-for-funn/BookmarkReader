@@ -4,9 +4,6 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
-import android.widget.Toast;
 
 import com.codezilla.bookmarkreader.async.CustomAsyncTaskExecutor;
 import com.codezilla.bookmarkreader.exception.DomainException;
@@ -24,10 +21,12 @@ public class ArticleDetailViewModel
     public final ObservableInt progress = new ObservableInt(0);
     public final ObservableField<String> content = new ObservableField<>();
     private final IArticleService articleService;
+    private final IErrorDisplay errorDisplay;
     private CustomAsyncTaskExecutor.TaskExecuteOwner<String> articleServiceCallback;
 
-    public ArticleDetailViewModel(IArticleService articleService) {
+    public ArticleDetailViewModel(IErrorDisplay errorDisplay , IArticleService articleService) {
         this.articleService = articleService;
+        this.errorDisplay = errorDisplay;
     }
 
     public void load(String url) {
@@ -56,13 +55,9 @@ public class ArticleDetailViewModel
             @Override
             public void onError(DomainException domainException)
             {
-                showErrorMessage(domainException);
+                errorDisplay.show(domainException.getMsg());
             }
         };
-    }
-
-    private void showErrorMessage(DomainException domainException) {
-        throw new RuntimeException("NOtImplementedYet");
     }
 
     @NonNull
@@ -70,7 +65,7 @@ public class ArticleDetailViewModel
         return new Callable<String>() {
             @Override
             public String call() throws Exception {
-                return articleService.getArticleDetail(url.get());
+                return articleService.getArticle(url.get());
             }
         };
     }

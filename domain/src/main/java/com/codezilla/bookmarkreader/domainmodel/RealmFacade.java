@@ -13,7 +13,7 @@ import io.realm.RealmConfiguration;
  * Created by davut on 8/21/2017.
  */
 
-public class RealmFacade {
+public class RealmFacade implements IRealmFacade {
     private final RealmConfiguration config;
 
     public RealmFacade(Context context) {
@@ -23,6 +23,7 @@ public class RealmFacade {
                 .build();
     }
 
+    @Override
     public void clearWebSites()
     {
         Realm realm = realm();
@@ -36,10 +37,12 @@ public class RealmFacade {
     }
 
 
+    @Override
     public List<WebUnit> webUnits() {
         return realm().where(WebUnit.class).findAll();
     }
 
+    @Override
     public void addSite(String anyUrl) {
         Realm realm = realm();
         realm.beginTransaction();
@@ -48,27 +51,30 @@ public class RealmFacade {
         realm.commitTransaction();
     }
 
+    @Override
     public  void close() {
         realm().close();
     }
 
-    public void addSiteContent(String url ,String content) {
+    @Override
+    public void addSiteContent(String url, String content) {
         Realm realm = realm();
         WebUnit wu = getWebUnit(url);
         realm.beginTransaction();
         WebUnitContent webUnitContent =  realm.createObject(WebUnitContent.class);
-        webUnitContent.setUrl(url);
         webUnitContent.setContent(content);
         wu.setLatestContent(webUnitContent);
         realm.commitTransaction();
     }
 
+    @Override
     public String getWebUnitContent(String url) {
         WebUnit wu = getWebUnit(url);
         WebUnitContent wuc= wu.getLatestContent();
         return wuc.getContent();
     }
 
+    @Override
     public WebUnit getWebUnit(String url) {
         WebUnit wu = realm().where(WebUnit.class).equalTo(WebUnit.COL_URL, url).findFirst();
         if(wu == null)
@@ -76,6 +82,7 @@ public class RealmFacade {
         return wu;
     }
 
+    @Override
     public boolean exists(String url) {
         return realm().where(WebUnit.class).equalTo(WebUnit.COL_URL , url).findFirst() != null;
     }

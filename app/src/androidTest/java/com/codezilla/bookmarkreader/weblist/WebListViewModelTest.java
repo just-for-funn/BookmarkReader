@@ -1,10 +1,7 @@
 package com.codezilla.bookmarkreader.weblist;
 
-import android.content.Intent;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.codezilla.bookmarkreader.MainActivity;
 import com.codezilla.bookmarkreader.MainActivityTestBase;
 import com.codezilla.bookmarkreader.R;
 import com.codezilla.bookmarkreader.application.BookmarkReaderApplication;
@@ -23,19 +20,14 @@ import org.mockito.stubbing.Answer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static com.codezilla.bookmarkreader.test.TestExtensions.untilAsserted;
 import static junit.framework.Assert.fail;
 import static org.awaitility.Awaitility.await;
-import static org.awaitility.Awaitility.pollInSameThread;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 /**
@@ -45,7 +37,8 @@ import static org.mockito.Mockito.when;
 public class WebListViewModelTest  extends MainActivityTestBase{
     public static final String ANY_URL = "www.mocksite.com";
     public static final String ANY_SUMMARY = "Summary of mock site";
-    public static final String NEW_URL = "www.newurl.com";
+    public static final String ANY_NEW_URL = "http://www.newurl.com";
+    public static final String NEW_URL = ANY_NEW_URL;
 
     @Mock
     IWebListService webListService;
@@ -102,9 +95,20 @@ public class WebListViewModelTest  extends MainActivityTestBase{
         launch();
         AddNewSitepage addNewSitepage =  webListViewPage().clickAdd();
         addNewSitepage.enter(NEW_URL).submit();
-        verify(webListService).add("www.newurl.com");
+        verify(webListService).add(ANY_NEW_URL);
     }
 
+    @Test
+    public void shouldFullfillUrlOnadd()
+    {
+        staticWebSites = Arrays.asList(WebSiteInfo.of( ANY_URL , ANY_SUMMARY));
+        when(webListService.getWebSitesInfos()).thenReturn(staticWebSites);
+        launch();
+        AddNewSitepage addNewSitepage =  webListViewPage().clickAdd();
+        addNewSitepage.enter("www.test.com").submit();
+        verify(webListService).add("http://www.test.com");
+    }
+    
     @Test
     public void shouldNotAddOnCancelClick()
     {

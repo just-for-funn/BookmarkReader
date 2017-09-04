@@ -44,7 +44,7 @@ public class WeblistViewHandler {
                {
                    model.isBusy.set(true);
                    EditText editText = (EditText) w.findViewById(R.id.txtUrl);
-                   myApp().getWebListService().add(editText.getText().toString());
+                   myApp().getWebListService().add(fixUrl(editText.getText().toString()));
                    model.loadRows();
                }catch (DomainException e)
                {
@@ -62,12 +62,17 @@ public class WeblistViewHandler {
         dialog.show(fragmentManager , ADD_NEW_FRAGMENT_DIALOG);
     }
 
+    private String fixUrl(String url) {
+        if(!url.startsWith("http://") && !url.startsWith("https://"))
+            url = "http://"+url;
+        return url;
+    }
+
+
     public void onItemSelected(WebListRowModel wlrm)
     {
         Log.i("BookmarkReader","main activity item selected:"+wlrm.getTitle());
-        ArticleDetailViewModel articleDetailViewModel = new ArticleDetailViewModel(myApp().getArticleService());
         ArticleDetailView articleDetailView =  new ArticleDetailView();
-        articleDetailView.setModel(articleDetailViewModel);
         articleDetailView.load(wlrm.getTitle());
         fragmentManager.beginTransaction().replace(R.id.main_view_content ,
                 articleDetailView  , "TAG_ARTICLE_DETAIL")

@@ -1,26 +1,21 @@
 package com.codezilla.bookmarkreader.article;
 
-import android.support.test.espresso.web.assertion.WebViewAssertions;
-import android.support.test.rule.ActivityTestRule;
-
-import com.codezilla.bookmarkreader.MainActivity;
 import com.codezilla.bookmarkreader.MainActivityPage;
 import com.codezilla.bookmarkreader.MainActivityTestBase;
+import com.codezilla.bookmarkreader.exception.DomainException;
 import com.codezilla.bookmarkreader.weblist.IWebListService;
 import com.codezilla.bookmarkreader.weblist.WebSiteInfo;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.w3c.dom.Document;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import java.util.Arrays;
 
 import static android.support.test.espresso.web.sugar.Web.onWebView;
 import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.myApp;
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -33,6 +28,7 @@ public class ArticleDetailViewTest extends MainActivityTestBase
     public static final String ANY_URL = "www.test.url";
     public static final String ANY_SUMMARY = "Some summary";
     public static final String ANY_CONTENT = "Non text article";
+    public static final String ANY_ERROR = "error message";
     @Mock
     IWebListService webListService;
     @Mock
@@ -72,7 +68,7 @@ public class ArticleDetailViewTest extends MainActivityTestBase
     @Test
     public void shouldDisplayCorrectArticle()
     {
-        when(articleService.getArticleDetail(anyString())).thenReturn(ANY_CONTENT);
+        when(articleService.getArticle(anyString())).thenReturn(ANY_CONTENT);
         launch();
         getMainActivityPage()
                 .webListPage()
@@ -80,4 +76,23 @@ public class ArticleDetailViewTest extends MainActivityTestBase
                 .assertArticleDisplaying(ANY_CONTENT);
 
     }
+
+
+
+    @Test
+    public void shouldShowErrorMessageWhenArticleServiceThrowsDomainExcception()
+    {
+        when(articleService.getArticle(anyString())).then(new Answer<String>() {
+            @Override
+            public String answer(InvocationOnMock invocation) throws Throwable {
+                throw new DomainException(ANY_ERROR);
+            }
+        });
+        launch();
+        getMainActivityPage()
+                .webListPage()
+                .clickItem(webSiteInfo.getUrl())
+                .assertErrorDisplaying(ANY_ERROR);
+    }
+
 }

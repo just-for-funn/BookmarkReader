@@ -54,4 +54,7 @@ public class ArticleDetailPage {
         onWebView().check(WebViewAssertions.webContent(isDocumentContains(url)));
     }
 
+    public void assertErrorDisplaying(String msg) {
+        onView(withText(msg)).check(matches(isDisplayed()));
+    }
 }

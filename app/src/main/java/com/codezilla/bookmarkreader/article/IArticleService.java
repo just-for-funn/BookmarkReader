@@ -5,5 +5,5 @@ package com.codezilla.bookmarkreader.article;
  */
 
 public interface IArticleService {
-    String getArticleDetail(String url);
+    String getArticle(String url);
 }
