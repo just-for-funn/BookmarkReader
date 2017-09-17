@@ -5,5 +5,5 @@ package com.codezilla.bookmarkreader.domainmodel;
  */
 
 public interface IFaviconExtractor {
-    String faviconUrl(String html);
+    String faviconUrl(String url , String html);
 }

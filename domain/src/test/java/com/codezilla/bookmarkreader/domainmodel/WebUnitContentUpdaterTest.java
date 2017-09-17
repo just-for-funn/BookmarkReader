@@ -132,7 +132,7 @@ public class WebUnitContentUpdaterTest
     @Test
     public void shouldUpdateFaviconIfExists()
     {
-        when(faviconExtractor.faviconUrl(anyString())).thenReturn(FAVICON_URL);
+        when(faviconExtractor.faviconUrl(anyString(), anyString())).thenReturn(FAVICON_URL);
         webUnitContentUpdater.updateAll();
         verify(realmFacade).update(webUnitArgumentCaptor.capture());
         assertThat(webUnitArgumentCaptor.getValue().getFaviconUrl() , equalTo(FAVICON_URL));
@@ -143,7 +143,7 @@ public class WebUnitContentUpdaterTest
     {
         String existingFaviconUrl = "www.test.com/oldfavicon.ico";
         webUnit.setFaviconUrl(existingFaviconUrl);
-        when(faviconExtractor.faviconUrl(anyString())).thenReturn(null);
+        when(faviconExtractor.faviconUrl(anyString(), anyString())).thenReturn(null);
         webUnitContentUpdater.updateAll();
         verify(realmFacade).update(webUnitArgumentCaptor.capture());
         assertThat(webUnitArgumentCaptor.getValue().getFaviconUrl() , equalTo(existingFaviconUrl));

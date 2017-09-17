@@ -23,16 +23,24 @@ public class FaviconExtractorTest {
     @Test
     public void shouldReturnNullIfContetnIsNullOrEmpty()
     {
-        assertThat(faviconExtractor.faviconUrl(null) , nullValue());
-        assertThat(faviconExtractor.faviconUrl("") , nullValue());
+        assertThat(faviconExtractor.faviconUrl("",null) , nullValue());
+        assertThat(faviconExtractor.faviconUrl("","") , nullValue());
     }
 
 
     @Test
     public void shouldReturnGivenShortCutUrlFromHtml() throws IOException {
         String html = resource("twitter.html");
-        String faviconIco = faviconExtractor.faviconUrl(html);
+        String faviconIco = faviconExtractor.faviconUrl("",html);
         assertThat(faviconIco , equalTo("https://abs.twimg.com/favicons/favicon.ico"));
+    }
+
+
+    @Test
+    public void shouldGetUrlIfLinkRefNameIsIcon() throws IOException {
+        String html = resource("AndroidExperiments.html");
+        String faviconIco = faviconExtractor.faviconUrl("https://experiments.withgoogle.com", html);
+        assertThat(faviconIco , equalTo("https://experiments.withgoogle.com/assets/img/favicon.png"));
     }
 
     private String resource(String resource) throws IOException {

@@ -54,7 +54,7 @@ public class WebUnitContentUpdater
             wuc.setContent(htmlContent);
             w.setLatestContent(wuc);
             w.setChangeSummary(comparer.change());
-            String favicon = faviconExtractor.faviconUrl(htmlContent);
+            String favicon = faviconExtractor.faviconUrl(w.getUrl(), htmlContent);
             if(!isNullOrEmpty(favicon))
                 w.setFaviconUrl(favicon);
             realmFacade.update(w);
