@@ -1,6 +1,6 @@
 package com.codezilla.bookmarkreader.application;
 
-import com.codezilla.bookmarkreader.domainmodel.IRealmFacade;
+import com.codezilla.bookmarkreader.domainmodel.IWebUnitRepository;
 import com.codezilla.bookmarkreader.domainmodel.WebUnit;
 import com.codezilla.bookmarkreader.domainmodel.WebUnitContent;
 
@@ -14,7 +14,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.equalTo;
+
 /**
  * Created by davut on 9/2/2017.
  */
@@ -23,7 +23,7 @@ public class ArticleRepositoryAdapterTest {
     public static final String ANY_URL = "www.test.com";
     public static final String ANY_CONTENT = "some content";
     @Mock
-    IRealmFacade realmFacade;
+    IWebUnitRepository realmFacade;
     ArticleRepositoryAdapter repositoryAdapter;
     WebUnit webUnit = new WebUnit();
     @Before

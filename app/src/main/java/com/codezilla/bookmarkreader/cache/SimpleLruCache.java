@@ -37,6 +37,8 @@ public class SimpleLruCache implements ICacheService {
     @Nullable
     @Override
     public Bitmap get(String key) {
+        if(key == null)
+            return null;
         return mMemoryCache.get(key);
     }
 }

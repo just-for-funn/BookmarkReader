@@ -6,20 +6,18 @@ import java.util.List;
  * Created by davut on 9/2/2017.
  */
 
-public interface IRealmFacade {
-    void clearWebSites();
+public interface IWebUnitRepository {
+    void clearWebUnits();
 
     List<WebUnit> webUnits();
 
-    void addSite(String anyUrl);
-
+    void add(WebUnit wu);
     void close();
 
-    void addSiteContent(String url, String content);
-
-    String getWebUnitContent(String url);
 
     WebUnit getWebUnit(String url);
 
     boolean exists(String url);
+
+    void update(WebUnit wu);
 }

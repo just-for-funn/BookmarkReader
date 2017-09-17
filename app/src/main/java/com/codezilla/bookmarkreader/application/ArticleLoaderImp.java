@@ -4,22 +4,22 @@ import android.content.Context;
 
 import com.codezilla.bookmarkreader.R;
 import com.codezilla.bookmarkreader.article.IArticleLoader;
-import com.codezilla.bookmarkreader.domainmodel.IRealmFacade;
-import com.codezilla.bookmarkreader.domainmodel.RealmFacade;
+import com.codezilla.bookmarkreader.domainmodel.IHttpClient;
+import com.codezilla.bookmarkreader.domainmodel.IWebUnitRepository;
+import com.codezilla.bookmarkreader.domainmodel.WebUnit;
+import com.codezilla.bookmarkreader.domainmodel.WebUnitContent;
 import com.codezilla.bookmarkreader.exception.DomainException;
-
-import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.myApp;
 
 /**
  * Created by davut on 9/2/2017.
  */
 
 class ArticleLoaderImp implements IArticleLoader {
-    private final IRealmFacade realmFacade;
+    private final IWebUnitRepository realmFacade;
     private final IHttpClient httpClient;
     private final Context resourceProvider;
 
-    public ArticleLoaderImp(IRealmFacade realmFacade , IHttpClient httpClient , Context resourceProvider) {
+    public ArticleLoaderImp(IWebUnitRepository realmFacade , IHttpClient httpClient , Context resourceProvider) {
         this.realmFacade = realmFacade;
         this.httpClient = httpClient;
         this.resourceProvider = resourceProvider;
@@ -31,7 +31,11 @@ class ArticleLoaderImp implements IArticleLoader {
         String htmlContent = loadHtml(url);
         if(htmlContent == null || htmlContent.isEmpty())
             throw new DomainException(resourceProvider.getString(R.string.article_load_error));
-        realmFacade.addSiteContent(url , htmlContent);
+        WebUnit wu = realmFacade.getWebUnit(url);
+        WebUnitContent wuc = new WebUnitContent();
+        wuc.setContent(htmlContent);
+        wu.setLatestContent(wuc);
+        realmFacade.update(wu);
     }
 
     private String loadHtml(String url) {

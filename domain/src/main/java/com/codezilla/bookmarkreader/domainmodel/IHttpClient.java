@@ -1,9 +1,9 @@
-package com.codezilla.bookmarkreader.application;
+package com.codezilla.bookmarkreader.domainmodel;
 
 /**
  * Created by davut on 9/3/2017.
  */
 
-interface IHttpClient {
+public interface IHttpClient {
     String getHtmlContent(String url);
 }

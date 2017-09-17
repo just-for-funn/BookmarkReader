@@ -35,10 +35,10 @@
             android:id="@+id/thumbnail"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             app:layout_constraintTop_toTopOf="@id/guidelineHorizontal"
             app:layout_constraintLeft_toRightOf="@id/guideline"
-            app:imageUrl="@{rowData.iconUrl}"
+            app:imageUrl="@{rowData.faviconUrl}"
             />
         <TextView
             android:id="@+id/title"

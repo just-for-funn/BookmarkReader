@@ -18,6 +18,11 @@ import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication
  */
 
 public class WebListRowModel {
+
+    String title;
+    String description;
+    String faviconUrl;
+
     public String getTitle() {
         return title;
     }
@@ -34,25 +39,21 @@ public class WebListRowModel {
         this.description = description;
     }
 
-    public WebListRowModel(String title, String description) {
+    public WebListRowModel(String title, String description , String faviconUrl) {
         this.title = title;
         this.description = description;
+        this.faviconUrl = faviconUrl;
     }
 
-    String title;
-    String description;
 
 
-    public String getIconUrl()
-    {
-        return getTitle()+"/favicon.ico";
+    public String getFaviconUrl() {
+        return faviconUrl;
     }
 
-    public static WebListRowModel of(String title, String description)
-    {
-        return new WebListRowModel(title , description);
+    public void setFaviconUrl(String faviconUrl) {
+        this.faviconUrl = faviconUrl;
     }
-
 
     @BindingAdapter({"bind:imageUrl"})
     public static void loadImage(ImageView view, final String imageUrl)

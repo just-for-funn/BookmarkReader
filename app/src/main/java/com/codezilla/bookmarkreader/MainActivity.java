@@ -7,6 +7,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 
+import com.codezilla.bookmarkreader.sync.MyJopScheduler;
 import com.codezilla.bookmarkreader.weblist.WebListView;
 
 
@@ -50,5 +51,16 @@ public class MainActivity extends FragmentActivity {
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
     }
-    
+
+    @Override
+    protected void onResume() {
+        new MyJopScheduler(getApplicationContext()).cancel();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        new MyJopScheduler(getApplicationContext()).schedule();
+        super.onPause();
+    }
 }

@@ -4,6 +4,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -25,17 +26,19 @@ public class SimpleLruCacheTest
         assertThat(simpleLruCache.get("InvalidKey") , is(nullValue()));
     }
 
+    @Ignore
     @Test
     public void shoulReturnInsertedElement()
     {
         fail("NotYetImplemented");
     }
-
+    @Ignore
     @Test
     public void shouldThrowExceptionWhenBitmapNull()
     {
         fail("NotYetImplemented");
     }
+    @Ignore
     @Test
     public void shouldThrowExceptionWhenKey()
     {

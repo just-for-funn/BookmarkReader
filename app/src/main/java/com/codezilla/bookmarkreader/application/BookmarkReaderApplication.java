@@ -6,8 +6,8 @@ import com.codezilla.bookmarkreader.article.ArticleServiceImp;
 import com.codezilla.bookmarkreader.article.IArticleService;
 import com.codezilla.bookmarkreader.cache.ICacheService;
 import com.codezilla.bookmarkreader.cache.SimpleLruCache;
-import com.codezilla.bookmarkreader.domainmodel.IRealmFacade;
-import com.codezilla.bookmarkreader.domainmodel.RealmFacade;
+import com.codezilla.bookmarkreader.domainmodel.IWebUnitRepository;
+import com.codezilla.bookmarkreader.domainmodel.RealmRepositoryImp;
 import com.codezilla.bookmarkreader.login.IUserService;
 import com.codezilla.bookmarkreader.weblist.IWebListService;
 
@@ -21,13 +21,13 @@ public class BookmarkReaderApplication extends Application{
     IWebListService webListService;
     ICacheService cacheService;
     IArticleService articleService;
-    private IRealmFacade realmFacade;
+    private IWebUnitRepository realmFacade;
     private IApplicationState applicationState;
     @Override
     public void onCreate() {
         super.onCreate();
         self = this;
-        this.realmFacade = new RealmFacade(getApplicationContext());
+        this.realmFacade = new RealmRepositoryImp(getApplicationContext());
         userService = new MockUserService();
         webListService = new WeblistServiceAdapter(realmFacade);
         cacheService = new SimpleLruCache();

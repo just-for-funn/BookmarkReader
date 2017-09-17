@@ -8,6 +8,7 @@ public class WebSiteInfo {
     String url;
     String summary;
     Status status;
+    String faviconUrl;
 
     public String getUrl() {
         return url;
@@ -34,6 +35,13 @@ public class WebSiteInfo {
         this.status = status;
     }
 
+    public String getFaviconUrl() {
+        return faviconUrl;
+    }
+
+    public void setFaviconUrl(String faviconUrl) {
+        this.faviconUrl = faviconUrl;
+    }
 
     public static  WebSiteInfo of(String url, String summary) {
         WebSiteInfo info = new WebSiteInfo();

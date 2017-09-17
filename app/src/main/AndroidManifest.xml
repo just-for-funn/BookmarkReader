@@ -19,9 +19,22 @@
             </intent-filter>
         </activity>
         <activity android:name=".login.LoginActivity"></activity>
+        <service
+            android:name=".sync.ScheduledSynchronizer"
+            android:label="Smart Article Reader Background synchronizer"
+            android:permission="android.permission.BIND_JOB_SERVICE">
+        </service>
+        <receiver android:name=".sync.MyBootCompletedListener" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+
 
 </manifest>
