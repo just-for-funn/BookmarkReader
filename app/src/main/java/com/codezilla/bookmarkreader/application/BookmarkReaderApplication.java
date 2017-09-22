@@ -6,7 +6,9 @@ import com.codezilla.bookmarkreader.article.ArticleServiceImp;
 import com.codezilla.bookmarkreader.article.IArticleService;
 import com.codezilla.bookmarkreader.cache.ICacheService;
 import com.codezilla.bookmarkreader.cache.SimpleLruCache;
+import com.codezilla.bookmarkreader.domainmodel.ILogRepository;
 import com.codezilla.bookmarkreader.domainmodel.IWebUnitRepository;
+import com.codezilla.bookmarkreader.domainmodel.RealmLogRepositoryImp;
 import com.codezilla.bookmarkreader.domainmodel.RealmRepositoryImp;
 import com.codezilla.bookmarkreader.login.IUserService;
 import com.codezilla.bookmarkreader.weblist.IWebListService;
@@ -23,6 +25,8 @@ public class BookmarkReaderApplication extends Application{
     IArticleService articleService;
     private IWebUnitRepository realmFacade;
     private IApplicationState applicationState;
+    private ILogRepository logRepository;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -30,6 +34,7 @@ public class BookmarkReaderApplication extends Application{
         this.realmFacade = new RealmRepositoryImp(getApplicationContext());
         userService = new MockUserService();
         webListService = new WeblistServiceAdapter(realmFacade);
+        logRepository = new RealmLogRepositoryImp(getApplicationContext());
         cacheService = new SimpleLruCache();
         articleService = new ArticleServiceImp(new ArticleRepositoryAdapter(realmFacade) , new ArticleLoaderImp(realmFacade , new OkHttpClientImp(), this));
         applicationState = new ApplicationStateSharedPrefencesImp(getApplicationContext());
@@ -100,4 +105,11 @@ public class BookmarkReaderApplication extends Application{
     }
 
 
+    public void setLogRepository(ILogRepository logRepository) {
+        this.logRepository = logRepository;
+    }
+
+    public ILogRepository getLogRepository() {
+        return logRepository;
+    }
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="model"
+            type="com.codezilla.bookmarkreader.history.HistoryViewModel">
+        </variable>
+        <import type="android.view.View"></import>
+    </data>
+    <LinearLayout
+        android:id="@+id/history_view"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        >
+        <ProgressBar
+            android:theme="@style/LinearProgress"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-7dp"
+            android:layout_marginTop="-7dp"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:visibility="@{model.isBusy ? View.VISIBLE:View.GONE}"
+            />
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:historyRows="@{model.rows}">
+        </ListView>
+    </LinearLayout>
+</layout>

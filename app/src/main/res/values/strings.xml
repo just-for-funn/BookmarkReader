@@ -9,4 +9,8 @@
     <string name="already_added">Already added</string>
     <string name="article_load_error">Cannot load article</string>
     <string name="connection_error">Connection error</string>
+    <string name="history">History</string>
+    <string name="recent_activity">Recent activity</string>
+    <string name="home">Home</string>
+    <string name="none">none</string>
 </resources>

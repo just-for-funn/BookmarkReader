@@ -3,5 +3,9 @@
     <declare-styleable name="customAttrs">
         <attr name="imageUrl" format="string" />
         <attr name="webContent" format="string" />
+        <attr name="menuitems" format="reference"/>
+        <attr name="imgsrc" format="integer"/>
+        <attr name="historyRows" format="reference"/>
+        <attr name="background_color" format="reference"/>
     </declare-styleable>
 </resources>

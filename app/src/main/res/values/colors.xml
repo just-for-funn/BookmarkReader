@@ -15,4 +15,9 @@
     <color name="edittext_background">#FFFFFF</color>
     <color name="indigo">#3F51B5</color>
     <color name="pink">#EC407A</color>
+    <color name="black">#000000</color>
+    <color name="menu_item_selected">#cccccc</color>
+    <color name="matte_green">#a5d6a7</color>
+    <color name="matte_yellow">#ffe082</color>
+    <color name="matte_red">#ff8a65</color>
 </resources>

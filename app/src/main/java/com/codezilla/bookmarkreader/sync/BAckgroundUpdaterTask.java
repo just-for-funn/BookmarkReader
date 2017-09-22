@@ -34,13 +34,10 @@ public class BackgroundUpdaterTask extends AsyncTask<Void ,Void , Boolean > {
         ILogRepository logRepository = new LogCatDecorator(new RealmLogRepositoryImp(context));
         try
         {
-
-            logRepository.info("Synchronization started");
             WebUnitContentUpdater contentUpdater = new WebUnitContentUpdater(new OkHttpClientImp(),
                     new RealmRepositoryImp( context) ,
                     new MockHtmlComparer() , logRepository , new FaviconExtractor());
             contentUpdater.updateAll();
-            logRepository.info("Synchronization finished");
             return new Boolean(true);
         }
         catch (Exception e)

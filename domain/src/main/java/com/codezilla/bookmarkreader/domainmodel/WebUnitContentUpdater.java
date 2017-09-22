@@ -14,6 +14,8 @@ public class WebUnitContentUpdater
     IHtmlComparer comparer;
     ILogRepository logRepository;
     IFaviconExtractor faviconExtractor;
+    private int changedCount = 0;
+
     public WebUnitContentUpdater(IHttpClient httpClient , IWebUnitRepository realmFacade , IHtmlComparer comparer , ILogRepository logRepository , IFaviconExtractor faviconExtractor) {
         this.httpClient = httpClient;
         this.realmFacade = realmFacade;
@@ -24,12 +26,17 @@ public class WebUnitContentUpdater
 
     public void updateAll()
     {
-        logRepository.info("Update started");
+        this.changedCount = 0;
+        logRepository.info("Syncronization started");
         List<WebUnit> units =  realmFacade.webUnits();
         for (WebUnit w: units)
         {
             update(w);
         }
+        if(this.changedCount == 0)
+            logRepository.info("Synchronization finished. No update available");
+        else
+            logRepository.info(String.format("Syncronization finished. %d sites updated.",this.changedCount));
     }
 
     private void update(WebUnit w)
@@ -44,12 +51,10 @@ public class WebUnitContentUpdater
     }
 
     private void updateSafe(WebUnit w) {
-        logRepository.info("Updating : "+w.getUrl());
         String htmlContent = httpClient.getHtmlContent(w.getUrl());
         int changeResult = comparer.compare(currentContent(w) , htmlContent);
         if(isChanged(changeResult))
         {
-            logRepository.info(String.format("content changed updating[%s]" , w.getUrl()));
             WebUnitContent wuc = new WebUnitContent();
             wuc.setContent(htmlContent);
             w.setLatestContent(wuc);
@@ -57,7 +62,9 @@ public class WebUnitContentUpdater
             String favicon = faviconExtractor.faviconUrl(w.getUrl(), htmlContent);
             if(!isNullOrEmpty(favicon))
                 w.setFaviconUrl(favicon);
+            logRepository.info(String.format("Updated:[%s] " , w.getUrl()));
             realmFacade.update(w);
+            this.changedCount+=1;
         }
     }
 

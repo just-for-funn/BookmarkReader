@@ -11,9 +11,9 @@ import io.realm.annotations.Required;
  */
 @RealmClass
 public class Log implements RealmModel {
-    final static int INFO = 0;
-    final static int WARNING = 1;
-    final static int ERROR = 2;
+    public final static int INFO = 0;
+    public final static int WARNING = 1;
+    public final static int ERROR = 2;
 
     @Required
     Date date;

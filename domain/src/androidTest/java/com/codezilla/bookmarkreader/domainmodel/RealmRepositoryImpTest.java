@@ -80,7 +80,7 @@ public class RealmRepositoryImpTest {
         wu.setLatestContent(wuc);
         realmFacade.update(wu);
         assertThat(realmFacade.getWebUnit(ANY_URL).getLatestContent().getContent() , equalTo(NEW_CHANGE));
-        assertTrue(realmFacade.getWebUnit(ANY_URL).getLatestContent().getDate().after(date));
+        assertTrue(realmFacade.getWebUnit(ANY_URL).getLatestContent().getDate().compareTo(date) >= 0);
     }
 
     private WebUnit webUnit(String anyUrl) {

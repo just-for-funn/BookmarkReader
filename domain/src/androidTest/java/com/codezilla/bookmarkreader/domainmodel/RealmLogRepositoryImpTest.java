@@ -55,10 +55,12 @@ public class RealmLogRepositoryImpTest
         logRepository.warning("warning");
         logRepository.error("error");
 
-        assertThat(logRepository.logs().get(0) , logEqualTo("info" , Log.INFO , date ));
+        assertThat(logRepository.logs().get(2) , logEqualTo("info" , Log.INFO , date ));
         assertThat(logRepository.logs().get(1) , logEqualTo("warning" , Log.WARNING , date ));
-        assertThat(logRepository.logs().get(2) , logEqualTo("error" , Log.ERROR , date ));
+        assertThat(logRepository.logs().get(0) , logEqualTo("error" , Log.ERROR , date ));
     }
+
+
 
     private Matcher<? super Log> logEqualTo(final String msg, final int level, final Date minDate) {
         return new BaseMatcher<Log>() {

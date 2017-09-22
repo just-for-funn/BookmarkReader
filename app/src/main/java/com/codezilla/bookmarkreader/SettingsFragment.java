@@ -12,6 +12,7 @@ import com.codezilla.bookmarkreader.application.BookmarkReaderApplication;
 import com.codezilla.bookmarkreader.databinding.*;
 import com.codezilla.bookmarkreader.databinding.FragmentSettingsBinding;
 import com.codezilla.bookmarkreader.login.User;
+import com.codezilla.bookmarkreader.menu.INavigator;
 
 import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.userService;
 
@@ -20,7 +21,15 @@ import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication
  */
 
 public class SettingsFragment extends Fragment {
+    private INavigator navigator;
     private FragmentSettingsBinding binding;
+
+    public SettingsFragment() {
+    }
+
+    public SettingsFragment(INavigator navigator) {
+        this.navigator = navigator;
+    }
 
     @Nullable
     @Override
@@ -28,7 +37,7 @@ public class SettingsFragment extends Fragment {
         if(this.binding == null)
         {
             this.binding =  FragmentSettingsBinding.inflate(inflater , container , false);
-            binding.setModel(new SettingsFragmentModel());
+            binding.setModel(new SettingsFragmentModel(navigator));
         }
         return binding.getRoot();
     }

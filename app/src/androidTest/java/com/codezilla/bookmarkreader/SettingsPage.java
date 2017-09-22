@@ -1,9 +1,13 @@
 package com.codezilla.bookmarkreader;
 
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.assertion.ViewAssertions;
 
+import com.codezilla.bookmarkreader.menu.HistoryPage;
+
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -23,5 +27,10 @@ public class SettingsPage
 
     public void assertNameSurnameDisplaying(String name, String surname) {
         onView(withText(name+" "+surname)).check(ViewAssertions.matches(isDisplayed()));
+    }
+
+    public HistoryPage clickHistory() {
+        onView(withText(R.string.history)).perform(click());
+        return new HistoryPage();
     }
 }

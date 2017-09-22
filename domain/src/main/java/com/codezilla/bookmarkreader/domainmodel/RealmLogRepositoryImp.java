@@ -9,6 +9,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by davut on 9/7/2017.
@@ -31,7 +32,7 @@ public class RealmLogRepositoryImp implements ILogRepository {
     public List<Log> logs() {
         try(Realm realm = realm())
         {
-            RealmResults<Log> rr = realm().where(Log.class).findAll();
+            RealmResults<Log> rr = realm().where(Log.class).findAllSorted("date", Sort.DESCENDING);
             return realm.copyFromRealm(rr);
         }
     }

@@ -44,4 +44,6 @@ public class MainActivityMenuTest extends MainActivityTestBase {
                 .clickToggeButton()
                 .assertDisplaying();
     }
+
+
 }
