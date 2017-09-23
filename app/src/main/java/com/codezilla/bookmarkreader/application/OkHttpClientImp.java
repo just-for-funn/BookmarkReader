@@ -14,6 +14,7 @@ import okhttp3.Response;
 public class OkHttpClientImp implements IHttpClient {
 
     public static final String MOBILE_USER_AGENT = "Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3";
+    private Response response;
 
     @Override
     public String getHtmlContent(String url)
@@ -21,7 +22,7 @@ public class OkHttpClientImp implements IHttpClient {
         OkHttpClient client = new OkHttpClient.Builder().build();
         Call call =  client.newCall(new Request.Builder().header("User-Agent", MOBILE_USER_AGENT).url(url).build());
         try {
-            Response response =  call.execute();
+            this.response =  call.execute();
             if(!response.isSuccessful())
                 throw new RuntimeException("Web request failed");
             return response.body().string();
@@ -31,6 +32,10 @@ public class OkHttpClientImp implements IHttpClient {
         }
     }
 
+    @Override
+    public String url() {
+        return response.request().url().toString();
+    }
 
 
 }

@@ -6,4 +6,5 @@ package com.codezilla.bookmarkreader.domainmodel;
 
 public interface IHttpClient {
     String getHtmlContent(String url);
+    String url();
 }

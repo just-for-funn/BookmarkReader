@@ -2,11 +2,16 @@ package com.codezilla.bookmarkreader.weblist;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.codezilla.bookmarkreader.R;
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+
+
 
 import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.cacheService;
 
@@ -15,7 +20,7 @@ import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication
  */
 
 class UrlImageLoader {
-
+    final static String TAG = UrlImageLoader.class.getSimpleName();
     private final ImageView view;
     private final String imageUrl;
 
@@ -33,8 +38,18 @@ class UrlImageLoader {
     }
 
     private void loadFromInternet() {
-        Picasso.with(view.getContext())
-                .load(imageUrl)
+        Log.i(TAG, "loadFromInternet: "+imageUrl);
+        Picasso picasso = new Picasso.Builder(view.getContext())
+                .listener(new Picasso.Listener() {
+                    @Override
+                    public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+                        Log.e(TAG, "onImageLoadFailed: "+uri.toString(),exception );
+                    }
+                })
+                .downloader(new OkHttp3Downloader(view.getContext()))
+                .build();
+
+        picasso.load(imageUrl)
                 .placeholder(R.drawable.ic_alert_circle_outline_grey)
                 .error(R.drawable.ic_alert_circle_outline_grey)
                 .into(view, new Callback() {

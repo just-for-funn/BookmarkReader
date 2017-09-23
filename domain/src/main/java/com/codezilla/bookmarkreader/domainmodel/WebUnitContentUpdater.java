@@ -59,7 +59,7 @@ public class WebUnitContentUpdater
             wuc.setContent(htmlContent);
             w.setLatestContent(wuc);
             w.setChangeSummary(comparer.change());
-            String favicon = faviconExtractor.faviconUrl(w.getUrl(), htmlContent);
+            String favicon = faviconExtractor.faviconUrl(httpClient.url(), htmlContent);
             if(!isNullOrEmpty(favicon))
                 w.setFaviconUrl(favicon);
             logRepository.info(String.format("Updated:[%s] " , w.getUrl()));
