@@ -1,5 +1,6 @@
 package com.codezilla.bookmarkreader;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -8,8 +9,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 
+import com.codezilla.bookmarkreader.domainmodel.WebUnitContentUpdater;
 import com.codezilla.bookmarkreader.history.HistoryView;
 import com.codezilla.bookmarkreader.menu.INavigator;
+import com.codezilla.bookmarkreader.sync.BackgroundUpdaterTask;
 import com.codezilla.bookmarkreader.sync.MyJopScheduler;
 import com.codezilla.bookmarkreader.weblist.WebListView;
 
@@ -31,7 +34,7 @@ public class MainActivity extends FragmentActivity {
         toolbar = (Toolbar)findViewById(R.id.toolBar);
         toolbar.setTitle("Bookmark Reader");
         this.toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
-        this.navigator = new Navigator(getSupportFragmentManager() , toggle , drawerLayout);
+        this.navigator = new Navigator(getSupportFragmentManager() , toggle , drawerLayout , this);
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.settings_container , new SettingsFragment(navigator) , TAG_SETTINGS_FRAGMENT)
@@ -68,12 +71,14 @@ public class MainActivity extends FragmentActivity {
 
         private final ActionBarDrawerToggle toggle;
         private final DrawerLayout drawerLayout;
+        private final Context context;
         FragmentManager fragmentManager;
 
-        public Navigator(FragmentManager fragmentManager, ActionBarDrawerToggle toggle, DrawerLayout drawerLayout) {
+        public Navigator(FragmentManager fragmentManager, ActionBarDrawerToggle toggle, DrawerLayout drawerLayout , Context context) {
             this.fragmentManager = fragmentManager;
             this.toggle = toggle;
             this.drawerLayout = drawerLayout;
+            this.context  = context;
         }
 
         @Override
@@ -104,6 +109,20 @@ public class MainActivity extends FragmentActivity {
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
             drawerLayout.closeDrawers();
+        }
+
+        @Override
+        public void refresh()
+        {
+            BackgroundUpdaterTask backgroundUpdaterTask = new BackgroundUpdaterTask(context)
+            {
+                @Override
+                protected void onPostExecute(Boolean aBoolean) {
+                    super.onPostExecute(aBoolean);
+                    showHome();
+                }
+            };
+            backgroundUpdaterTask.execute();
         }
     }
 }

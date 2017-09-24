@@ -7,4 +7,5 @@ package com.codezilla.bookmarkreader.menu;
 public interface INavigator {
     void showHistory();
     void showHome();
+    void refresh();
 }

@@ -59,13 +59,15 @@ public class WebUnitContentUpdater
             wuc.setContent(htmlContent);
             w.setLatestContent(wuc);
             w.setChangeSummary(comparer.change());
-            String favicon = faviconExtractor.faviconUrl(httpClient.url(), htmlContent);
-            if(!isNullOrEmpty(favicon))
-                w.setFaviconUrl(favicon);
             logRepository.info(String.format("Updated:[%s] " , w.getUrl()));
-            realmFacade.update(w);
             this.changedCount+=1;
         }
+        String favicon = faviconExtractor.faviconUrl(httpClient.url(), htmlContent);
+        if(!isNullOrEmpty(favicon))
+        {
+            w.setFaviconUrl(favicon);
+        }
+        realmFacade.update(w);
     }
 
     private String currentContent(WebUnit w) {

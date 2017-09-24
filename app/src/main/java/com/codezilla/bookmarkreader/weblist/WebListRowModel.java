@@ -11,6 +11,8 @@ import com.codezilla.bookmarkreader.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.cacheService;
 
 /**
@@ -56,7 +58,7 @@ public class WebListRowModel {
     }
 
     @BindingAdapter({"bind:imageUrl"})
-    public static void loadImage(ImageView view, final String imageUrl)
+    public static void loadImage(CircleImageView view, final String imageUrl)
     {
         new UrlImageLoader(view , imageUrl).load();
     }

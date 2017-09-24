@@ -43,6 +43,14 @@ public class FaviconExtractorTest {
         assertThat(faviconIco , equalTo("https://experiments.withgoogle.com/assets/img/favicon.png"));
     }
 
+    @Test
+    public void shouldPrependhttpIfUrlStartsWithDoubleSlashes() throws IOException {
+        String html = resource("ntvspor.html");
+        String faviconIco = faviconExtractor.faviconUrl("https://www.ntvspor.com", html);
+        assertThat(faviconIco , equalTo("http://cdn3.ntvspor.net/Content/dist/img/favicon/android-icon-192x192.png"));
+    }
+
+
     private String resource(String resource) throws IOException {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resource);
         try(ByteArrayOutputStream result = new ByteArrayOutputStream())

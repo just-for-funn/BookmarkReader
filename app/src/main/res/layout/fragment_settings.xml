@@ -14,7 +14,7 @@
         android:background="@color/colorLightContent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="175dp"
             android:orientation="vertical"
             android:background="@color/colorPrimary">
            <de.hdodenhof.circleimageview.CircleImageView
@@ -23,12 +23,13 @@
                android:layout_marginTop="@dimen/settings_horizontal_margin"
                android:layout_marginLeft="@dimen/settings_horizontal_margin"
                android:layout_centerInParent="true"
-               android:src="@drawable/grumpy_cat"
+               android:src="@drawable/circular_user"
                app:civ_border_color="@color/colorImageBorder"
                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_marginBottom="@dimen/settings_vertical_margin"
                 android:layout_marginLeft="@dimen/settings_horizontal_margin"
                 android:text="@{model.userName}"

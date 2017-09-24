@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class FaviconExtractor implements IFaviconExtractor {
     //<link.*rel="shortcut icon".*>
-    String shortCutIconRegExFormat = "(<link.*rel=\"%s\"[^>]+>)";
+    String shortCutIconRegExFormat = "(<link[^<]+rel=\"%s\"[^>]+>)";
     private static  String [] refNames = {"shortcut icon","icon","apple-touch-icon"};
     @Override
     public String faviconUrl(String url , String html) {
@@ -22,6 +22,8 @@ public class FaviconExtractor implements IFaviconExtractor {
             return null;
         if(path.startsWith("http"))
             return path;
+        if(path.startsWith("//"))
+            return "http:"+path;
         return basePath(url)+path;
     }
 

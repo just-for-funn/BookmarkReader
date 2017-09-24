@@ -23,7 +23,8 @@ public class SettingsFragmentModel {
         menuItemHandler = new MenuItemHandler(navigator);
         menuItems = Arrays.asList(
                 new MenuItemModel(R.string.home , R.drawable.ic_home , menuItemHandler),
-                new MenuItemModel(R.string.history, R.drawable.ic_history , menuItemHandler)
+                new MenuItemModel(R.string.history, R.drawable.ic_history , menuItemHandler),
+                new MenuItemModel(R.string.refresh_sites , R.drawable.ic_cloud_download_black_48dp , menuItemHandler)
         );
     }
 
@@ -73,6 +74,9 @@ public class SettingsFragmentModel {
                     break;
                 case R.string.history:
                     navigator.showHistory();
+                    break;
+                case R.string.refresh_sites:
+                    navigator.refresh();
                     break;
                 default:
                     break;
