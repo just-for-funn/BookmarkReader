@@ -22,7 +22,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 public class ArticleServiceImpTest
 {
     public static final String ANY_URL = "www.sample.com";
-    public static final String ANY_ARTICLE = "article for sample.com";
+    public static final IArticleService.ArticleDetail ANY_ARTICLE = new IArticleService.ArticleDetail( "article for sample.com" , "www.sample.com");
     @Mock
     IArticleRepository articleRepository;
 

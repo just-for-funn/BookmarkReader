@@ -6,5 +6,5 @@ package com.codezilla.bookmarkreader.article;
 
 public interface IArticleRepository {
     boolean hasArticle(String url);
-    String getArticle(String url);
+    IArticleService.ArticleDetail getArticle(String url);
 }

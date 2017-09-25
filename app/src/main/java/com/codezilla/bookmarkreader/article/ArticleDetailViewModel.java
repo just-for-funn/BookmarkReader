@@ -22,7 +22,7 @@ public class ArticleDetailViewModel
     public final ObservableField<String> content = new ObservableField<>();
     private final IArticleService articleService;
     private final IErrorDisplay errorDisplay;
-    private CustomAsyncTaskExecutor.TaskExecuteOwner<String> articleServiceCallback;
+    private CustomAsyncTaskExecutor.TaskExecuteOwner<IArticleService.ArticleDetail> articleServiceCallback;
 
     public ArticleDetailViewModel(IErrorDisplay errorDisplay , IArticleService articleService) {
         this.articleService = articleService;
@@ -39,16 +39,17 @@ public class ArticleDetailViewModel
     {
         this.isBusy.set(true);
         this.articleServiceCallback = articleServiceCallback();
-        CustomAsyncTaskExecutor<String> executor = new CustomAsyncTaskExecutor<>(this.articleServiceCallback, articleServiceCall());
+        CustomAsyncTaskExecutor<IArticleService.ArticleDetail> executor = new CustomAsyncTaskExecutor<>(this.articleServiceCallback, articleServiceCall());
         executor.execute();
     }
 
     @NonNull
-    private CustomAsyncTaskExecutor.TaskExecuteOwner<String> articleServiceCallback() {
-        return new CustomAsyncTaskExecutor.TaskExecuteOwner<String>() {
+    private CustomAsyncTaskExecutor.TaskExecuteOwner<IArticleService.ArticleDetail> articleServiceCallback() {
+        return new CustomAsyncTaskExecutor.TaskExecuteOwner<IArticleService.ArticleDetail>() {
             @Override
-            public void onFinish(String s) {
-                 content.set(s);
+            public void onFinish(IArticleService.ArticleDetail s) {
+                 content.set(s.getContent());
+                 url.set(s.getBaseUrl());
                  isBusy.set(false);
             }
 
@@ -61,10 +62,10 @@ public class ArticleDetailViewModel
     }
 
     @NonNull
-    private Callable<String> articleServiceCall() {
-        return new Callable<String>() {
+    private Callable<IArticleService.ArticleDetail> articleServiceCall() {
+        return new Callable<IArticleService.ArticleDetail>() {
             @Override
-            public String call() throws Exception {
+            public IArticleService.ArticleDetail call() throws Exception {
                 return articleService.getArticle(url.get());
             }
         };

@@ -1,7 +1,9 @@
 package com.codezilla.bookmarkreader.application;
 
 import com.codezilla.bookmarkreader.article.IArticleRepository;
+import com.codezilla.bookmarkreader.article.IArticleService;
 import com.codezilla.bookmarkreader.domainmodel.IWebUnitRepository;
+import com.codezilla.bookmarkreader.domainmodel.WebUnitContent;
 
 /**
  * Created by davut on 9/2/2017.
@@ -20,7 +22,8 @@ class ArticleRepositoryAdapter implements IArticleRepository {
     }
 
     @Override
-    public String getArticle(String url) {
-        return realmFacade.getWebUnit(url).getLatestContent().getContent();
+    public IArticleService.ArticleDetail getArticle(String url) {
+        WebUnitContent wuc =  realmFacade.getWebUnit(url).getLatestContent();
+        return new IArticleService.ArticleDetail(wuc.getContent() , wuc.getUrl());
     }
 }

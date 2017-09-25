@@ -58,6 +58,7 @@ public class WebUnitContentUpdater
             WebUnitContent wuc = new WebUnitContent();
             wuc.setContent(htmlContent);
             w.setLatestContent(wuc);
+            wuc.setUrl(httpClient.url());
             w.setChangeSummary(comparer.change());
             logRepository.info(String.format("Updated:[%s] " , w.getUrl()));
             this.changedCount+=1;

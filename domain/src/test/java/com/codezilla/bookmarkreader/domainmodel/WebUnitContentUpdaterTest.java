@@ -117,7 +117,8 @@ public class WebUnitContentUpdaterTest
     {
         when(httpComparer.compare(anyString() , anyString())).thenReturn(0);
         webUnitContentUpdater.updateAll();
-        Mockito.verify(realmFacade , Mockito.times(0)).update(any(WebUnit.class)); ;
+        Mockito.verify(realmFacade).update(webUnitArgumentCaptor.capture());
+        assertThat(webUnitArgumentCaptor.getValue().getLatestContent().getContent() , equalTo(OLD_CONTENT) );
     }
 
 

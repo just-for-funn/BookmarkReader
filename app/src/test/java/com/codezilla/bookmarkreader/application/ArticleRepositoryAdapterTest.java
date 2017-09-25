@@ -55,6 +55,6 @@ public class ArticleRepositoryAdapterTest {
         WebUnitContent webUnitContent = new WebUnitContent();
         webUnitContent.setContent(ANY_CONTENT);
         webUnit.setLatestContent(webUnitContent);
-        assertThat(repositoryAdapter.getArticle(ANY_URL) , is(ANY_CONTENT));
+        assertThat(repositoryAdapter.getArticle(ANY_URL).getContent() , is(ANY_CONTENT));
     }
 }

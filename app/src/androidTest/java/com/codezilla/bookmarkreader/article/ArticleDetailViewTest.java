@@ -27,7 +27,7 @@ public class ArticleDetailViewTest extends MainActivityTestBase
 {
     public static final String ANY_URL = "www.test.url";
     public static final String ANY_SUMMARY = "Some summary";
-    public static final String ANY_CONTENT = "Non text article";
+    public static final IArticleService.ArticleDetail ANY_CONTENT = new IArticleService.ArticleDetail("Test article detail","www.baseurl.com");
     public static final String ANY_ERROR = "error message";
     @Mock
     IWebListService webListService;
@@ -43,6 +43,7 @@ public class ArticleDetailViewTest extends MainActivityTestBase
         webSiteInfo.setStatus(WebSiteInfo.Status.CHANGED);
         initMocks(this);
         when(webListService.getWebSitesInfos()).thenReturn(Arrays.asList(webSiteInfo));
+        when(articleService.getArticle(anyString())).thenReturn(ANY_CONTENT);
         myApp().setWebListService(webListService);
         myApp().setArticleService(articleService);
     }
@@ -73,7 +74,7 @@ public class ArticleDetailViewTest extends MainActivityTestBase
         getMainActivityPage()
                 .webListPage()
                 .clickItem(webSiteInfo.getUrl())
-                .assertArticleDisplaying(ANY_CONTENT);
+                .assertArticleDisplaying(ANY_CONTENT.getContent());
 
     }
 

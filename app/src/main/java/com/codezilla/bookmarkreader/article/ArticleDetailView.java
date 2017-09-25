@@ -10,14 +10,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.codezilla.bookmarkreader.R;
 import com.codezilla.bookmarkreader.databinding.FragmentArticleDetailBinding;
-import com.codezilla.bookmarkreader.weblist.WebListRowModel;
 
 import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.myApp;
 

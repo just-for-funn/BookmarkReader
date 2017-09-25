@@ -15,7 +15,7 @@ public class WebUnitContent extends RealmObject
 
     private Date date;
     private String content;
-
+    private String url;
     public String getContent() {
         return content;
     }
@@ -31,5 +31,13 @@ public class WebUnitContent extends RealmObject
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

@@ -18,6 +18,7 @@ class ArticleLoaderImp implements IArticleLoader {
     private final IWebUnitRepository realmFacade;
     private final IHttpClient httpClient;
     private final Context resourceProvider;
+    private String baseUrl;
 
     public ArticleLoaderImp(IWebUnitRepository realmFacade , IHttpClient httpClient , Context resourceProvider) {
         this.realmFacade = realmFacade;
@@ -34,6 +35,7 @@ class ArticleLoaderImp implements IArticleLoader {
         WebUnit wu = realmFacade.getWebUnit(url);
         WebUnitContent wuc = new WebUnitContent();
         wuc.setContent(htmlContent);
+        wu.setUrl(baseUrl);
         wu.setLatestContent(wuc);
         realmFacade.update(wu);
     }
@@ -41,6 +43,7 @@ class ArticleLoaderImp implements IArticleLoader {
     private String loadHtml(String url) {
         try {
             String content = httpClient.getHtmlContent(url);
+            this.baseUrl = httpClient.url();
             return content;
         }catch (Exception e)
         {

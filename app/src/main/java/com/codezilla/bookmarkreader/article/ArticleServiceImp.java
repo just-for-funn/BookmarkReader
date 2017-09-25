@@ -19,12 +19,13 @@ public class ArticleServiceImp implements IArticleService {
     }
 
     @Override
-    public String getArticle(String url) {
+    public ArticleDetail getArticle(String url) {
         if(!repository.hasArticle(url))
             loader.load(url);
-        String result =  repository.getArticle(url);
+        ArticleDetail result =  repository.getArticle(url);
         if(result == null)
             throw new DomainException(myApp().getResources().getString(R.string.article_load_error));
         return result;
     }
+
 }

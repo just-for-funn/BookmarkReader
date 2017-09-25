@@ -8,9 +8,10 @@ import android.webkit.WebView;
  */
 
 public class WebViewBindings {
-    @BindingAdapter(value = "webContent")
-    public static void setWebContent(WebView webView , String content)
+    @BindingAdapter(value={"webContent" , "base_url"},requireAll = true)
+    public static void setWebContent(WebView webView , String content , String baseUrl)
     {
-        webView.loadData(content , "text/html" , "utf-8");
+        //webView.loadData(content , "text/html" , "utf-8");
+        webView.loadDataWithBaseURL(baseUrl , content , "text/html" , "utf-8" , null );
     }
 }

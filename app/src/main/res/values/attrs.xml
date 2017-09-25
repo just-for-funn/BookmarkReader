@@ -3,6 +3,7 @@
     <declare-styleable name="customAttrs">
         <attr name="imageUrl" format="string" />
         <attr name="webContent" format="string" />
+        <attr name="base_url" format="string" />
         <attr name="menuitems" format="reference"/>
         <attr name="imgsrc" format="integer"/>
         <attr name="historyRows" format="reference"/>
