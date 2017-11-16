@@ -5,7 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/BookmarkReader.iml" filepath="$PROJECT_DIR$/BookmarkReader.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/domain/domain.iml" filepath="$PROJECT_DIR$/domain/domain.iml" />
-      <module fileurl="file://$PROJECT_DIR$/domain-model/domain-model.iml" filepath="$PROJECT_DIR$/domain-model/domain-model.iml" />
+      <module fileurl="file://F:\Android\BookmarkReader\domain-model\domain-model.iml" filepath="F:\Android\BookmarkReader\domain-model\domain-model.iml" />
     </modules>
   </component>
 </project>
