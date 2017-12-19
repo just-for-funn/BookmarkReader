@@ -10,18 +10,20 @@ public class WebUnitContentUpdater
 {
 
     private final IHttpClient httpClient;
+    private final IArticleExtractor articleExtractor;
     IWebUnitRepository realmFacade;
     IHtmlComparer comparer;
     ILogRepository logRepository;
     IFaviconExtractor faviconExtractor;
     private int changedCount = 0;
 
-    public WebUnitContentUpdater(IHttpClient httpClient , IWebUnitRepository realmFacade , IHtmlComparer comparer , ILogRepository logRepository , IFaviconExtractor faviconExtractor) {
+    public WebUnitContentUpdater(IHttpClient httpClient , IWebUnitRepository realmFacade , IHtmlComparer comparer , ILogRepository logRepository , IFaviconExtractor faviconExtractor , IArticleExtractor articleExtractor) {
         this.httpClient = httpClient;
         this.realmFacade = realmFacade;
         this.comparer = comparer;
         this.logRepository = logRepository;
         this.faviconExtractor = faviconExtractor;
+        this.articleExtractor = articleExtractor;
     }
 
     public void updateAll()
@@ -57,6 +59,7 @@ public class WebUnitContentUpdater
         {
             WebUnitContent wuc = new WebUnitContent();
             wuc.setContent(htmlContent);
+            wuc.setArticle( articleExtractor.convert(htmlContent) );
             w.setLatestContent(wuc);
             wuc.setUrl(httpClient.url());
             w.setChangeSummary(comparer.change());

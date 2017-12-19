@@ -24,6 +24,6 @@ class ArticleRepositoryAdapter implements IArticleRepository {
     @Override
     public IArticleService.ArticleDetail getArticle(String url) {
         WebUnitContent wuc =  realmFacade.getWebUnit(url).getLatestContent();
-        return new IArticleService.ArticleDetail(wuc.getContent() , wuc.getUrl());
+        return new IArticleService.ArticleDetail(wuc.getArticle() , wuc.getUrl());
     }
 }

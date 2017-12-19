@@ -36,7 +36,10 @@ public class BackgroundUpdaterTask extends AsyncTask<Void ,Void , Boolean > {
         {
             WebUnitContentUpdater contentUpdater = new WebUnitContentUpdater(new OkHttpClientImp(),
                     new RealmRepositoryImp( context) ,
-                    new MockHtmlComparer() , logRepository , new FaviconExtractor());
+                    new MockHtmlComparer() , logRepository ,
+                    new FaviconExtractor(),
+                    new BoilerplateArticlConverterAdapter()
+            );
             contentUpdater.updateAll();
             return new Boolean(true);
         }
