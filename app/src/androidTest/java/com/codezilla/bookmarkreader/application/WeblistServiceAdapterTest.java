@@ -2,6 +2,8 @@ package com.codezilla.bookmarkreader.application;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.codezilla.bookmarkreader.R;
+import com.codezilla.bookmarkreader.domainmodel.IArticleExtractor;
 import com.codezilla.bookmarkreader.domainmodel.IWebUnitRepository;
 import com.codezilla.bookmarkreader.domainmodel.WebUnit;
 
@@ -14,6 +16,8 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+
+import java.util.Arrays;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.*;
@@ -30,13 +34,15 @@ public class WeblistServiceAdapterTest {
     WeblistServiceAdapter weblistServiceAdapter;
     @Mock
     IWebUnitRepository repository;
+    @Mock
+    IArticleExtractor extractor;
     @Captor
     ArgumentCaptor<WebUnit> captor = ArgumentCaptor.forClass(WebUnit.class);
     @Before
     public void before()
     {
         MockitoAnnotations.initMocks(this);
-        weblistServiceAdapter = new WeblistServiceAdapter(repository);
+        weblistServiceAdapter = new WeblistServiceAdapter(repository , extractor);
         when(repository.exists(URL)).thenReturn(false);
     }
 
@@ -82,5 +88,18 @@ public class WeblistServiceAdapterTest {
         assertThat(captor.getValue().getUrl() , equalTo(url));
         assertThat(captor.getValue().getFaviconUrl() , equalTo(URL+"/favicon.ico"));
     }
+
+    @Test
+    public void shouldSetSummaryAsNotEvaluatedYetWhenNoDownloadAvailable()
+    {
+        WebUnit wu = new WebUnit( );
+        wu.setPreviousContent( null);
+        wu.setLatestContent(null);
+        wu.setUrl( "test");
+        when(repository.webUnits()).thenReturn(Arrays.asList(wu));
+        String summary =  weblistServiceAdapter.getWebSitesInfos().get(0).getSummary();
+        assertThat(summary , equalTo("Not evaluated yet"));
+    }
+
 
 }

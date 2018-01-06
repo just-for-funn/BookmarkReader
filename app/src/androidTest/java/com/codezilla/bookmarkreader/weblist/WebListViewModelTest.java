@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.codezilla.bookmarkreader.test.TestExtensions.untilAsserted;
 import static junit.framework.Assert.fail;
 import static org.awaitility.Awaitility.await;
@@ -154,7 +156,13 @@ public class WebListViewModelTest  extends MainActivityTestBase{
         webListViewPage().assertErrorDisplaying(R.string.already_added);
     }
 
-
+    @Test
+    public void shouldDisplayErrorMessageWhenWebListServiceCrushes()
+    {
+        when(webListService.getWebSitesInfos()).thenThrow(new RuntimeException("error") );
+        launch();
+        webListViewPage().assertErrorDisplaying(R.string.unexpected_error);
+    }
 
     private WebSiteInfo convert(String url) {
         return WebSiteInfo.of(url , "");

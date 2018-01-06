@@ -8,10 +8,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -63,10 +67,14 @@ public class WebUnitContentUpdaterTest
     {
         mockSingleElement();
         when(httpClient.getHtmlContent(URL_1)).thenReturn(NEW_CONTENT);
-        when(httpComparer.compare(anyString() , anyString())).thenReturn(1);
-        when(httpComparer.change()).thenReturn(CONTENT_CHANGE);
+        when(httpComparer.isChanged(anyString() , anyString())).thenReturn(true);
+        when(httpComparer.newLines()).thenReturn(asTextBlock(CONTENT_CHANGE));
         webUnitContentUpdater = new WebUnitContentUpdater(httpClient , realmFacade , httpComparer ,logRepository , faviconExtractor);
 
+    }
+
+    private List<TextBlock> asTextBlock(String contentChange) {
+        return Arrays.asList(TextBlock.textBlock(contentChange));
     }
 
     @Test
@@ -84,7 +92,7 @@ public class WebUnitContentUpdaterTest
     public void shouldCompareGivenComponents()
     {
         webUnitContentUpdater.updateAll();
-        Mockito.verify(httpComparer).compare(OLD_CONTENT , NEW_CONTENT);
+        Mockito.verify(httpComparer).isChanged(OLD_CONTENT , NEW_CONTENT);
     }
 
     @Test
@@ -92,7 +100,7 @@ public class WebUnitContentUpdaterTest
     {
         realmFacade.webUnits().get(0).setLatestContent(null);
         webUnitContentUpdater.updateAll();
-        verify(httpComparer).compare("" , NEW_CONTENT);
+        verify(httpComparer).isChanged("" , NEW_CONTENT);
     }
 
     @Test
@@ -115,20 +123,12 @@ public class WebUnitContentUpdaterTest
     @Test
     public void shouldNotUpdateIfNotChanged()
     {
-        when(httpComparer.compare(anyString() , anyString())).thenReturn(0);
+        when(httpComparer.isChanged(anyString() , anyString())).thenReturn(false);
         webUnitContentUpdater.updateAll();
         Mockito.verify(realmFacade).update(webUnitArgumentCaptor.capture());
         assertThat(webUnitArgumentCaptor.getValue().getLatestContent().getContent() , equalTo(OLD_CONTENT) );
     }
 
-
-    @Test
-    public void shouldUpdateChangeSummary()
-    {
-        webUnitContentUpdater.updateAll();
-        Mockito.verify(realmFacade).update(webUnitArgumentCaptor.capture());
-        assertThat(webUnitArgumentCaptor.getValue().getChangeSummary() , equalTo(CONTENT_CHANGE) );
-    }
 
     @Test
     public void shouldUpdateFaviconIfExists()
@@ -150,4 +150,13 @@ public class WebUnitContentUpdaterTest
         assertThat(webUnitArgumentCaptor.getValue().getFaviconUrl() , equalTo(existingFaviconUrl));
     }
 
+    @Test
+    public void shouldUpdateChange()
+    {
+        webUnitContentUpdater.updateAll();
+        Mockito.verify(realmFacade).update(webUnitArgumentCaptor.capture());
+        WebUnit wu = webUnitArgumentCaptor.getValue();
+        assertThat(wu.getChange().getNewBlocks() , hasSize(1));
+        assertThat(wu.getChange().getNewBlocks().get(0).lines() , hasItems(CONTENT_CHANGE));
+    }
 }

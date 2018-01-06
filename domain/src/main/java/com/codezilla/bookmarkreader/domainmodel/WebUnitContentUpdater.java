@@ -2,6 +2,8 @@ package com.codezilla.bookmarkreader.domainmodel;
 
 import java.util.List;
 
+import io.realm.RealmList;
+
 /**
  * Created by davut on 9/5/2017.
  */
@@ -10,20 +12,18 @@ public class WebUnitContentUpdater
 {
 
     private final IHttpClient httpClient;
-    private final IArticleExtractor articleExtractor;
     IWebUnitRepository realmFacade;
     IHtmlComparer comparer;
     ILogRepository logRepository;
     IFaviconExtractor faviconExtractor;
     private int changedCount = 0;
 
-    public WebUnitContentUpdater(IHttpClient httpClient , IWebUnitRepository realmFacade , IHtmlComparer comparer , ILogRepository logRepository , IFaviconExtractor faviconExtractor , IArticleExtractor articleExtractor) {
+    public WebUnitContentUpdater(IHttpClient httpClient , IWebUnitRepository realmFacade , IHtmlComparer comparer , ILogRepository logRepository , IFaviconExtractor faviconExtractor) {
         this.httpClient = httpClient;
         this.realmFacade = realmFacade;
         this.comparer = comparer;
         this.logRepository = logRepository;
         this.faviconExtractor = faviconExtractor;
-        this.articleExtractor = articleExtractor;
     }
 
     public void updateAll()
@@ -54,15 +54,14 @@ public class WebUnitContentUpdater
 
     private void updateSafe(WebUnit w) {
         String htmlContent = httpClient.getHtmlContent(w.getUrl());
-        int changeResult = comparer.compare(currentContent(w) , htmlContent);
-        if(isChanged(changeResult))
+        boolean changed = comparer.isChanged(currentContent(w) , htmlContent);
+        if(changed)
         {
             WebUnitContent wuc = new WebUnitContent();
             wuc.setContent(htmlContent);
-            wuc.setArticle( articleExtractor.convert(htmlContent) );
             w.setLatestContent(wuc);
             wuc.setUrl(httpClient.url());
-            w.setChangeSummary(comparer.change());
+            w.setChange( toChange(comparer.newLines()));
             logRepository.info(String.format("Updated:[%s] " , w.getUrl()));
             this.changedCount+=1;
         }
@@ -72,6 +71,14 @@ public class WebUnitContentUpdater
             w.setFaviconUrl(favicon);
         }
         realmFacade.update(w);
+    }
+
+    private Change toChange(List<TextBlock> textBlocks) {
+        Change change = new Change();
+        RealmList<TextBlock> blocks = new RealmList<>();
+        blocks.addAll(textBlocks );
+        change.setNewBlocks(blocks);
+        return change;
     }
 
     private String currentContent(WebUnit w) {

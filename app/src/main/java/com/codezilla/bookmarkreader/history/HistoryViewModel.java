@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import io.realm.internal.Collection;
 
 import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.myApp;
 

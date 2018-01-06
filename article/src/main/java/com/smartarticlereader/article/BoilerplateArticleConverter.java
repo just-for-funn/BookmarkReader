@@ -18,9 +18,20 @@ public class BoilerplateArticleConverter {
     {
         try {
             return CommonExtractors.ARTICLE_EXTRACTOR.getText(html);
-        } catch (BoilerpipeProcessingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "cannot convert html", e );
+            return null;
+        }
+    }
+
+
+    public String htmlToRawString(String html)
+    {
+        try {
+            return CommonExtractors.KEEP_EVERYTHING_EXTRACTOR.getText(html);
+        } catch (Exception e) {
+            Log.e(TAG ,"Cannot convert html to article", e);
             return null;
         }
     }

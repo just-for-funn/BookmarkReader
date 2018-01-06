@@ -14,4 +14,6 @@
     <string name="home">Home</string>
     <string name="none">none</string>
     <string name="refresh_sites">Download all</string>
+    <string name="unexpected_error">Something went terribly wrong</string>
+    <string name="error">Error</string>
 </resources>

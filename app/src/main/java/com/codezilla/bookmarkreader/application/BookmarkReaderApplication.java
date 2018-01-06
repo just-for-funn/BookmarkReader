@@ -11,6 +11,7 @@ import com.codezilla.bookmarkreader.domainmodel.IWebUnitRepository;
 import com.codezilla.bookmarkreader.domainmodel.RealmLogRepositoryImp;
 import com.codezilla.bookmarkreader.domainmodel.RealmRepositoryImp;
 import com.codezilla.bookmarkreader.login.IUserService;
+import com.codezilla.bookmarkreader.sync.BoilerplateArticlConverterAdapter;
 import com.codezilla.bookmarkreader.weblist.IWebListService;
 
 /**
@@ -33,7 +34,7 @@ public class BookmarkReaderApplication extends Application{
         self = this;
         this.realmFacade = new RealmRepositoryImp(getApplicationContext());
         userService = new MockUserService();
-        webListService = new WeblistServiceAdapter(realmFacade);
+        webListService = new WeblistServiceAdapter(realmFacade ,  new BoilerplateArticlConverterAdapter());
         logRepository = new RealmLogRepositoryImp(getApplicationContext());
         cacheService = new SimpleLruCache();
         articleService = new ArticleServiceImp(new ArticleRepositoryAdapter(realmFacade) , new ArticleLoaderImp(realmFacade , new OkHttpClientImp(), this));

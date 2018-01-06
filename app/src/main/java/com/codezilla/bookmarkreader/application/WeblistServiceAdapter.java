@@ -1,24 +1,30 @@
 package com.codezilla.bookmarkreader.application;
 
+import com.codezilla.bookmarkreader.R;
+import com.codezilla.bookmarkreader.domainmodel.Change;
+import com.codezilla.bookmarkreader.domainmodel.IArticleExtractor;
 import com.codezilla.bookmarkreader.domainmodel.IWebUnitRepository;
 import com.codezilla.bookmarkreader.domainmodel.WebUnit;
 import com.codezilla.bookmarkreader.exception.RecordExistsException;
 import com.codezilla.bookmarkreader.weblist.IWebListService;
 import com.codezilla.bookmarkreader.weblist.WebSiteInfo;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.myApp;
 
 /**
  * Created by davut on 8/27/2017.
  */
 
 public class WeblistServiceAdapter implements IWebListService {
+    private final IArticleExtractor articleExtractor;
     IWebUnitRepository realmFacade;
 
-    public WeblistServiceAdapter(IWebUnitRepository realmFacade) {
+    public WeblistServiceAdapter(IWebUnitRepository realmFacade , IArticleExtractor articleExtractor) {
         this.realmFacade = realmFacade;
+        this.articleExtractor = articleExtractor;
     }
 
     @Override
@@ -64,10 +70,39 @@ public class WeblistServiceAdapter implements IWebListService {
     private WebSiteInfo convert(WebUnit webUnit) {
         WebSiteInfo inf = new WebSiteInfo();
         inf.setUrl(webUnit.getUrl());
-        inf.setSummary(webUnit.getChangeSummary());
         inf.setStatus(WebSiteInfo.Status.CHANGED );
         inf.setFaviconUrl(webUnit.getFaviconUrl());
+        inf.setSummary(getSummaryFrom(webUnit));
         return inf;
+    }
+
+    private String getSummaryFrom(WebUnit webUnit) {
+        try{
+            if(webUnit.getLatestContent() == null)
+                return myApp().getApplicationContext().getString(R.string.not_evaluated);
+            else if(webUnit.getPreviousContent() == null)
+                return  articleExtractor.convert(webUnit.getLatestContent().getContent());
+            else
+                return toSummary(webUnit.getChange());
+        }catch (Exception e)
+        {
+            return myApp().getApplicationContext().getString(R.string.error);
+        }
+    }
+
+    private String toSummary(Change change) {
+        if(change == null)
+            return null;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < change.getNewBlocks().size(); i++) {
+            for (int j = 0; j < change.getNewBlocks().get(i).lines().size(); j++) {
+                if(j == 0)
+                    sb.append("\t");
+                sb.append(change.getNewBlocks().get(i).lines().get(j));
+                sb.append("\n");
+            }
+        }
+        return sb.toString();
     }
 
 }

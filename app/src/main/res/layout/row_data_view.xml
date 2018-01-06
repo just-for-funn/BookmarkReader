@@ -57,14 +57,27 @@
             android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:minHeight="35dp"
             android:text="@{rowData.description == null ?  @string/not_evaluated:rowData.description}"
             app:layout_constraintLeft_toLeftOf="@id/title"
             app:layout_constraintTop_toBottomOf="@id/title"
             app:layout_constraintRight_toRightOf="@id/title"
             android:layout_marginBottom="10dp"
+            android:maxLines="10"
+            android:ellipsize="end"
             />
-
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="2 hours"
+            android:textSize="10sp"
+            app:layout_constraintLeft_toLeftOf="@id/thumbnail"
+            app:layout_constraintRight_toRightOf="@id/thumbnail"
+            app:layout_constraintBottom_toTopOf="@id/delimeter"
+            />
         <View
+            android:id="@+id/delimeter"
             android:layout_width="0dp"
             android:layout_height="1px"
             app:layout_constraintLeft_toLeftOf="parent"

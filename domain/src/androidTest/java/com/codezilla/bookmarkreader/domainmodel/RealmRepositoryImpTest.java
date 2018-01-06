@@ -5,16 +5,17 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.codezilla.bookmarkreader.domainmodel.exception.CustomRealException;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import static com.codezilla.bookmarkreader.domainmodel.TextBlock.textBlock;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.*;
 
@@ -89,15 +90,7 @@ public class RealmRepositoryImpTest {
         return wu;
     }
 
-    @Test
-    public void shouldUpdateChange()
-    {
-        realmFacade.add(webUnit(ANY_URL) );
-        WebUnit wu = realmFacade.getWebUnit(ANY_URL);
-        wu.setChangeSummary(NEW_CHANGE);
-        realmFacade.update(wu);
-        assertThat(realmFacade.getWebUnit(ANY_URL).getChangeSummary() , equalTo(NEW_CHANGE));
-    }
+
 
 
     @Test
@@ -118,13 +111,72 @@ public class RealmRepositoryImpTest {
     {
         WebUnit wu = new WebUnit();
         wu.setUrl(ANY_URL);
-        wu.setChangeSummary("old");
         realmFacade.add(wu);
         WebUnit updated = new WebUnit();
         updated.setUrl(ANY_URL);
-        updated.setChangeSummary("new");
         realmFacade.update(updated);
         assertThat(realmFacade.webUnits().size() , equalTo(1));
-        assertThat(realmFacade.getWebUnit(ANY_URL).getChangeSummary() , equalTo("new") );
     }
+
+
+    @Test
+    public void shouldUpdatePreviousContent()
+    {
+        WebUnit wu = new WebUnit();
+        wu.setUrl(ANY_URL);
+        WebUnitContent webUnitContent = new WebUnitContent();
+        webUnitContent.setContent("c1");
+        wu.setLatestContent(webUnitContent);
+        realmFacade.add(wu);
+
+        WebUnitContent wcNew = new WebUnitContent();
+        wcNew.setContent("c2");
+
+        wu.setPreviousContent(wu.getLatestContent());
+        wu.setLatestContent(wcNew);
+        realmFacade.update(wu);
+        assertThat(realmFacade.getWebUnit(ANY_URL).getLatestContent().getContent() , equalTo("c2")  );
+        assertThat(realmFacade.getWebUnit(ANY_URL).getPreviousContent().getContent() , equalTo("c1")  );
+    }
+
+    @Test
+    public void shouldAddChange()
+    {
+
+        Change change = new Change();
+        change.setNewBlocks(textBlock("a","b","c") , textBlock("x","y"));
+        WebUnit wu = new WebUnit();
+        wu.setUrl(ANY_URL);
+        wu.setChange(change);
+        realmFacade.add(wu);
+
+        WebUnit wuDb = realmFacade.getWebUnit( ANY_URL);
+        Change chDB = wuDb.getChange();
+        assertThat(chDB.getNewBlocks() , hasSize(2));
+        assertThat(chDB.getNewBlocks().get(0).lines() , hasItems("a" , "b" , "c")  );
+        assertThat(chDB.getNewBlocks().get(1).lines() , hasItems("x" , "y" )  );
+    }
+
+
+    @Test
+    public void shouldUpdateChange()
+    {
+        Change change = new Change();
+        change.setNewBlocks(textBlock("a","b","c") , textBlock("x","y"));
+        WebUnit wu = new WebUnit();
+        wu.setUrl(ANY_URL);
+        wu.setChange(change);
+        realmFacade.add(wu);
+
+        wu = realmFacade.getWebUnit(ANY_URL);
+        wu.getChange().setNewBlocks(textBlock("e") );
+        realmFacade.update(wu);
+
+        wu = realmFacade.getWebUnit(ANY_URL);
+
+        assertThat(wu.getChange().getNewBlocks() , hasSize(1));
+        assertThat(wu.getChange().getNewBlocks().get(0).lines() , hasItems("e"));
+
+    }
+
 }

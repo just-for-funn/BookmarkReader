@@ -1,6 +1,7 @@
 package com.codezilla.bookmarkreader.weblist;
 
 import android.databinding.ObservableBoolean;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import com.codezilla.bookmarkreader.async.CustomAsyncTaskExecutor;
@@ -50,8 +51,10 @@ public class WebListViewModel implements CustomAsyncTaskExecutor.TaskExecuteOwne
     }
 
     @Override
-    public void onError(DomainException domainException) {
+    public void onError(DomainException domainException)
+    {
         isBusy.set(false);
+        this.weblistView.get().showError(domainException.getMsg() );
     }
 
 
@@ -63,5 +66,6 @@ public class WebListViewModel implements CustomAsyncTaskExecutor.TaskExecuteOwne
     static interface IWebListView
     {
         void onListChanged(List<WebSiteInfo> webSiteInfos);
+        void showError(String message);
     }
 }

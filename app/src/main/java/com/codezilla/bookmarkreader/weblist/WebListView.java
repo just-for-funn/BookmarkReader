@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -71,6 +72,12 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
             rowElements.add(new WebListRowModel(w.getUrl() , w.getSummary() , w.getFaviconUrl()));
         }
         recyclerView.setAdapter( new WebListViewFragmentAdapter(rowElements , this.handler));
+    }
+
+    @Override
+    public void showError(String message)
+    {
+        Snackbar.make(this.getView() , message , Snackbar.LENGTH_SHORT ).show();
     }
 
     static class WebListViewFragmentAdapter extends RecyclerView.Adapter<WebListViewRowDataHolder>

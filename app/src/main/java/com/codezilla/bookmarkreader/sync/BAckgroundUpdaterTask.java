@@ -10,6 +10,7 @@ import com.codezilla.bookmarkreader.domainmodel.RealmLogRepositoryImp;
 import com.codezilla.bookmarkreader.domainmodel.RealmRepositoryImp;
 import com.codezilla.bookmarkreader.domainmodel.WebUnitContentUpdater;
 import com.codezilla.bookmarkreader.exception.DomainException;
+import com.codezilla.bookmarkreader.summary.HtmlComparerImp;
 
 import java.util.concurrent.Callable;
 
@@ -31,16 +32,18 @@ public class BackgroundUpdaterTask extends AsyncTask<Void ,Void , Boolean > {
     @Override
     protected Boolean doInBackground(Void... params)
     {
+        Log.i(TAG, "Background updater tast started");
         ILogRepository logRepository = new LogCatDecorator(new RealmLogRepositoryImp(context));
         try
         {
             WebUnitContentUpdater contentUpdater = new WebUnitContentUpdater(new OkHttpClientImp(),
                     new RealmRepositoryImp( context) ,
-                    new MockHtmlComparer() , logRepository ,
-                    new FaviconExtractor(),
-                    new BoilerplateArticlConverterAdapter()
+                    new HtmlComparerImp(),
+                    logRepository ,
+                    new FaviconExtractor()
             );
             contentUpdater.updateAll();
+            Log.i(TAG, "Background updater task finished");
             return new Boolean(true);
         }
         catch (Exception e)

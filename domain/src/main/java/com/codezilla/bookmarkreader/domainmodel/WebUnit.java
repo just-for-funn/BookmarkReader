@@ -15,9 +15,10 @@ public class WebUnit extends RealmObject {
     @PrimaryKey
     private String url;
     private String faviconUrl;
-    private String changeSummary;
 
     WebUnitContent latestContent;
+    WebUnitContent previousContent;
+    Change change;
 
     public String getUrl() {
         return url;
@@ -25,14 +26,6 @@ public class WebUnit extends RealmObject {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public String getChangeSummary() {
-        return changeSummary;
-    }
-
-    public void setChangeSummary(String changeSummary) {
-        this.changeSummary = changeSummary;
     }
 
     public WebUnitContent getLatestContent() {
@@ -49,5 +42,21 @@ public class WebUnit extends RealmObject {
 
     public void setFaviconUrl(String faviconUrl) {
         this.faviconUrl = faviconUrl;
+    }
+
+    public WebUnitContent getPreviousContent() {
+        return previousContent;
+    }
+
+    public void setPreviousContent(WebUnitContent previousContent) {
+        this.previousContent = previousContent;
+    }
+
+    public Change getChange() {
+        return change;
+    }
+
+    public void setChange(Change change) {
+        this.change = change;
     }
 }
