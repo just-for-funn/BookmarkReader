@@ -4,6 +4,8 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.util.Log;
 
+import com.codezilla.bookmarkreader.domainmodel.IUpdateListener;
+
 import java.util.concurrent.Callable;
 
 /**
@@ -19,7 +21,7 @@ public class ScheduledSynchronizer extends JobService
     public boolean onStartJob(final JobParameters params)
     {
         Log.i(TAG , "onStart");
-        this.bAckgroundUpdaterTask = new BackgroundUpdaterTask(getApplicationContext())
+        this.bAckgroundUpdaterTask = new BackgroundUpdaterTask(getApplicationContext() , IUpdateListener.NULL)
         {
             @Override
             protected void onPostExecute(Boolean aBoolean) {

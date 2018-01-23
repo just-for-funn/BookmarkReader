@@ -106,4 +106,11 @@ public class RealmRepositoryImp implements IWebUnitRepository {
             realm.refresh();
         }
     }
+
+    @Override
+    public long count() {
+        try (Realm realm = realm()) {
+            return realm.where(WebUnit.class).count();
+        }
+    }
 }

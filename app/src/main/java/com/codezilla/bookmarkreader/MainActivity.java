@@ -14,6 +14,7 @@ import com.codezilla.bookmarkreader.history.HistoryView;
 import com.codezilla.bookmarkreader.menu.INavigator;
 import com.codezilla.bookmarkreader.sync.BackgroundUpdaterTask;
 import com.codezilla.bookmarkreader.sync.MyJopScheduler;
+import com.codezilla.bookmarkreader.views.download.DownloadFragment;
 import com.codezilla.bookmarkreader.weblist.WebListView;
 
 
@@ -22,6 +23,7 @@ public class MainActivity extends FragmentActivity {
     public static final String TAG_WEBLIST_FRAGMENT = "WebListFragment";
     private static final String TAG_HISTORY_VIEW_FRAGMENT = "historyViewFragment";
     private static final String TAG_SETTINGS_FRAGMENT = "settingsFragment";
+    private static final String TAG_DOWNLOAD_FRAGMENT = "downLoadFragment";
     Toolbar toolbar;
     DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
@@ -114,15 +116,11 @@ public class MainActivity extends FragmentActivity {
         @Override
         public void refresh()
         {
-            BackgroundUpdaterTask backgroundUpdaterTask = new BackgroundUpdaterTask(context)
-            {
-                @Override
-                protected void onPostExecute(Boolean aBoolean) {
-                    super.onPostExecute(aBoolean);
-                    showHome();
-                }
-            };
-            backgroundUpdaterTask.execute();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.main_view_content , new DownloadFragment() , TAG_DOWNLOAD_FRAGMENT )
+                    .addToBackStack(null)
+                    .commit();
+            drawerLayout.closeDrawers();
         }
     }
 }

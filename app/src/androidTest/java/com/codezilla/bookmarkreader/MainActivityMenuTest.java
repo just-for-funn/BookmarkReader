@@ -7,11 +7,13 @@ import android.widget.RelativeLayout;
 
 import com.codezilla.bookmarkreader.MainActivity;
 import com.codezilla.bookmarkreader.R;
+import com.codezilla.bookmarkreader.domainmodel.IWebUnitRepository;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -21,6 +23,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.myApp;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.allOf;
 
@@ -44,6 +47,4 @@ public class MainActivityMenuTest extends MainActivityTestBase {
                 .clickToggeButton()
                 .assertDisplaying();
     }
-
-
 }

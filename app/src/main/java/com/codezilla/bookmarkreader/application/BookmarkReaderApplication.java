@@ -113,4 +113,8 @@ public class BookmarkReaderApplication extends Application{
     public ILogRepository getLogRepository() {
         return logRepository;
     }
+
+    public IWebUnitRepository getRealmFacade() {
+        return realmFacade;
+    }
 }

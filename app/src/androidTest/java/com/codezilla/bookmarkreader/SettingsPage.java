@@ -5,6 +5,7 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.assertion.ViewAssertions;
 
 import com.codezilla.bookmarkreader.menu.HistoryPage;
+import com.codezilla.bookmarkreader.views.download.DownloadPage;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -32,5 +33,10 @@ public class SettingsPage
     public HistoryPage clickHistory() {
         onView(withText(R.string.history)).perform(click());
         return new HistoryPage();
+    }
+
+    public DownloadPage clickDownloadAll() {
+        onView(withText(R.string.refresh_sites)).perform(click());
+        return new DownloadPage();
     }
 }

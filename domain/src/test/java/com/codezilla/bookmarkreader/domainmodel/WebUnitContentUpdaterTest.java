@@ -6,9 +6,10 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -50,6 +52,9 @@ public class WebUnitContentUpdaterTest
     @Mock
     IFaviconExtractor faviconExtractor;
 
+    @Mock
+    IUpdateListener updateListener;
+
     WebUnitContentUpdater webUnitContentUpdater;
     ArgumentCaptor<WebUnit> webUnitArgumentCaptor = ArgumentCaptor.forClass(WebUnit.class);
     List<WebUnit> webUnits = Arrays.asList(of(URL_1) , of(URL_2));
@@ -69,7 +74,7 @@ public class WebUnitContentUpdaterTest
         when(httpClient.getHtmlContent(URL_1)).thenReturn(NEW_CONTENT);
         when(httpComparer.isChanged(anyString() , anyString())).thenReturn(true);
         when(httpComparer.newLines()).thenReturn(asTextBlock(CONTENT_CHANGE));
-        webUnitContentUpdater = new WebUnitContentUpdater(httpClient , realmFacade , httpComparer ,logRepository , faviconExtractor);
+        webUnitContentUpdater = new WebUnitContentUpdater(new UpdateContext(httpClient, realmFacade, httpComparer, logRepository, faviconExtractor, updateListener));
 
     }
 
@@ -158,5 +163,36 @@ public class WebUnitContentUpdaterTest
         WebUnit wu = webUnitArgumentCaptor.getValue();
         assertThat(wu.getChange().getNewBlocks() , hasSize(1));
         assertThat(wu.getChange().getNewBlocks().get(0).lines() , hasItems(CONTENT_CHANGE));
+    }
+
+    @Test
+    public void shouldCallbackUpdateListener()
+    {
+        webUnitContentUpdater.updateAll();
+        Mockito.verify(updateListener).onStart(any(WebUnit.class));
+        Mockito.verify(updateListener).onComplete(any(WebUnit.class));
+    }
+
+    @Test
+    public void shouldCallbackUpdateListenerOnFail()
+    {
+        when(httpClient.getHtmlContent(URL_1)).thenThrow(new RuntimeException());
+        webUnitContentUpdater.updateAll();
+        Mockito.verify(updateListener).onStart(any(WebUnit.class));
+        Mockito.verify(updateListener).onFail(any(WebUnit.class));
+    }
+
+    @Test
+    public void shouldNotUpdateRemainingElementsWhenStopped()
+    {
+        when(httpClient.getHtmlContent(URL_1)).thenAnswer(new Answer<String>() {
+            @Override
+            public String answer(InvocationOnMock invocation) throws Throwable {
+                webUnitContentUpdater.stop();
+                return "";
+            }
+        });
+        webUnitContentUpdater.updateAll();
+        verify(httpClient , times(1)).getHtmlContent(anyString());
     }
 }

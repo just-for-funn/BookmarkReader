@@ -54,5 +54,10 @@ class MockWebListService implements com.codezilla.bookmarkreader.weblist.IWebLis
         result.add(WebSiteInfo.of(url , "No changes yet"));
     }
 
+    @Override
+    public long count() {
+        return result.size();
+    }
+
 
 }

@@ -47,6 +47,11 @@ public class WeblistServiceAdapter implements IWebListService {
         realmFacade.add(wu);
     }
 
+    @Override
+    public long count() {
+        return realmFacade.count();
+    }
+
     private String faviconOf(String url) {
         return getParentUrl(url)+"/favicon.ico";
     }

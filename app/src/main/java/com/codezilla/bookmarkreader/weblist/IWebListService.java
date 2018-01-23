@@ -10,4 +10,5 @@ public interface IWebListService
 {
     List<WebSiteInfo> getWebSitesInfos();
     void add(String url);
+    long count();
 }

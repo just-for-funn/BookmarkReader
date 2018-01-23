@@ -31,7 +31,7 @@ public abstract class MainActivityTestBase {
     @Before
     public final void beforeTest()
     {
-        BookmarkReaderApplication.getInstance().setWebListService(null);
+        //BookmarkReaderApplication.getInstance().setWebListService(null);
         //BookmarkReaderApplication.getInstance().setUserService(null);
         //BookmarkReaderApplication.getInstance().setCacheService(null);
     }

@@ -20,4 +20,6 @@ public interface IWebUnitRepository {
     boolean exists(String url);
 
     void update(WebUnit wu);
+
+    long count();
 }

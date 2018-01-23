@@ -6,15 +6,12 @@ import android.util.Log;
 
 import com.codezilla.bookmarkreader.application.OkHttpClientImp;
 import com.codezilla.bookmarkreader.domainmodel.ILogRepository;
+import com.codezilla.bookmarkreader.domainmodel.IUpdateListener;
 import com.codezilla.bookmarkreader.domainmodel.RealmLogRepositoryImp;
 import com.codezilla.bookmarkreader.domainmodel.RealmRepositoryImp;
+import com.codezilla.bookmarkreader.domainmodel.UpdateContext;
 import com.codezilla.bookmarkreader.domainmodel.WebUnitContentUpdater;
-import com.codezilla.bookmarkreader.exception.DomainException;
 import com.codezilla.bookmarkreader.summary.HtmlComparerImp;
-
-import java.util.concurrent.Callable;
-
-import okhttp3.OkHttpClient;
 
 /**
  * Created by davut on 9/7/2017.
@@ -22,11 +19,19 @@ import okhttp3.OkHttpClient;
 
 public class BackgroundUpdaterTask extends AsyncTask<Void ,Void , Boolean > {
     final static String TAG = BackgroundUpdaterTask.class.getSimpleName();
+    private final IUpdateListener updateListener;
     Context context;
+    private WebUnitContentUpdater contentUpdater;
 
-    public BackgroundUpdaterTask(Context context)
+    public BackgroundUpdaterTask(Context context , IUpdateListener updateListener)
     {
         this.context = context;
+        this.updateListener = updateListener;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        this.updateListener.onStart();
     }
 
     @Override
@@ -36,12 +41,8 @@ public class BackgroundUpdaterTask extends AsyncTask<Void ,Void , Boolean > {
         ILogRepository logRepository = new LogCatDecorator(new RealmLogRepositoryImp(context));
         try
         {
-            WebUnitContentUpdater contentUpdater = new WebUnitContentUpdater(new OkHttpClientImp(),
-                    new RealmRepositoryImp( context) ,
-                    new HtmlComparerImp(),
-                    logRepository ,
-                    new FaviconExtractor()
-            );
+            this.contentUpdater = new WebUnitContentUpdater(
+                    new UpdateContext(new OkHttpClientImp(), new RealmRepositoryImp(context), new HtmlComparerImp(), logRepository, new FaviconExtractor(), updateListener));
             contentUpdater.updateAll();
             Log.i(TAG, "Background updater task finished");
             return new Boolean(true);
@@ -53,4 +54,14 @@ public class BackgroundUpdaterTask extends AsyncTask<Void ,Void , Boolean > {
         }
     }
 
+
+    @Override
+    protected void onPostExecute(Boolean aBoolean) {
+        this.updateListener.onFinish();
+    }
+
+    public void stop()
+    {
+        this.contentUpdater.stop();
+    }
 }

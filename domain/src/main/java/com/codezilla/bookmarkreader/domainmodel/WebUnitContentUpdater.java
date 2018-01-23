@@ -10,20 +10,22 @@ import io.realm.RealmList;
 
 public class WebUnitContentUpdater
 {
-
     private final IHttpClient httpClient;
+    private final IUpdateListener IUpdateListener;
     IWebUnitRepository realmFacade;
     IHtmlComparer comparer;
     ILogRepository logRepository;
     IFaviconExtractor faviconExtractor;
     private int changedCount = 0;
+    private boolean isStopped = false;
 
-    public WebUnitContentUpdater(IHttpClient httpClient , IWebUnitRepository realmFacade , IHtmlComparer comparer , ILogRepository logRepository , IFaviconExtractor faviconExtractor) {
-        this.httpClient = httpClient;
-        this.realmFacade = realmFacade;
-        this.comparer = comparer;
-        this.logRepository = logRepository;
-        this.faviconExtractor = faviconExtractor;
+    public WebUnitContentUpdater(UpdateContext updateContext) {
+        this.httpClient = updateContext.getHttpClient();
+        this.realmFacade = updateContext.getRealmFacade();
+        this.comparer = updateContext.getComparer();
+        this.logRepository = updateContext.getLogRepository();
+        this.faviconExtractor = updateContext.getFaviconExtractor();
+        this.IUpdateListener = updateContext.getListener();
     }
 
     public void updateAll()
@@ -33,6 +35,8 @@ public class WebUnitContentUpdater
         List<WebUnit> units =  realmFacade.webUnits();
         for (WebUnit w: units)
         {
+            if(isStopped)
+                return;
             update(w);
         }
         if(this.changedCount == 0)
@@ -45,9 +49,12 @@ public class WebUnitContentUpdater
     {
         try
         {
+            this.IUpdateListener.onStart(w);
             updateSafe(w);
+            this.IUpdateListener.onComplete(w);
         } catch (Exception e)
         {
+            this.IUpdateListener.onFail(w);
             logRepository.error(String.format("Cannot update[%s] cause:%s" , w.getUrl() , e.getMessage()));
         }
     }
@@ -99,5 +106,9 @@ public class WebUnitContentUpdater
 
     private boolean isChanged(int changeValue) {
         return changeValue != 0;
+    }
+
+    public void stop() {
+        this.isStopped = true;
     }
 }

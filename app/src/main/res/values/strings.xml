@@ -16,4 +16,12 @@
     <string name="refresh_sites">Download all</string>
     <string name="unexpected_error">Something went terribly wrong</string>
     <string name="error">Error</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="total">Total</string>
+    <string name="failed">Failed</string>
+    <string name="neww">New</string>
+    <string name="successfull">Unchanged</string>
+    <string name="downloading">Downloading</string>
+    <string name="download_stopped">Download Stopped</string>
 </resources>
