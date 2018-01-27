@@ -70,7 +70,7 @@
             android:id="@+id/date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="2 hours"
+            android:text="@{rowData.changeDate}"
             android:textSize="10sp"
             app:layout_constraintLeft_toLeftOf="@id/thumbnail"
             app:layout_constraintRight_toRightOf="@id/thumbnail"

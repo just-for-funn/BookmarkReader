@@ -78,6 +78,7 @@ public class WeblistServiceAdapter implements IWebListService {
         inf.setStatus(WebSiteInfo.Status.CHANGED );
         inf.setFaviconUrl(webUnit.getFaviconUrl());
         inf.setSummary(getSummaryFrom(webUnit));
+        inf.setChangeDate(webUnit.getLatestContent().getDate());
         return inf;
     }
 

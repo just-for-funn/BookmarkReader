@@ -1,5 +1,7 @@
 package com.codezilla.bookmarkreader.weblist;
 
+import java.util.Date;
+
 /**
  * Created by davut on 7/28/2017.
  */
@@ -9,6 +11,7 @@ public class WebSiteInfo {
     String summary;
     Status status;
     String faviconUrl;
+    private Date changeDate;
 
     public String getUrl() {
         return url;
@@ -48,6 +51,14 @@ public class WebSiteInfo {
         info.setUrl(url);
         info.setSummary(summary);
         return info;
+    }
+
+    public void setChangeDate(Date changeDate) {
+        this.changeDate = changeDate;
+    }
+
+    public Date getChangeDate() {
+        return changeDate;
     }
 
     public static enum Status

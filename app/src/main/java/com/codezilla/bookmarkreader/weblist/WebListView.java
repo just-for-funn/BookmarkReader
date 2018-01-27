@@ -69,7 +69,9 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
         List<WebListRowModel> rowElements = new ArrayList<>();
         for (WebSiteInfo w: webSiteInfos)
         {
-            rowElements.add(new WebListRowModel(w.getUrl() , w.getSummary() , w.getFaviconUrl()));
+            WebListRowModel rm =  new WebListRowModel(w.getUrl() , w.getSummary() , w.getFaviconUrl());
+            rm.setChangeDate(w.getChangeDate());
+            rowElements.add(rm);
         }
         recyclerView.setAdapter( new WebListViewFragmentAdapter(rowElements , this.handler));
     }
