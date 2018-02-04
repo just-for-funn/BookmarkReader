@@ -13,7 +13,7 @@ import io.realm.annotations.Required;
 public class WebUnitContent extends RealmObject
 {
 
-    private Date date;
+    private Date date = new Date(0);
     private String content;
     private String url;
     public String getContent() {

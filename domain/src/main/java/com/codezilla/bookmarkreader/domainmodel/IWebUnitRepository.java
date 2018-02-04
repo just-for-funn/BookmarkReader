@@ -22,4 +22,6 @@ public interface IWebUnitRepository {
     void update(WebUnit wu);
 
     long count();
+
+    List<WebUnit> getUnreadWebUnits();
 }

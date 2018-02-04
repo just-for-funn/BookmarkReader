@@ -5,6 +5,8 @@ import android.support.test.runner.AndroidJUnit4;
 import com.codezilla.bookmarkreader.MainActivityTestBase;
 import com.codezilla.bookmarkreader.R;
 import com.codezilla.bookmarkreader.application.BookmarkReaderApplication;
+import com.codezilla.bookmarkreader.domainmodel.WebUnit;
+import com.codezilla.bookmarkreader.domainmodel.WebUnitContent;
 import com.codezilla.bookmarkreader.exception.RecordExistsException;
 
 import org.awaitility.core.ThrowingRunnable;
@@ -19,10 +21,12 @@ import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.myApp;
 import static com.codezilla.bookmarkreader.test.TestExtensions.untilAsserted;
 import static junit.framework.Assert.fail;
 import static org.awaitility.Awaitility.await;
@@ -37,20 +41,18 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(AndroidJUnit4.class)
 public class WebListViewModelTest  extends MainActivityTestBase{
-    public static final String ANY_URL = "www.mocksite.com";
+    public static final String ANY_URL = "http://www.mocksite.com";
     public static final String ANY_SUMMARY = "Summary of mock site";
     public static final String ANY_NEW_URL = "http://www.newurl.com";
     public static final String NEW_URL = ANY_NEW_URL;
 
-    @Mock
-    IWebListService webListService;
-    List<WebSiteInfo> staticWebSites = new ArrayList<>();
+
 
     @Before
     public void before()
     {
-        MockitoAnnotations.initMocks(this);
-        BookmarkReaderApplication.getInstance().setWebListService(webListService);
+        myApp().onCreate();
+        myApp().getRealmFacade().clearWebUnits();
     }
 
     @Test
@@ -72,17 +74,28 @@ public class WebListViewModelTest  extends MainActivityTestBase{
 
     @Test
     public void shouldLoadItemsOnOpen() throws InterruptedException {
-        staticWebSites = Arrays.asList(WebSiteInfo.of( ANY_URL , ANY_SUMMARY));
-        when(webListService.getWebSitesInfos()).thenReturn(staticWebSites);
+        addWebUnit(ANY_URL , ANY_SUMMARY);
         launch();
         webListViewPage().assertUrlDisplaying(ANY_URL);
+    }
+
+    private void addWebUnit(String url, String content) {
+        WebUnit webUnit = new WebUnit();
+        WebUnitContent webUnitContent = new WebUnitContent();
+        webUnitContent.setContent(content);
+        webUnitContent.setDate(new Date(System.currentTimeMillis()));
+        webUnitContent.setUrl(url);
+        webUnit.setLatestContent(webUnitContent);
+        webUnit.setUrl(url);
+        webUnit.setStatus(WebUnit.Status.HAS_NEW_CONTENT);
+        webUnit.setChange(null);
+        myApp().getRealmFacade().add(webUnit);
     }
 
     @Test
     public void shouldOpenAddnewDialogOnAddClick()
     {
-        staticWebSites = Arrays.asList(WebSiteInfo.of( ANY_URL , ANY_SUMMARY));
-        when(webListService.getWebSitesInfos()).thenReturn(staticWebSites);
+        addWebUnit(ANY_URL , ANY_SUMMARY);
         launch();
         AddNewSitepage addNewSitepage =  webListViewPage().clickAdd();
         addNewSitepage.assertVisible();
@@ -92,47 +105,36 @@ public class WebListViewModelTest  extends MainActivityTestBase{
     @Test
     public void shouldAddNewItem()
     {
-        staticWebSites = Arrays.asList(WebSiteInfo.of( ANY_URL , ANY_SUMMARY));
-        when(webListService.getWebSitesInfos()).thenReturn(staticWebSites);
+        addWebUnit(ANY_URL , ANY_SUMMARY);
         launch();
         AddNewSitepage addNewSitepage =  webListViewPage().clickAdd();
         addNewSitepage.enter(NEW_URL).submit();
-        verify(webListService).add(ANY_NEW_URL);
+        webListViewPage().assertUrlDisplaying(NEW_URL);
     }
 
     @Test
     public void shouldFullfillUrlOnadd()
     {
-        staticWebSites = Arrays.asList(WebSiteInfo.of( ANY_URL , ANY_SUMMARY));
-        when(webListService.getWebSitesInfos()).thenReturn(staticWebSites);
+        addWebUnit(ANY_URL , ANY_SUMMARY);
         launch();
         AddNewSitepage addNewSitepage =  webListViewPage().clickAdd();
         addNewSitepage.enter("www.test.com").submit();
-        verify(webListService).add("http://www.test.com");
+        webListViewPage().assertUrlDisplaying("http://www.test.com");
     }
     
-    @Test
+    @Test(expected = RuntimeException.class)
     public void shouldNotAddOnCancelClick()
     {
-        staticWebSites.add(WebSiteInfo.of( ANY_URL , ANY_SUMMARY));
-        when(webListService.getWebSitesInfos()).thenReturn(staticWebSites);
+        addWebUnit(ANY_URL , ANY_SUMMARY);
         launch();
         AddNewSitepage addNewSitepage =  webListViewPage().clickAdd();
         addNewSitepage.enter(NEW_URL).cancel();
-        verify(webListService , times(0)).add(anyString());
+        webListViewPage().assertUrlDisplaying(NEW_URL);
     }
 
     @Test
     public void shouldNewlyAddedItemAppearInList() throws InterruptedException {
-        staticWebSites.add(WebSiteInfo.of( ANY_URL , ANY_SUMMARY));
-        when(webListService.getWebSitesInfos()).thenReturn(staticWebSites);
-        Mockito.doAnswer(new Answer<Boolean>() {
-            @Override
-            public Boolean answer(InvocationOnMock invocation) throws Throwable {
-                staticWebSites.add(convert((String)invocation.getArgument(0)));
-                return true;
-            }
-        }).when(webListService).add(anyString());
+        addWebUnit(ANY_URL , ANY_SUMMARY);
         launch();
         AddNewSitepage addNewSitepage =  webListViewPage().clickAdd();
         addNewSitepage.enter(NEW_URL).submit();
@@ -142,14 +144,7 @@ public class WebListViewModelTest  extends MainActivityTestBase{
     @Test
     public void shouldShowErrorMsg()
     {
-        staticWebSites.add(WebSiteInfo.of( ANY_URL , ANY_SUMMARY));
-        when(webListService.getWebSitesInfos()).thenReturn(staticWebSites);
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                throw new RecordExistsException();
-            }
-        }).when(webListService).add(anyString());
+        addWebUnit(ANY_URL , ANY_SUMMARY);
         launch();
         AddNewSitepage addNewSitepage =  webListViewPage().clickAdd();
         addNewSitepage.enter(ANY_URL).submit();
@@ -159,9 +154,22 @@ public class WebListViewModelTest  extends MainActivityTestBase{
     @Test
     public void shouldDisplayErrorMessageWhenWebListServiceCrushes()
     {
-        when(webListService.getWebSitesInfos()).thenThrow(new RuntimeException("error") );
+        myApp().setWebListService(null);
         launch();
         webListViewPage().assertErrorDisplaying(R.string.unexpected_error);
+    }
+
+    @Test
+    public void shouldNotDisplayElementWhenItsRead()
+    {
+        addWebUnit(ANY_URL , ANY_SUMMARY);
+        addWebUnit(ANY_NEW_URL , ANY_SUMMARY);
+        launch();
+        webListViewPage()
+                .clickItem(ANY_URL)
+                .back();
+        webListViewPage()
+                .assertUrlNotDisplaying(ANY_URL);
     }
 
     private WebSiteInfo convert(String url) {

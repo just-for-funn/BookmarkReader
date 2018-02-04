@@ -1,5 +1,7 @@
 package com.codezilla.bookmarkreader.application;
 
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Stream;
 import com.codezilla.bookmarkreader.R;
 import com.codezilla.bookmarkreader.domainmodel.Change;
 import com.codezilla.bookmarkreader.domainmodel.IArticleExtractor;
@@ -10,6 +12,7 @@ import com.codezilla.bookmarkreader.weblist.IWebListService;
 import com.codezilla.bookmarkreader.weblist.WebSiteInfo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.myApp;
@@ -42,6 +45,7 @@ public class WeblistServiceAdapter implements IWebListService {
         if(realmFacade.exists(url))
             throw new RecordExistsException();
         WebUnit wu = new WebUnit();
+        wu.setStatus(WebUnit.Status.HAS_NEW_CONTENT);
         wu.setUrl(url);
         wu.setFaviconUrl(faviconOf(url));
         realmFacade.add(wu);
@@ -50,6 +54,26 @@ public class WeblistServiceAdapter implements IWebListService {
     @Override
     public long count() {
         return realmFacade.count();
+    }
+
+
+
+    @Override
+    public List<WebSiteInfo> getUnreadWebSitesInfos() {
+        List<WebUnit> wuts = realmFacade.getUnreadWebUnits();
+        return Stream.of(wuts)
+                .map(this::convert)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void markRead(String url) {
+        if(realmFacade.exists(url))
+        {
+            WebUnit webUnit =  realmFacade.getWebUnit(url);
+            webUnit.setStatus(WebUnit.Status.ALREADY_READ);
+            realmFacade.update(webUnit);
+        }
     }
 
     private String faviconOf(String url) {
@@ -75,10 +99,13 @@ public class WeblistServiceAdapter implements IWebListService {
     private WebSiteInfo convert(WebUnit webUnit) {
         WebSiteInfo inf = new WebSiteInfo();
         inf.setUrl(webUnit.getUrl());
-        inf.setStatus(WebSiteInfo.Status.CHANGED );
+        inf.setStatus(webUnit.getStatus());
         inf.setFaviconUrl(webUnit.getFaviconUrl());
         inf.setSummary(getSummaryFrom(webUnit));
-        inf.setChangeDate(webUnit.getLatestContent().getDate());
+        if(webUnit.getLatestContent() == null)
+            inf.setChangeDate(new Date(0));
+        else
+            inf.setChangeDate(webUnit.getLatestContent().getDate());
         return inf;
     }
 

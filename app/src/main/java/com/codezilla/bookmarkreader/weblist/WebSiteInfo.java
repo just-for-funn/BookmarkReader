@@ -9,9 +9,9 @@ import java.util.Date;
 public class WebSiteInfo {
     String url;
     String summary;
-    Status status;
     String faviconUrl;
     private Date changeDate;
+    private int status;
 
     public String getUrl() {
         return url;
@@ -30,13 +30,7 @@ public class WebSiteInfo {
         this.summary = summary;
     }
 
-    public Status getStatus() {
-        return status;
-    }
 
-    public void setStatus(Status status) {
-        this.status = status;
-    }
 
     public String getFaviconUrl() {
         return faviconUrl;
@@ -61,9 +55,12 @@ public class WebSiteInfo {
         return changeDate;
     }
 
-    public static enum Status
-    {
-        NOTHING_CHANGED,
-        CHANGED
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public int getStatus() {
+        return status;
     }
 }

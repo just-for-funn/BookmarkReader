@@ -19,6 +19,7 @@ public class WebUnit extends RealmObject {
     WebUnitContent latestContent;
     WebUnitContent previousContent;
     Change change;
+    private int status;
 
     public String getUrl() {
         return url;
@@ -58,5 +59,19 @@ public class WebUnit extends RealmObject {
 
     public void setChange(Change change) {
         this.change = change;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public static class Status
+    {
+        public static final int ALREADY_READ = 0;
+        public static final int HAS_NEW_CONTENT = 1;
     }
 }

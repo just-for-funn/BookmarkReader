@@ -5,6 +5,7 @@ import android.app.job.JobService;
 import android.util.Log;
 
 import com.codezilla.bookmarkreader.domainmodel.IUpdateListener;
+import com.codezilla.bookmarkreader.domainmodel.RealmLogRepositoryImp;
 
 import java.util.concurrent.Callable;
 
@@ -20,33 +21,29 @@ public class ScheduledSynchronizer extends JobService
     @Override
     public boolean onStartJob(final JobParameters params)
     {
-        Log.i(TAG , "onStart");
+
+        RealmLogRepositoryImp realmLogRepositoryImp = new RealmLogRepositoryImp(getApplicationContext());
+        realmLogRepositoryImp.info("Scheduled Sycronizer onStartJob");
+
         this.bAckgroundUpdaterTask = new BackgroundUpdaterTask(getApplicationContext() , IUpdateListener.NULL)
         {
             @Override
             protected void onPostExecute(Boolean aBoolean) {
-                jobFinished(params , aBoolean);
+                jobFinished(params , false);
             }
         };
         bAckgroundUpdaterTask.execute();
         return true;
     }
 
-    private Callable<Void> stopCallBack()
-    {
-        return new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-
-                ScheduledSynchronizer.this.jobFinished(null , true);
-                return null;
-            }
-        };
-    }
-
     @Override
     public boolean onStopJob(JobParameters params)
     {
+        if(bAckgroundUpdaterTask!= null)
+        {
+            bAckgroundUpdaterTask.stop();
+            bAckgroundUpdaterTask.cancel(true);
+        }
         return true;
     }
 }

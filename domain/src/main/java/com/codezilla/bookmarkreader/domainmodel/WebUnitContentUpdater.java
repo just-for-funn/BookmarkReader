@@ -69,6 +69,7 @@ public class WebUnitContentUpdater
             w.setLatestContent(wuc);
             wuc.setUrl(httpClient.url());
             w.setChange( toChange(comparer.newLines()));
+            w.setStatus(WebUnit.Status.HAS_NEW_CONTENT);
             logRepository.info(String.format("Updated:[%s] " , w.getUrl()));
             this.changedCount+=1;
         }

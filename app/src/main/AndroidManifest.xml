@@ -29,6 +29,8 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".sync.AlarmReceiver" >
+        </receiver>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

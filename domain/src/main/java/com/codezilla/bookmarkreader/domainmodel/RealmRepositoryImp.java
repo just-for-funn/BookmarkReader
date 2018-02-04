@@ -113,4 +113,13 @@ public class RealmRepositoryImp implements IWebUnitRepository {
             return realm.where(WebUnit.class).count();
         }
     }
+
+    @Override
+    public List<WebUnit> getUnreadWebUnits() {
+        try(Realm realm = realm())
+        {
+            RealmResults<WebUnit> wunits =  realm.where(WebUnit.class).equalTo("status" , WebUnit.Status.HAS_NEW_CONTENT).findAll();
+            return realm.copyFromRealm(wunits);
+        }
+    }
 }

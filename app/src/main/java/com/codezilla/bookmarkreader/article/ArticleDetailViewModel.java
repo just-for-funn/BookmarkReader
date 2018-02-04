@@ -10,6 +10,8 @@ import com.codezilla.bookmarkreader.exception.DomainException;
 
 import java.util.concurrent.Callable;
 
+import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.myApp;
+
 /**
  * Created by davut on 8/8/2017.
  */
@@ -51,6 +53,7 @@ public class ArticleDetailViewModel
                  content.set(s.getContent());
                  url.set(s.getBaseUrl());
                  isBusy.set(false);
+                 myApp().getWebListService().markRead(url.get());
             }
 
             @Override

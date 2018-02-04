@@ -59,5 +59,15 @@ class MockWebListService implements com.codezilla.bookmarkreader.weblist.IWebLis
         return result.size();
     }
 
+    @Override
+    public List<WebSiteInfo> getUnreadWebSitesInfos() {
+        return result;
+    }
+
+    @Override
+    public void markRead(String url) {
+
+    }
+
 
 }

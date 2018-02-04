@@ -2,6 +2,8 @@ package com.codezilla.bookmarkreader.application;
 
 import com.codezilla.bookmarkreader.domainmodel.IHttpClient;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -19,7 +21,7 @@ public class OkHttpClientImp implements IHttpClient {
     @Override
     public String getHtmlContent(String url)
     {
-        OkHttpClient client = new OkHttpClient.Builder().build();
+        OkHttpClient client = new OkHttpClient.Builder().readTimeout(3 , TimeUnit.SECONDS).build();
         Call call =  client.newCall(new Request.Builder().header("User-Agent", MOBILE_USER_AGENT).url(url).build());
         try {
             this.response =  call.execute();

@@ -1,9 +1,17 @@
 package com.codezilla.bookmarkreader.sync;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.database.DatabaseUtils;
+import android.os.Build;
+import android.os.SystemClock;
+import android.support.annotation.RequiresApi;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 
@@ -14,12 +22,8 @@ import android.util.Log;
  */
 
 public class MyJopScheduler {
-    public static final int TWELVE_HOURS = 12 * 60 * 60 * 1000;
     private final static String TAG = "SAR.Scheduler";
-    public static final long ONE_HOUR = 1 * 60 * 60 * 1000;
-    private static final long ONE_MINUTE = 1 * 60 * 1000;
-    private static final long FIVE_MIN = 5* ONE_MINUTE;
-    private static final long HALF_HOUR = 30 * ONE_MINUTE;
+    private static final int SYNC_JOB_ID = 123456;
     private final Context context;
     public MyJopScheduler(Context context) {
         this.context = context;
@@ -27,15 +31,33 @@ public class MyJopScheduler {
 
     public void schedule() {
         Log.i(TAG,"scheduling new jop");
+//        AlarmManager alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+//        Intent intent = new Intent(context, AlarmReceiver.class);
+//        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+//        alarmMgr.setWindow(AlarmManager.RTC_WAKEUP , DateUtils.HOUR_IN_MILLIS /2 ,DateUtils.HOUR_IN_MILLIS/2, alarmIntent);
+//        alarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP ,SystemClock.elapsedRealtime() +
+//               20*  60 * 1000 , DateUtils.HOUR_IN_MILLIS/3 , alarmIntent);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            scheduleJobService();
+        }
+        else
+        {
+            Log.i(TAG , "");
+        }
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void scheduleJobService() {
         ComponentName cn = new ComponentName(context , ScheduledSynchronizer.class );
-        JobInfo inf =  new JobInfo.Builder(0 , cn )
-                .setRequiresDeviceIdle(false)
-                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                .setMinimumLatency(HALF_HOUR)
-                .setOverrideDeadline(ONE_HOUR)
+        JobInfo inf =  new JobInfo.Builder(SYNC_JOB_ID , cn )
+                .setPeriodic(DateUtils.HOUR_IN_MILLIS /4 , DateUtils.HOUR_IN_MILLIS/2 )
                 .build();
         JobScheduler jobScheduler  = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
-        jobScheduler.schedule(inf);
+        int result =  jobScheduler.schedule(inf);
+        Log.i(TAG, "scheduleJobService: schedule result : "+result);
     }
 
     public void cancel()

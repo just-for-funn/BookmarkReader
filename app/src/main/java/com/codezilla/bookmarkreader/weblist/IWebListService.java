@@ -1,5 +1,7 @@
 package com.codezilla.bookmarkreader.weblist;
 
+import android.databinding.ObservableField;
+
 import java.util.List;
 
 /**
@@ -11,4 +13,8 @@ public interface IWebListService
     List<WebSiteInfo> getWebSitesInfos();
     void add(String url);
     long count();
+
+    List<WebSiteInfo> getUnreadWebSitesInfos();
+
+    void markRead(String url);
 }

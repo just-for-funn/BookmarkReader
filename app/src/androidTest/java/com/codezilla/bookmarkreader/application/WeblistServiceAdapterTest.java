@@ -92,7 +92,7 @@ public class WeblistServiceAdapterTest {
     @Test
     public void shouldSetSummaryAsNotEvaluatedYetWhenNoDownloadAvailable()
     {
-        WebUnit wu = new WebUnit( );
+        WebUnit wu = new WebUnit();
         wu.setPreviousContent( null);
         wu.setLatestContent(null);
         wu.setUrl( "test");

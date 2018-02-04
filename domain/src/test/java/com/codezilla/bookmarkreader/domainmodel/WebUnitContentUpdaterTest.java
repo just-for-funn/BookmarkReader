@@ -13,6 +13,7 @@ import org.mockito.stubbing.Answer;
 import java.util.Arrays;
 import java.util.List;
 
+import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
@@ -122,7 +123,9 @@ public class WebUnitContentUpdaterTest
         WebUnitContent wuc = new WebUnitContent();
         wuc.setContent(OLD_CONTENT);
         webUnit.setLatestContent(wuc);
+        webUnit.setStatus(WebUnit.Status.ALREADY_READ);
         when(realmFacade.webUnits()).thenReturn(Arrays.asList(webUnit));
+        when(realmFacade.getWebUnit(URL_1)).thenReturn(webUnit);
     }
 
     @Test
@@ -194,5 +197,12 @@ public class WebUnitContentUpdaterTest
         });
         webUnitContentUpdater.updateAll();
         verify(httpClient , times(1)).getHtmlContent(anyString());
+    }
+
+    @Test
+    public void shouldUpdateStatusWhenNewContentAvailable() {
+        assertEquals(realmFacade.getWebUnit(URL_1).getStatus() , WebUnit.Status.ALREADY_READ);
+        webUnitContentUpdater.updateAll();
+        assertEquals(realmFacade.getWebUnit(URL_1).getStatus() , WebUnit.Status.HAS_NEW_CONTENT);
     }
 }

@@ -31,7 +31,7 @@ public class OkHttpClientImpTest {
     @Test
     public void shouldGetWebContentWhenUrlIsValid()
     {
-        String content = client.getHtmlContent("http://www.google.com");
+        String content = client.getHtmlContent(NON_REDIRECT_URL);
         assertThat(content , not(isEmptyOrNullString()));
     }
 

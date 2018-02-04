@@ -32,6 +32,10 @@ public class BookmarkReaderApplication extends Application{
     public void onCreate() {
         super.onCreate();
         self = this;
+        initilizeServices();
+    }
+
+    public void initilizeServices() {
         this.realmFacade = new RealmRepositoryImp(getApplicationContext());
         userService = new MockUserService();
         webListService = new WeblistServiceAdapter(realmFacade ,  new BoilerplateArticlConverterAdapter());

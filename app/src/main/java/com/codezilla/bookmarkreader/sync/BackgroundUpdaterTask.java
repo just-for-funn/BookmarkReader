@@ -62,6 +62,7 @@ public class BackgroundUpdaterTask extends AsyncTask<Void ,Void , Boolean > {
 
     public void stop()
     {
-        this.contentUpdater.stop();
+        if(contentUpdater!= null)
+            this.contentUpdater.stop();
     }
 }

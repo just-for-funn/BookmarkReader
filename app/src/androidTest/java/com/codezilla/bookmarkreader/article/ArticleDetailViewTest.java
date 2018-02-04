@@ -2,6 +2,7 @@ package com.codezilla.bookmarkreader.article;
 
 import com.codezilla.bookmarkreader.MainActivityPage;
 import com.codezilla.bookmarkreader.MainActivityTestBase;
+import com.codezilla.bookmarkreader.domainmodel.WebUnit;
 import com.codezilla.bookmarkreader.exception.DomainException;
 import com.codezilla.bookmarkreader.weblist.IWebListService;
 import com.codezilla.bookmarkreader.weblist.WebSiteInfo;
@@ -40,9 +41,9 @@ public class ArticleDetailViewTest extends MainActivityTestBase
         webSiteInfo = new WebSiteInfo();
         webSiteInfo.setUrl(ANY_URL);
         webSiteInfo.setSummary(ANY_SUMMARY);
-        webSiteInfo.setStatus(WebSiteInfo.Status.CHANGED);
+        webSiteInfo.setStatus(WebUnit.Status.HAS_NEW_CONTENT);
         initMocks(this);
-        when(webListService.getWebSitesInfos()).thenReturn(Arrays.asList(webSiteInfo));
+        when(webListService.getUnreadWebSitesInfos()).thenReturn(Arrays.asList(webSiteInfo));
         when(articleService.getArticle(anyString())).thenReturn(ANY_CONTENT);
         myApp().setWebListService(webListService);
         myApp().setArticleService(articleService);

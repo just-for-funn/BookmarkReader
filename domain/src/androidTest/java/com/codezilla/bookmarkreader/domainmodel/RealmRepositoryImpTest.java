@@ -1,5 +1,6 @@
 package com.codezilla.bookmarkreader.domainmodel;
 
+import android.support.annotation.NonNull;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -179,4 +180,23 @@ public class RealmRepositoryImpTest {
 
     }
 
+    @Test
+    public void shouldGetUnreadElements()
+    {
+        realmFacade.add(webUnit("a" , WebUnit.Status.ALREADY_READ));
+        realmFacade.add(webUnit("b" , WebUnit.Status.HAS_NEW_CONTENT));
+        realmFacade.add(webUnit("c" , WebUnit.Status.HAS_NEW_CONTENT));
+        assertThat(realmFacade.getUnreadWebUnits() , hasSize(2));
+        assertThat(realmFacade.getUnreadWebUnits().get(0).getUrl() , equalTo("b"));
+        assertThat(realmFacade.getUnreadWebUnits().get(1).getUrl() , equalTo("c"));
+
+    }
+
+    @NonNull
+    private WebUnit webUnit(String url, int status) {
+        WebUnit webUnit = new WebUnit();
+        webUnit.setStatus(status);
+        webUnit.setUrl(url);
+        return webUnit;
+    }
 }

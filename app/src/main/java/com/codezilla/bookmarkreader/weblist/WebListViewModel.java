@@ -31,12 +31,7 @@ public class WebListViewModel implements CustomAsyncTaskExecutor.TaskExecuteOwne
     public void loadRows()
     {
         this.isBusy.set(true);
-        new CustomAsyncTaskExecutor<List<WebSiteInfo>>(this, new Callable<List<WebSiteInfo>>() {
-            @Override
-            public List<WebSiteInfo> call() throws Exception {
-                return myApp().getWebListService().getWebSitesInfos();
-            }
-        }).execute();
+        new CustomAsyncTaskExecutor<List<WebSiteInfo>>(this, () -> myApp().getWebListService().getUnreadWebSitesInfos()).execute();
     }
 
     @Override
