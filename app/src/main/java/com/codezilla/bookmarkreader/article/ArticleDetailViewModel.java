@@ -50,10 +50,10 @@ public class ArticleDetailViewModel
         return new CustomAsyncTaskExecutor.TaskExecuteOwner<IArticleService.ArticleDetail>() {
             @Override
             public void onFinish(IArticleService.ArticleDetail s) {
-                 content.set(s.getContent());
+                myApp().getWebListService().markRead(url.get());
+                content.set(s.getContent());
                  url.set(s.getBaseUrl());
                  isBusy.set(false);
-                 myApp().getWebListService().markRead(url.get());
             }
 
             @Override
