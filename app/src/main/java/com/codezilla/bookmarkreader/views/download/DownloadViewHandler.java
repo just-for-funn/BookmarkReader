@@ -50,14 +50,16 @@ public class DownloadViewHandler
             @Override
             public void onFail(WebUnit wu)
             {
-                inc( downloadViewModel.total);
                 inc( downloadViewModel.failed);
+                inc(downloadViewModel.total);
             }
 
             @Override
             public void onComplete(WebUnit wu) {
-                inc( downloadViewModel.neww);
-                inc( downloadViewModel.successed);
+                if(wu.getStatus() == WebUnit.Status.HAS_NEW_CONTENT)
+                    inc( downloadViewModel.neww);
+                else
+                    inc( downloadViewModel.successed);
                 inc( downloadViewModel.total);
             }
         });

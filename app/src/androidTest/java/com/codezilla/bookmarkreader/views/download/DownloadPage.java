@@ -40,7 +40,7 @@ public class DownloadPage {
 
     public DownloadPage assertCompletedCount(int count)
     {
-        onView(withId(R.id.arc_completed)).check(ViewAssertions.matches(arcProcess(count)));
+        onView(withId(R.id.arc_total)).check(ViewAssertions.matches(arcProcess(count)));
         return this;
     }
 

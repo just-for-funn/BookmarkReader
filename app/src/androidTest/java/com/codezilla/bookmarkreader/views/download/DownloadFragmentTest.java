@@ -71,6 +71,7 @@ public class DownloadFragmentTest extends MainActivityTestBase
                 .assertTotalCount(3);
     }
 
+
     @Test
     public void shouldDisplayDownloadingItem()
     {
