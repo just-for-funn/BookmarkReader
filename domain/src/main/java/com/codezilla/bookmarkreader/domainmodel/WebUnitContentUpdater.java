@@ -64,6 +64,7 @@ public class WebUnitContentUpdater
         boolean changed = comparer.isChanged(currentContent(w) , htmlContent);
         if(changed)
         {
+            swapLatestContent(w);
             WebUnitContent wuc = new WebUnitContent();
             wuc.setContent(htmlContent);
             w.setLatestContent(wuc);
@@ -79,6 +80,12 @@ public class WebUnitContentUpdater
             w.setFaviconUrl(favicon);
         }
         realmFacade.update(w);
+    }
+
+    private void swapLatestContent(WebUnit w) {
+        WebUnitContent wuc = w.getLatestContent();
+        w.setPreviousContent(wuc);
+        w.setLatestContent(null);
     }
 
     private Change toChange(List<TextBlock> textBlocks) {

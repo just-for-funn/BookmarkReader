@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
@@ -204,5 +205,16 @@ public class WebUnitContentUpdaterTest
         assertEquals(realmFacade.getWebUnit(URL_1).getStatus() , WebUnit.Status.ALREADY_READ);
         webUnitContentUpdater.updateAll();
         assertEquals(realmFacade.getWebUnit(URL_1).getStatus() , WebUnit.Status.HAS_NEW_CONTENT);
+    }
+
+    @Test
+    public void shouldUpdatePreviousContent()
+    {
+        WebUnitContent wuc = new WebUnitContent();
+        wuc.setContent("old-content");
+        this.webUnit.setLatestContent(wuc);
+        assertNull(realmFacade.getWebUnit(URL_1).getPreviousContent());
+        webUnitContentUpdater.updateAll();
+        assertThat(webUnit.getPreviousContent().getContent() ,equalTo("old-content") );
     }
 }
