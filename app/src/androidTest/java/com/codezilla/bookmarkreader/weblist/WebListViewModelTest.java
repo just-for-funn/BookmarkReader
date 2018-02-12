@@ -80,6 +80,10 @@ public class WebListViewModelTest  extends MainActivityTestBase{
     }
 
     private void addWebUnit(String url, String content) {
+        addWebUnit(url , content , WebUnit.Status.HAS_NEW_CONTENT);
+    }
+
+    private void addWebUnit(String url, String content, int status) {
         WebUnit webUnit = new WebUnit();
         WebUnitContent webUnitContent = new WebUnitContent();
         webUnitContent.setContent(content);
@@ -87,7 +91,7 @@ public class WebListViewModelTest  extends MainActivityTestBase{
         webUnitContent.setUrl(url);
         webUnit.setLatestContent(webUnitContent);
         webUnit.setUrl(url);
-        webUnit.setStatus(WebUnit.Status.HAS_NEW_CONTENT);
+        webUnit.setStatus(status);
         webUnit.setChange(null);
         myApp().getRealmFacade().add(webUnit);
     }
@@ -170,6 +174,16 @@ public class WebListViewModelTest  extends MainActivityTestBase{
                 .back();
         webListViewPage()
                 .assertUrlNotDisplaying(ANY_URL);
+    }
+
+    @Test
+    public void shouldDisplayNothingToReadWhenNoContentAvailable()
+    {
+        addWebUnit(ANY_URL , ANY_SUMMARY , WebUnit.Status.ALREADY_READ);
+        addWebUnit(ANY_NEW_URL , ANY_SUMMARY , WebUnit.Status.ALREADY_READ);
+        launch();
+        webListViewPage()
+                .assertNotContentDisplaying();
     }
 
     private WebSiteInfo convert(String url) {

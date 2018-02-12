@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -198,5 +199,15 @@ public class RealmRepositoryImpTest {
         webUnit.setStatus(status);
         webUnit.setUrl(url);
         return webUnit;
+    }
+
+    @Test
+    public void shouldGetUrlList()
+    {
+        realmFacade.add(webUnit("a" , WebUnit.Status.ALREADY_READ));
+        realmFacade.add(webUnit("b" , WebUnit.Status.HAS_NEW_CONTENT));
+        realmFacade.add(webUnit("c" , WebUnit.Status.HAS_NEW_CONTENT));
+        List<String> urls =  realmFacade.webUnitUrls();
+        assertThat(urls , hasItems("a","b","c"));
     }
 }

@@ -6,6 +6,7 @@ import android.support.test.espresso.assertion.ViewAssertions;
 
 import com.codezilla.bookmarkreader.menu.HistoryPage;
 import com.codezilla.bookmarkreader.views.download.DownloadPage;
+import com.codezilla.bookmarkreader.views.edit.EditPage;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -38,5 +39,10 @@ public class SettingsPage
     public DownloadPage clickDownloadAll() {
         onView(withText(R.string.refresh_sites)).perform(click());
         return new DownloadPage();
+    }
+
+    public EditPage clickEdit() {
+        onView(withText(R.string.edit_items)).perform(click());
+        return new EditPage();
     }
 }

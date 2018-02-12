@@ -73,4 +73,9 @@ public class WebListViewPage
         onView(withText(url)).check(doesNotExist());
         return this;
     }
+
+    public WebListViewPage assertNotContentDisplaying() {
+         onView(withText("Nothing to read")).check(matches(isDisplayed()));
+         return this;
+    }
 }

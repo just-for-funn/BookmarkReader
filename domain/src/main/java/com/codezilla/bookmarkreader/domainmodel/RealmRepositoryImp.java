@@ -2,6 +2,8 @@ package com.codezilla.bookmarkreader.domainmodel;
 
 import android.content.Context;
 
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Stream;
 import com.codezilla.bookmarkreader.domainmodel.exception.CustomRealException;
 
 import java.util.List;
@@ -47,6 +49,17 @@ public class RealmRepositoryImp implements IWebUnitRepository {
         {
             RealmResults<WebUnit> wunits =  realm.where(WebUnit.class).findAll();
             return realm.copyFromRealm(wunits);
+        }
+    }
+
+    @Override
+    public List<String> webUnitUrls() {
+        try(Realm realm = realm())
+        {
+            RealmResults<WebUnit> webUnits =  realm.where(WebUnit.class).findAll();
+            return Stream.of(webUnits)
+                    .map(o->o.getUrl())
+                    .collect(Collectors.toList());
         }
     }
 
@@ -120,6 +133,19 @@ public class RealmRepositoryImp implements IWebUnitRepository {
         {
             RealmResults<WebUnit> wunits =  realm.where(WebUnit.class).equalTo("status" , WebUnit.Status.HAS_NEW_CONTENT).findAll();
             return realm.copyFromRealm(wunits);
+        }
+    }
+
+    @Override
+    public void remove(String url)
+    {
+        try(Realm realm = realm())
+        {
+            realm.beginTransaction();
+            RealmResults<WebUnit> vals =  realm.where(WebUnit.class).equalTo(WebUnit.COL_URL , url).findAll();
+            vals.deleteAllFromRealm();
+            realm.commitTransaction();
+            realm.refresh();
         }
     }
 }

@@ -1,8 +1,6 @@
 package com.codezilla.bookmarkreader.weblist;
 
 import android.databinding.ObservableBoolean;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
 
 import com.codezilla.bookmarkreader.async.CustomAsyncTaskExecutor;
 import com.codezilla.bookmarkreader.exception.DomainException;
@@ -10,7 +8,6 @@ import com.codezilla.bookmarkreader.exception.DomainException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.myApp;
 
@@ -20,6 +17,7 @@ import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication
 
 public class WebListViewModel implements CustomAsyncTaskExecutor.TaskExecuteOwner<List<WebSiteInfo>>
 {
+    private ObservableBoolean isCompleted = new ObservableBoolean(false);
     WeakReference<IWebListView> weblistView;
 
     public WebListViewModel(IWebListView weblistView) {
@@ -43,6 +41,7 @@ public class WebListViewModel implements CustomAsyncTaskExecutor.TaskExecuteOwne
             this.webSiteInfos = webListViews;
         if(this.weblistView.get()!= null)
             this.weblistView.get().onListChanged(this.webSiteInfos);
+        isCompleted.set(webSiteInfos.size()  == 0 );
     }
 
     @Override
@@ -56,6 +55,14 @@ public class WebListViewModel implements CustomAsyncTaskExecutor.TaskExecuteOwne
 
     public boolean isLoaded() {
         return webSiteInfos.size() > 0;
+    }
+
+    public ObservableBoolean getIsCompleted() {
+        return isCompleted;
+    }
+
+    public void setIsCompleted(ObservableBoolean isCompleted) {
+        this.isCompleted = isCompleted;
     }
 
     static interface IWebListView

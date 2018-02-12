@@ -8,4 +8,5 @@ public interface INavigator {
     void showHistory();
     void showHome();
     void refresh();
+    void showEditList();
 }

@@ -7,4 +7,5 @@
     <dimen name="login_text_input_height">35dp</dimen>
     <dimen name="menu_item_text_size">15sp</dimen>
     <dimen name="arc_bottom_large">25sp</dimen>
+    <dimen name="menu_margin">10dp</dimen>
 </resources>

@@ -7,23 +7,27 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 
-import com.codezilla.bookmarkreader.domainmodel.WebUnitContentUpdater;
+import com.codezilla.bookmarkreader.databinding.FragmentDownloadBinding;
 import com.codezilla.bookmarkreader.history.HistoryView;
 import com.codezilla.bookmarkreader.menu.INavigator;
-import com.codezilla.bookmarkreader.sync.BackgroundUpdaterTask;
 import com.codezilla.bookmarkreader.sync.MyJopScheduler;
 import com.codezilla.bookmarkreader.views.download.DownloadFragment;
+import com.codezilla.bookmarkreader.views.edit.EditFragment;
 import com.codezilla.bookmarkreader.weblist.WebListView;
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends AppCompatActivity {
     public static final String NAVIGATION_CONTENT_DESCRIPTION = "Open Settings View";
     public static final String TAG_WEBLIST_FRAGMENT = "WebListFragment";
     private static final String TAG_HISTORY_VIEW_FRAGMENT = "historyViewFragment";
     private static final String TAG_SETTINGS_FRAGMENT = "settingsFragment";
     private static final String TAG_DOWNLOAD_FRAGMENT = "downLoadFragment";
+    private static final String TAG_EDIT_FRAGMENT = "editFragment";
     Toolbar toolbar;
     DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
@@ -41,6 +45,7 @@ public class MainActivity extends FragmentActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.settings_container , new SettingsFragment(navigator) , TAG_SETTINGS_FRAGMENT)
                 .commit();
+        setSupportActionBar(toolbar);
         this.navigator.showHome();
     }
 
@@ -54,6 +59,13 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(toggle.onOptionsItemSelected(item))
+            return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -118,6 +130,15 @@ public class MainActivity extends FragmentActivity {
         {
             fragmentManager.beginTransaction()
                     .replace(R.id.main_view_content , new DownloadFragment() , TAG_DOWNLOAD_FRAGMENT )
+                    .addToBackStack(null)
+                    .commit();
+            drawerLayout.closeDrawers();
+        }
+
+        @Override
+        public void showEditList() {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.main_view_content , new EditFragment(), TAG_EDIT_FRAGMENT )
                     .addToBackStack(null)
                     .commit();
             drawerLayout.closeDrawers();

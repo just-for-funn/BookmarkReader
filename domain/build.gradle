@@ -24,6 +24,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.annimon:stream:1.1.9'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.0'
     testCompile 'junit:junit:4.12'
     androidTestCompile 'org.hamcrest:hamcrest-library:1.3'

@@ -22,6 +22,7 @@ public class DownloadFragmentTest extends MainActivityTestBase
 {
     public static final String GOOGLE = "https://www.google.com";
     public static final String TWITTER = "https://twitter.com/";
+    public static final String FACEBOOOK = "https://facebook.com/";
 
     @Before
     public void  setUp()

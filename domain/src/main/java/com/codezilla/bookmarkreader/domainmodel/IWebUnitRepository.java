@@ -10,7 +10,7 @@ public interface IWebUnitRepository {
     void clearWebUnits();
 
     List<WebUnit> webUnits();
-
+    List<String> webUnitUrls();
     void add(WebUnit wu);
     void close();
 
@@ -24,4 +24,6 @@ public interface IWebUnitRepository {
     long count();
 
     List<WebUnit> getUnreadWebUnits();
+
+    void remove(String url);
 }
