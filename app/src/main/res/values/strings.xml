@@ -30,4 +30,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="edit_items">Edit Items</string>
     <string name="delete">Delete</string>
+    <string name="logs">Logs</string>
+    <string name="download">Download</string>
+    <string name="edit">Edit</string>
 </resources>

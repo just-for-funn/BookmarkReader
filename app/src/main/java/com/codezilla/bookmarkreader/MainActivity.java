@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         toolbar = (Toolbar)findViewById(R.id.toolBar);
         toolbar.setTitle("Bookmark Reader");
         this.toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
-        this.navigator = new Navigator(getSupportFragmentManager() , drawerLayout );
+        this.navigator = new Navigator(getSupportFragmentManager() , drawerLayout , toolbar );
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.settings_container , new SettingsFragment(navigator) , TAG_SETTINGS_FRAGMENT)
@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
             getSupportActionBar().setDisplayHomeAsUpEnabled(canback);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }else {
+            toolbar.setTitle(R.string.app_name);
             toggle.setDrawerIndicatorEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             toggle.syncState();

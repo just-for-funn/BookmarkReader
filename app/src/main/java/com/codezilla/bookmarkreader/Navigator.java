@@ -3,6 +3,7 @@ package com.codezilla.bookmarkreader;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.Toolbar;
 
 import com.codezilla.bookmarkreader.history.HistoryView;
 import com.codezilla.bookmarkreader.menu.INavigator;
@@ -17,10 +18,11 @@ class Navigator implements INavigator {
 
     private final DrawerLayout drawerLayout;
     FragmentManager fragmentManager;
-
-    public Navigator(FragmentManager fragmentManager, DrawerLayout drawerLayout) {
+    Toolbar toolbar;
+    public Navigator(FragmentManager fragmentManager, DrawerLayout drawerLayout , Toolbar toolbar) {
         this.fragmentManager = fragmentManager;
         this.drawerLayout = drawerLayout;
+        this.toolbar = toolbar;
     }
 
     @Override
@@ -34,6 +36,11 @@ class Navigator implements INavigator {
                     .addToBackStack(null)
                     .commit();
         drawerLayout.closeDrawers();
+        setTitle(R.string.logs);
+    }
+
+    private void setTitle(int string) {
+        toolbar.setTitle(string);
     }
 
     private boolean isRequireOpen(Fragment currenntFragment, Class clazz) {
@@ -49,6 +56,7 @@ class Navigator implements INavigator {
                     .commit();
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
+        setTitle(R.string.app_name);
         drawerLayout.closeDrawers();
     }
 
@@ -58,6 +66,7 @@ class Navigator implements INavigator {
                 .replace(R.id.main_view_content, new DownloadFragment(), MainActivity.TAG_DOWNLOAD_FRAGMENT)
                 .addToBackStack(null)
                 .commit();
+        setTitle(R.string.download);
         drawerLayout.closeDrawers();
     }
 
@@ -67,6 +76,7 @@ class Navigator implements INavigator {
                 .replace(R.id.main_view_content, new EditFragment(), MainActivity.TAG_EDIT_FRAGMENT)
                 .addToBackStack(null)
                 .commit();
+        toolbar.setTitle(R.string.edit);
         drawerLayout.closeDrawers();
     }
 }
