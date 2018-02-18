@@ -16,6 +16,12 @@ public class EditRowModel
     private static final String TAG = EditRowModel.class.getSimpleName();
     public EditRowModel(String url, boolean checked) {
         this.url.set(url);
+        this.url.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                Log.i(TAG , "Url value :"+ EditRowModel.this.url.get());
+            }
+        });
         this.checked.set(checked);
         this.checked.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override

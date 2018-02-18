@@ -8,37 +8,37 @@
             type="com.codezilla.bookmarkreader.views.edit.EditRowModel">
         </variable>
     </data>
-    <android.support.constraint.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:minHeight="40dp"
         tools:layout_height="40dp"
+        background_color="@color/colorPrimaryDark"
         >
         <TextView
             android:id="@+id/txtUrl"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/checkbox"
             android:layout_marginLeft="10dp"
             tools:text="www.google.com"
             android:text="@{model.url}"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/checkbox"
             />
 
         <android.support.v7.widget.AppCompatCheckBox
             android:id="@+id/checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:checked="@{model.checked}"
             android:onCheckedChanged="@{(view , checked)->model.checked(checked)}"
             android:tag="@{model.url}"
             android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             />
 
-    </android.support.constraint.ConstraintLayout>
+    </RelativeLayout>
 </layout>
 

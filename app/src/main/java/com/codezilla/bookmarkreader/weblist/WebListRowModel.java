@@ -7,7 +7,10 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.annimon.stream.function.Consumer;
+import com.annimon.stream.function.Function;
 import com.codezilla.bookmarkreader.R;
+import com.codezilla.bookmarkreader.article.ArticleDetailView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -28,6 +31,13 @@ public class WebListRowModel {
     String description;
     String faviconUrl;
     String changeDate;
+    Consumer<WebListRowModel> onClick;
+    public WebListRowModel(String title, String description , String faviconUrl , Consumer<WebListRowModel> click) {
+        this.title = title;
+        this.description = description;
+        this.faviconUrl = faviconUrl;
+        this.onClick = click;
+    }
 
     public String getTitle() {
         return title;
@@ -43,12 +53,6 @@ public class WebListRowModel {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public WebListRowModel(String title, String description , String faviconUrl) {
-        this.title = title;
-        this.description = description;
-        this.faviconUrl = faviconUrl;
     }
 
 
@@ -78,5 +82,12 @@ public class WebListRowModel {
     public void setChangeDate(Date changeDate) {
         if(changeDate != null)
             setChangeDate(customizedDateFormatter().format(changeDate));
+    }
+
+    public void onItemSelected()
+    {
+        Log.i("BookmarkReader","main activity item selected:"+this.getTitle());
+        if(this.onClick != null)
+            onClick.accept(this);
     }
 }

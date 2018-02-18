@@ -1,17 +1,13 @@
-package com.codezilla.bookmarkreader.weblist;
+package com.codezilla.bookmarkreader.views.edit;
 
 import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
-import android.widget.EditText;
 
 import com.codezilla.bookmarkreader.R;
-
-import java.util.concurrent.CompletionService;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 

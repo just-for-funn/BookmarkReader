@@ -40,7 +40,7 @@ public class EditFragment extends Fragment {
         setHasOptionsMenu(true);
         this.binding =  DataBindingUtil.inflate(inflater , R.layout.fragment_edit , container , false);
         this.binding.setModel(model);
-
+        this.binding.setHandler(new EditViewHandler(this));
         RecyclerView recyclerView = binding.getRoot().findViewById(R.id.edit_list_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
         this.listAdapter = new EditListAdapter();
@@ -51,8 +51,13 @@ public class EditFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        reload();
+    }
+
+    void reload() {
         model.load();
         listAdapter.setItems(model.urls);
+        listAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -77,5 +82,9 @@ public class EditFragment extends Fragment {
         model.remove(items);
         listAdapter.setItems(model.urls);
         listAdapter.notifyDataSetChanged();
+    }
+
+    public EditFragmentViewModel getModel() {
+        return model;
     }
 }

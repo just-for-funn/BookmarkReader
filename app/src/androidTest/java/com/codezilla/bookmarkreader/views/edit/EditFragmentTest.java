@@ -3,6 +3,7 @@ package com.codezilla.bookmarkreader.views.edit;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.codezilla.bookmarkreader.MainActivityTestBase;
+import com.codezilla.bookmarkreader.R;
 import com.codezilla.bookmarkreader.domainmodel.WebUnit;
 
 import org.junit.After;
@@ -55,9 +56,7 @@ public class EditFragmentTest extends MainActivityTestBase
     public void shouldDeleteSelectedElements()
     {
         launch();
-        EditPage editPage =  getMainActivityPage()
-                .clickToggeButton()
-                .clickEdit();
+        EditPage editPage = editPage();
         editPage.checked(GOOGLE)
                 .clickDelete();
         List<String> urls =  Stream.of(myApp()
@@ -69,15 +68,83 @@ public class EditFragmentTest extends MainActivityTestBase
         assertThat(urls , hasItems(FACEBOOOK , TWITTER ));
     }
 
+    private EditPage editPage() {
+        return getMainActivityPage()
+                    .clickToggeButton()
+                    .clickEdit();
+    }
+
     @Test
     public void shouldRemoveFromListWhenRemoved()
     {
         launch();
-        EditPage editPage =  getMainActivityPage()
-                .clickToggeButton()
-                .clickEdit();
+        EditPage editPage = editPage();
         editPage.checked(GOOGLE)
                 .clickDelete();
         editPage.assertNotDisplaying(GOOGLE);
+    }
+
+    @Test
+    public void shouldOpenAddnewDialogOnAddClick()
+    {
+        addWebUnit(ANY_URL , ANY_SUMMARY);
+        launch();
+        AddNewSitepage addNewSitepage =  editPage().clickAdd();
+        addNewSitepage.assertVisible();
+    }
+
+
+    @Test
+    public void shouldAddNewItem()
+    {
+        addWebUnit(ANY_URL , ANY_SUMMARY);
+        launch();
+        EditPage editPage = editPage();
+        AddNewSitepage addNewSitepage =  editPage.clickAdd();
+        addNewSitepage.enter(NEW_URL).submit();
+        editPage.assertUrlDisplaying(NEW_URL);
+    }
+
+    @Test
+    public void shouldFullfillUrlOnadd()
+    {
+        addWebUnit(ANY_URL , ANY_SUMMARY);
+        launch();
+        EditPage editPage = editPage();
+        AddNewSitepage addNewSitepage =  editPage.clickAdd();
+        addNewSitepage.enter("www.test.com").submit();
+        editPage.assertUrlDisplaying("http://www.test.com");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void shouldNotAddOnCancelClick()
+    {
+        addWebUnit(ANY_URL , ANY_SUMMARY);
+        launch();
+        EditPage editPage = editPage();
+        AddNewSitepage addNewSitepage =  editPage.clickAdd();
+        addNewSitepage.enter(NEW_URL).cancel();
+        editPage.assertUrlDisplaying(NEW_URL);
+    }
+
+    @Test
+    public void shouldNewlyAddedItemAppearInList() throws InterruptedException {
+        addWebUnit(ANY_URL , ANY_SUMMARY);
+        launch();
+        EditPage editPage = editPage();
+        AddNewSitepage addNewSitepage =  editPage.clickAdd();
+        addNewSitepage.enter(NEW_URL).submit();
+        editPage.assertUrlDisplaying(NEW_URL);
+    }
+
+    @Test
+    public void shouldShowErrorMsg()
+    {
+        addWebUnit(ANY_URL , ANY_SUMMARY);
+        launch();
+        EditPage editPage = editPage();
+        AddNewSitepage addNewSitepage =  editPage.clickAdd();
+        addNewSitepage.enter(ANY_URL).submit();
+        editPage.assertErrorDisplaying(R.string.already_added);
     }
 }

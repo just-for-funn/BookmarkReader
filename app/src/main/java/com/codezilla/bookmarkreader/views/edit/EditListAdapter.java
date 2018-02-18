@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.codezilla.bookmarkreader.R;
+import com.codezilla.bookmarkreader.bindings.recyclerview.BaseAdapter;
+import com.codezilla.bookmarkreader.bindings.recyclerview.BaseArrayListAdapter;
+import com.codezilla.bookmarkreader.bindings.recyclerview.DataBindedViewHolder;
 import com.codezilla.bookmarkreader.databinding.EditListRowBinding;
 
 import java.util.ArrayList;
@@ -18,36 +21,14 @@ import java.util.List;
  * Created by davut on 10.02.2018.
  */
 
-class EditListAdapter extends RecyclerView.Adapter<EditListAdapter.EditListRowView>
+class EditListAdapter extends BaseArrayListAdapter<EditListRowBinding,EditRowModel>
 {
-    List<EditRowModel> items = new ArrayList();
-
-    public EditListAdapter()
-    {
-
-    }
-    @Override
-    public EditListRowView onCreateViewHolder(ViewGroup parent, int viewType)
-    {
-        EditListRowBinding binding =  DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()) , R.layout.edit_list_row , parent , false );
-        return new EditListRowView(binding);
-    }
-
-    @Override
-    public void onBindViewHolder(EditListRowView holder, int position)
-    {
-        holder.binding.setModel(items.get(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        return items.size();
-    }
 
     public void setItems(ObservableList<String> urls) {
-        items = Stream.of(urls)
+        List<EditRowModel> items = Stream.of(urls)
                 .map(o->create(o))
                 .collect(Collectors.toList());
+        setItems(items);
     }
 
     private EditRowModel create(String o)
@@ -57,20 +38,13 @@ class EditListAdapter extends RecyclerView.Adapter<EditListAdapter.EditListRowVi
     }
 
     public List<String> getSelected() {
-        return Stream.of(this.items).filter(o->o.checked.get())
+        return Stream.of(getItems()).filter(o->o.checked.get())
                 .map(o->o.url.get())
                 .collect(Collectors.toList());
     }
 
-
-    static class EditListRowView extends RecyclerView.ViewHolder {
-
-        private final EditListRowBinding binding;
-
-        public EditListRowView(EditListRowBinding binding)
-        {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
+    @Override
+    protected int getLayoutId() {
+        return R.layout.edit_list_row;
     }
 }

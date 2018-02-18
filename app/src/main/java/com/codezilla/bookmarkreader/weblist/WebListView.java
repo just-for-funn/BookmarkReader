@@ -1,31 +1,28 @@
 package com.codezilla.bookmarkreader.weblist;
 
-import android.content.res.ColorStateList;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.codezilla.bookmarkreader.R;
+import com.codezilla.bookmarkreader.article.ArticleDetailView;
 import com.codezilla.bookmarkreader.databinding.RowDataViewBinding;
 import com.codezilla.bookmarkreader.databinding.WebsiteListFragmentBinding;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static com.codezilla.bookmarkreader.R.*;
+import static com.codezilla.bookmarkreader.R.id;
+import static com.codezilla.bookmarkreader.R.layout;
 
 /**
  * Created by davut on 15.02.2017.
@@ -36,7 +33,7 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
     RecyclerView recyclerView;
     WebsiteListFragmentBinding binding;
     private WebListViewModel model;
-    private WeblistViewHandler handler;
+    private WebListViewFragmentAdapter adapter;
 
 
     @Nullable
@@ -49,13 +46,14 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
             this.recyclerView = (RecyclerView) binding.getRoot().findViewById(id.web_site_list_fragment);
             recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
             this.model = new WebListViewModel(this);
-            this.handler = new WeblistViewHandler(getFragmentManager() , model, binding.getRoot());
-            recyclerView.setAdapter( new WebListViewFragmentAdapter( Collections.<WebListRowModel>emptyList() , handler));
+            this.adapter = new WebListViewFragmentAdapter( Collections.<WebListRowModel>emptyList());
+            recyclerView.setAdapter(adapter);
             this.binding.setModel(model);
-            this.binding.setHandler(handler);
         }
         return binding.getRoot();
     }
+
+
 
     @Override
     public void onResume() {
@@ -65,67 +63,28 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
     
     @Override
     public void onListChanged(List<WebSiteInfo> webSiteInfos) {
+        Log.i(getClass().getSimpleName() , "List Changed");
         List<WebListRowModel> rowElements = new ArrayList<>();
         for (WebSiteInfo w: webSiteInfos)
         {
-            WebListRowModel rm =  new WebListRowModel(w.getUrl() , w.getSummary() , w.getFaviconUrl());
+            WebListRowModel rm =  new WebListRowModel(w.getUrl() , w.getSummary() , w.getFaviconUrl() , this::onItemClicked);
             rm.setChangeDate(w.getChangeDate());
             rowElements.add(rm);
         }
-        recyclerView.setAdapter( new WebListViewFragmentAdapter(rowElements , this.handler));
+        adapter.setItems(rowElements);
+    }
+
+    private void onItemClicked(WebListRowModel wlrm) {
+        ArticleDetailView articleDetailView =  new ArticleDetailView();
+        articleDetailView.load(wlrm.getTitle());
+        getFragmentManager().beginTransaction().replace(R.id.main_view_content , articleDetailView  , "TAG_ARTICLE_DETAIL")
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
     public void showError(String message)
     {
         Snackbar.make(this.getView() , message , Snackbar.LENGTH_SHORT ).show();
-    }
-
-    static class WebListViewFragmentAdapter extends RecyclerView.Adapter<WebListViewRowDataHolder>
-    {
-
-        private final List<WebListRowModel> rows;
-        private WeblistViewHandler handler;
-
-        public WebListViewFragmentAdapter(List<WebListRowModel> rows , WeblistViewHandler handler)
-        {
-            this.rows = rows;
-            this.handler = handler;
-        }
-
-        @Override
-        public WebListViewRowDataHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater li = LayoutInflater.from(parent.getContext());
-            RowDataViewBinding rdwb= DataBindingUtil.inflate(li , layout.row_data_view , parent , false);
-            return new WebListViewRowDataHolder(rdwb);
-        }
-
-        @Override
-        public void onBindViewHolder(WebListViewRowDataHolder holder, int position) {
-            holder.setWebListRowModel(rows.get(position),handler );
-        }
-
-        @Override
-        public int getItemCount() {
-            return rows.size();
-        }
-    }
-
-    static class WebListViewRowDataHolder extends RecyclerView.ViewHolder
-    {
-        RowDataViewBinding binding;
-        public WebListViewRowDataHolder(RowDataViewBinding binding)
-        {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
-
-        public void setWebListRowModel(WebListRowModel wlrm , WeblistViewHandler handler)
-        {
-            Log.i("Bookmark","creating view");
-            binding.setRowData(wlrm);
-            binding.setHandler(handler);
-            binding.executePendingBindings();
-        }
     }
 }

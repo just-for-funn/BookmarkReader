@@ -1,6 +1,7 @@
 package com.codezilla.bookmarkreader.views.edit;
 
 import android.databinding.ObservableArrayList;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 
@@ -17,7 +18,7 @@ public class EditFragmentViewModel
 {
     public final ObservableField<String> text = new ObservableField<>("text of model");
     public final ObservableList<String> urls = new ObservableArrayList<>();
-
+    public final ObservableBoolean isBusy = new ObservableBoolean(false);
     public void load() {
         List<String> urls =  myApp().getRealmFacade().webUnitUrls();
         this.urls.clear();

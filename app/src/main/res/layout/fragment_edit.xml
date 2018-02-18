@@ -7,15 +7,36 @@
     <data>
         <variable
             name="model"
-            type="com.codezilla.bookmarkreader.views.edit.EditFragmentViewModel"></variable>
+            type="com.codezilla.bookmarkreader.views.edit.EditFragmentViewModel">
+        </variable>
+        <variable
+            name="handler"
+            type="com.codezilla.bookmarkreader.views.edit.EditViewHandler">
+        </variable>
     </data>
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/edit_list_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
         </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_add"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_add_black_24dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:onClick="@{handler.onAddnew}"
+            />
+    </android.support.constraint.ConstraintLayout>
 </layout>

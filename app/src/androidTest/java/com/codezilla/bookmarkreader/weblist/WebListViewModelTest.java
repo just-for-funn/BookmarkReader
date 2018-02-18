@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.codezilla.bookmarkreader.MainActivityTestBase;
 import com.codezilla.bookmarkreader.R;
 import com.codezilla.bookmarkreader.application.BookmarkReaderApplication;
+import com.codezilla.bookmarkreader.builders.WebUnitTestDataBuilder;
 import com.codezilla.bookmarkreader.domainmodel.WebUnit;
 import com.codezilla.bookmarkreader.domainmodel.WebUnitContent;
 import com.codezilla.bookmarkreader.exception.RecordExistsException;
@@ -41,10 +42,7 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(AndroidJUnit4.class)
 public class WebListViewModelTest  extends MainActivityTestBase{
-    public static final String ANY_URL = "http://www.mocksite.com";
-    public static final String ANY_SUMMARY = "Summary of mock site";
-    public static final String ANY_NEW_URL = "http://www.newurl.com";
-    public static final String NEW_URL = ANY_NEW_URL;
+
 
 
 
@@ -79,81 +77,9 @@ public class WebListViewModelTest  extends MainActivityTestBase{
         webListViewPage().assertUrlDisplaying(ANY_URL);
     }
 
-    private void addWebUnit(String url, String content) {
-        addWebUnit(url , content , WebUnit.Status.HAS_NEW_CONTENT);
-    }
-
-    private void addWebUnit(String url, String content, int status) {
-        WebUnit webUnit = new WebUnit();
-        WebUnitContent webUnitContent = new WebUnitContent();
-        webUnitContent.setContent(content);
-        webUnitContent.setDate(new Date(System.currentTimeMillis()));
-        webUnitContent.setUrl(url);
-        webUnit.setLatestContent(webUnitContent);
-        webUnit.setUrl(url);
-        webUnit.setStatus(status);
-        webUnit.setChange(null);
-        myApp().getRealmFacade().add(webUnit);
-    }
-
-    @Test
-    public void shouldOpenAddnewDialogOnAddClick()
-    {
-        addWebUnit(ANY_URL , ANY_SUMMARY);
-        launch();
-        AddNewSitepage addNewSitepage =  webListViewPage().clickAdd();
-        addNewSitepage.assertVisible();
-    }
 
 
-    @Test
-    public void shouldAddNewItem()
-    {
-        addWebUnit(ANY_URL , ANY_SUMMARY);
-        launch();
-        AddNewSitepage addNewSitepage =  webListViewPage().clickAdd();
-        addNewSitepage.enter(NEW_URL).submit();
-        webListViewPage().assertUrlDisplaying(NEW_URL);
-    }
 
-    @Test
-    public void shouldFullfillUrlOnadd()
-    {
-        addWebUnit(ANY_URL , ANY_SUMMARY);
-        launch();
-        AddNewSitepage addNewSitepage =  webListViewPage().clickAdd();
-        addNewSitepage.enter("www.test.com").submit();
-        webListViewPage().assertUrlDisplaying("http://www.test.com");
-    }
-    
-    @Test(expected = RuntimeException.class)
-    public void shouldNotAddOnCancelClick()
-    {
-        addWebUnit(ANY_URL , ANY_SUMMARY);
-        launch();
-        AddNewSitepage addNewSitepage =  webListViewPage().clickAdd();
-        addNewSitepage.enter(NEW_URL).cancel();
-        webListViewPage().assertUrlDisplaying(NEW_URL);
-    }
-
-    @Test
-    public void shouldNewlyAddedItemAppearInList() throws InterruptedException {
-        addWebUnit(ANY_URL , ANY_SUMMARY);
-        launch();
-        AddNewSitepage addNewSitepage =  webListViewPage().clickAdd();
-        addNewSitepage.enter(NEW_URL).submit();
-        webListViewPage().assertUrlDisplaying(NEW_URL);
-    }
-    
-    @Test
-    public void shouldShowErrorMsg()
-    {
-        addWebUnit(ANY_URL , ANY_SUMMARY);
-        launch();
-        AddNewSitepage addNewSitepage =  webListViewPage().clickAdd();
-        addNewSitepage.enter(ANY_URL).submit();
-        webListViewPage().assertErrorDisplaying(R.string.already_added);
-    }
 
     @Test
     public void shouldDisplayErrorMessageWhenWebListServiceCrushes()
