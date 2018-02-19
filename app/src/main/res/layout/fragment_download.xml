@@ -19,7 +19,7 @@
         android:id="@+id/download_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimaryLight"
+        android:background="@color/colorPrimary"
         android:orientation="vertical">
 
         <com.github.lzyzsd.circleprogress.ArcProgress
@@ -34,6 +34,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:arc_suffix_text_size="0dp"
             app:arc_text_color="@color/lightText"
+            app:arc_unfinished_color="@color/colorPrimaryLight"
             app:arc_bottom_text_size="@dimen/arc_bottom_large"
             />
 
@@ -59,6 +60,7 @@
             app:arc_suffix_text_size="0dp"
             app:arc_progress="0"
             app:arc_text_color="@color/lightText"
+            app:arc_unfinished_color="@color/colorPrimaryLight"
             app:arc_bottom_text="@string/successfull"
             >
         </com.github.lzyzsd.circleprogress.ArcProgress>
@@ -73,6 +75,7 @@
             app:layout_constraintTop_toTopOf="@id/arc_completed"
             app:arc_suffix_text_size="0dp"
             app:arc_text_color="@color/lightText"
+            app:arc_unfinished_color="@color/colorPrimaryLight"
             app:arc_bottom_text="@string/failed"
             app:arc_finished_color="@color/matte_red"
             >
@@ -88,6 +91,7 @@
             app:layout_constraintTop_toTopOf="@id/arc_completed"
             app:arc_suffix_text_size="0dp"
             app:arc_text_color="@color/lightText"
+            app:arc_unfinished_color="@color/colorPrimaryLight"
             app:arc_bottom_text="@string/neww"
             >
         </com.github.lzyzsd.circleprogress.ArcProgress>
