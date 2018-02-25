@@ -1,6 +1,7 @@
 package com.codezilla.bookmarkreader.weblist;
 
 import android.databinding.DataBindingUtil;
+import android.databinding.Observable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -11,10 +12,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.codezilla.bookmarkreader.R;
 import com.codezilla.bookmarkreader.article.ArticleDetailView;
-import com.codezilla.bookmarkreader.databinding.RowDataViewBinding;
 import com.codezilla.bookmarkreader.databinding.WebsiteListFragmentBinding;
 
 import java.util.ArrayList;
@@ -30,22 +32,31 @@ import static com.codezilla.bookmarkreader.R.layout;
 
 public class WebListView extends Fragment implements WebListViewModel.IWebListView
 {
+    private  Animation fapOpenAnimation;
+    private  Animation fapCloseAnimation;
     RecyclerView recyclerView;
     WebsiteListFragmentBinding binding;
     private WebListViewModel model;
     private WebListViewFragmentAdapter adapter;
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
+        fapOpenAnimation = AnimationUtils.loadAnimation(getContext() , R.anim.fab_open );
+        fapCloseAnimation = AnimationUtils.loadAnimation(getContext() , R.anim.fab_close );
         if(binding == null)
         {
             this.binding = DataBindingUtil.inflate(inflater , layout.website_list_fragment , container , false );
             this.recyclerView = (RecyclerView) binding.getRoot().findViewById(id.web_site_list_fragment);
             recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
             this.model = new WebListViewModel(this);
+            this.model.getIsFabOpened().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+                @Override
+                public void onPropertyChanged(Observable sender, int propertyId) {
+                    fabStateChanged();
+                }
+            });
             this.adapter = new WebListViewFragmentAdapter( Collections.<WebListRowModel>emptyList());
             recyclerView.setAdapter(adapter);
             this.binding.setModel(model);
@@ -53,12 +64,38 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
         return binding.getRoot();
     }
 
+    private void fabStateChanged() {
+        if(model.getIsFabOpened().get())
+        {
+            showFaps();
+        }else {
+            hideFaps();
+        }
+    }
+
+    private void hideFaps() {
+        binding.fabAllContainer.startAnimation(fapCloseAnimation);
+        binding.fabReadContainer.startAnimation(fapCloseAnimation);
+        binding.fabUnreadContainer.startAnimation(fapCloseAnimation);
+        binding.fabUnreadContainer.setClickable(false);
+        binding.fabReadContainer.setClickable(false);
+        binding.fabAllContainer.setClickable(false);
+    }
+
+    private void showFaps() {
+        binding.fabAllContainer.startAnimation(fapOpenAnimation);
+        binding.fabReadContainer.startAnimation(fapOpenAnimation);
+        binding.fabUnreadContainer.startAnimation(fapOpenAnimation);
+        binding.fabUnreadContainer.setClickable(true);
+        binding.fabReadContainer.setClickable(true);
+        binding.fabAllContainer.setClickable(true);
+    }
 
 
     @Override
     public void onResume() {
         super.onResume();
-        model.loadRows();
+        model.loadUnreadElements();
     }
     
     @Override
@@ -87,4 +124,11 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
     {
         Snackbar.make(this.getView() , message , Snackbar.LENGTH_SHORT ).show();
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        model.getIsFabOpened().set(false);
+    }
+
 }

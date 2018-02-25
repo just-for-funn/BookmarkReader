@@ -17,4 +17,6 @@ public interface IWebListService
     List<WebSiteInfo> getUnreadWebSitesInfos();
 
     void markRead(String url);
+
+    List<WebSiteInfo> getReadWebSites();
 }

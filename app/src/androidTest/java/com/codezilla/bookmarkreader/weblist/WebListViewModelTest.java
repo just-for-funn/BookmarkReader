@@ -116,4 +116,45 @@ public class WebListViewModelTest  extends MainActivityTestBase{
         return WebSiteInfo.of(url , "");
     }
 
+
+    @Test
+    public void shouldListOnlyUnreadElementsWhenFilterSelected()
+    {
+        addWebUnit(ANY_URL , ANY_SUMMARY , WebUnit.Status.ALREADY_READ);
+        addWebUnit(ANY_NEW_URL , ANY_SUMMARY , WebUnit.Status.HAS_NEW_CONTENT);
+        launch();
+        webListViewPage()
+                .clickFab()
+                .clickFabItemUnread()
+                .assertUrlDisplaying(ANY_NEW_URL)
+                .assertUrlNotDisplaying(ANY_URL);
+    }
+
+    @Test
+    public void shouldListReadElementsWhenFilterIsSelected()
+    {
+        addWebUnit(ANY_URL , ANY_SUMMARY , WebUnit.Status.ALREADY_READ);
+        addWebUnit(ANY_NEW_URL , ANY_SUMMARY , WebUnit.Status.HAS_NEW_CONTENT);
+        launch();
+        webListViewPage()
+                .clickFab()
+                .clickFabItemRead()
+                .assertUrlDisplaying(ANY_URL)
+                .assertUrlNotDisplaying(ANY_NEW_URL);
+    }
+
+    @Test
+    public void shouldListAllElementsWhenFilterIsSelected()
+    {
+        addWebUnit(ANY_URL , ANY_SUMMARY , WebUnit.Status.ALREADY_READ);
+        addWebUnit(ANY_NEW_URL , ANY_SUMMARY , WebUnit.Status.HAS_NEW_CONTENT);
+        launch();
+        webListViewPage()
+                .clickFab()
+                .clickFabItemAll()
+                .assertUrlDisplaying(ANY_URL)
+                .assertUrlDisplaying(ANY_NEW_URL);
+    }
+
+
 }

@@ -20,4 +20,6 @@
     <color name="matte_green">#a5d6a7</color>
     <color name="matte_yellow">#ffe082</color>
     <color name="matte_red">#EF5350</color>
+    <color name="fab_label_color">@color/black</color>
+    <color name="fab_label_text_color">#FFFFFF</color>
 </resources>

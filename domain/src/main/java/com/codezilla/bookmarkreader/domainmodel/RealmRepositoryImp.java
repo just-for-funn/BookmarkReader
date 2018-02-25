@@ -129,11 +129,7 @@ public class RealmRepositoryImp implements IWebUnitRepository {
 
     @Override
     public List<WebUnit> getUnreadWebUnits() {
-        try(Realm realm = realm())
-        {
-            RealmResults<WebUnit> wunits =  realm.where(WebUnit.class).equalTo("status" , WebUnit.Status.HAS_NEW_CONTENT).findAll();
-            return realm.copyFromRealm(wunits);
-        }
+        return getByStatus(WebUnit.Status.HAS_NEW_CONTENT);
     }
 
     @Override
@@ -146,6 +142,15 @@ public class RealmRepositoryImp implements IWebUnitRepository {
             vals.deleteAllFromRealm();
             realm.commitTransaction();
             realm.refresh();
+        }
+    }
+
+    @Override
+    public List<WebUnit> getByStatus(int status) {
+        try(Realm realm = realm())
+        {
+            RealmResults<WebUnit> wunits =  realm.where(WebUnit.class).equalTo("status" , status).findAll();
+            return realm.copyFromRealm(wunits);
         }
     }
 }

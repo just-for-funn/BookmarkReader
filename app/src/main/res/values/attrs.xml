@@ -9,4 +9,8 @@
         <attr name="historyRows" format="reference"/>
         <attr name="background_color" format="reference"/>
     </declare-styleable>
+    <declare-styleable name="fabMenu">
+        <attr name="fab_item_text" format="reference"></attr>
+        <attr name="fab_item_src" format="reference"></attr>
+    </declare-styleable>
 </resources>

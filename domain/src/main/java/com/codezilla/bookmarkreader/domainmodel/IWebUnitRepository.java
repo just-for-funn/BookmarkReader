@@ -26,4 +26,6 @@ public interface IWebUnitRepository {
     List<WebUnit> getUnreadWebUnits();
 
     void remove(String url);
+
+    List<WebUnit> getByStatus(int status);
 }

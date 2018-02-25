@@ -1,6 +1,7 @@
 package com.codezilla.bookmarkreader.async;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 
 import java.lang.ref.WeakReference;
@@ -48,6 +49,12 @@ public class CustomAsyncTaskExecutor<T> extends AsyncTask<Void , Void , T>
             else
                 this.owner.get().onFinish(t);
         }
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        Log.i(getClass().getSimpleName(),"Task canceled");
     }
 
     public static interface  TaskExecuteOwner<T>

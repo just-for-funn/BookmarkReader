@@ -20,4 +20,13 @@
         <item name="colorAccent">@color/indigo</item>
         <item name="android:progressBackgroundTint">@color/pink</item>
     </style>
+
+    <style name="fab_menu_item">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/fab_small_height</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_marginBottom">@dimen/fab_menu_margin</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingRight">8dp</item>
+    </style>
 </resources>

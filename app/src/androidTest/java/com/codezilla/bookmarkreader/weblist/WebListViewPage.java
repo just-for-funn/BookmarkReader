@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.widget.ProgressBar;
 
 import com.codezilla.bookmarkreader.MainActivity;
+import com.codezilla.bookmarkreader.R;
 import com.codezilla.bookmarkreader.article.ArticleDetailPage;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -13,6 +14,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.doesNotExis
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -41,8 +43,9 @@ public class WebListViewPage
         onView(withClassName(equalTo(ProgressBar.class.getName())) ).check(matches(isDisplayed()));
     }
 
-    public void assertUrlDisplaying(String url) {
+    public WebListViewPage assertUrlDisplaying(String url) {
         onView(withText(url)).check(matches(isDisplayed()));
+        return this;
     }
 
     public ArticleDetailPage clickItem(String title)
@@ -62,6 +65,26 @@ public class WebListViewPage
     }
     public WebListViewPage assertErrorDisplaying(int stringResourceId) {
         onView(withText(stringResourceId)).check(matches(isDisplayed()));
+        return this;
+    }
+
+    public WebListViewPage clickFab() {
+         onView(withId(R.id.fab_menu)).perform(click());
+         return this;
+    }
+
+    public WebListViewPage clickFabItemUnread() {
+        onView(withId(R.id.fab_unread_container)).perform(click());
+        return this;
+    }
+
+    public WebListViewPage clickFabItemRead() {
+        onView(withId(R.id.fab_read_container)).perform(click());
+        return this;
+    }
+
+    public WebListViewPage clickFabItemAll() {
+        onView(withId(R.id.fab_all_container)).perform(click());
         return this;
     }
 }

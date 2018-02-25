@@ -76,6 +76,14 @@ public class WeblistServiceAdapter implements IWebListService {
         }
     }
 
+    @Override
+    public List<WebSiteInfo> getReadWebSites() {
+        List<WebUnit> wuts = realmFacade.getByStatus(WebUnit.Status.ALREADY_READ);
+        return Stream.of(wuts)
+                .map(this::convert)
+                .collect(Collectors.toList());
+    }
+
     private String faviconOf(String url) {
         return getParentUrl(url)+"/favicon.ico";
     }

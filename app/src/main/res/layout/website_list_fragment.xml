@@ -63,5 +63,48 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
     </android.support.v7.widget.RecyclerView>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_menu"
+        android:layout_width="@dimen/fab_width"
+        android:layout_height="@dimen/fab_width"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:clickable="true"
+        android:src="@{model.isFabOpened ? @drawable/ic_close_black_24dp : @drawable/ic_filter}"
+        android:onClick="@{()->model.toggleFab()}"
+        />
+    <com.codezilla.bookmarkreader.views.fab.FabMenuItem
+        style="@style/fab_menu_item"
+        android:id="@+id/fab_unread_container"
+        app:layout_constraintRight_toRightOf="@id/fab_menu"
+        app:layout_constraintBottom_toTopOf="@id/fab_menu"
+        android:layout_marginBottom="20dp"
+        android:visibility="@{model.isFabOpened?View.VISIBLE:View.INVISIBLE}"
+        app:fab_item_text="@string/unread"
+        app:fab_item_src="@drawable/unseen"
+        android:onClick="@{()->model.loadUnreadElements()}"
+        />
+    <com.codezilla.bookmarkreader.views.fab.FabMenuItem
+        style="@style/fab_menu_item"
+        android:id="@+id/fab_read_container"
+        app:layout_constraintRight_toRightOf="@id/fab_menu"
+        app:layout_constraintBottom_toTopOf="@id/fab_unread_container"
+        android:visibility="@{model.isFabOpened?View.VISIBLE:View.INVISIBLE}"
+        app:fab_item_text="@string/read"
+        app:fab_item_src="@drawable/seen_48"
+        android:onClick="@{()->model.loadReadElements()}"
+        />
+    <com.codezilla.bookmarkreader.views.fab.FabMenuItem
+        style="@style/fab_menu_item"
+        android:id="@+id/fab_all_container"
+        app:layout_constraintRight_toRightOf="@id/fab_menu"
+        app:layout_constraintBottom_toTopOf="@id/fab_read_container"
+        android:visibility="@{model.isFabOpened?View.VISIBLE:View.INVISIBLE}"
+        app:fab_item_text="@string/all"
+        app:fab_item_src="@drawable/list"
+        android:onClick="@{()->model.loadAllElements()}"
+        />
 </android.support.constraint.ConstraintLayout>
     </layout>
