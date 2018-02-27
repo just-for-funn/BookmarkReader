@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="model"
@@ -14,28 +14,22 @@
         android:id="@+id/container"
         android:background="#FFFFFF"
         android:onClick="@{()->model.onItemSelected()}"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="2dp"
         >
-        <android.support.constraint.Guideline
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/guideline"
-            app:layout_constraintGuide_begin="10dp"
-            android:orientation="vertical" />
-        <android.support.constraint.Guideline
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/guidelineHorizontal"
-            app:layout_constraintGuide_begin="10dp"
-            android:orientation="horizontal" />
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/thumbnail"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:layout_constraintTop_toTopOf="@id/guidelineHorizontal"
-            app:layout_constraintLeft_toRightOf="@id/guideline"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:imageUrl="@{model.faviconUrl}"
-            app:civ_border_width="3px"
+            app:civ_border_width="1dp"
             app:civ_border_color="@color/colorImageBorder"
+            tools:src="@drawable/circular_user"
             />
         <TextView
             android:id="@+id/title"
@@ -47,30 +41,32 @@
             android:text="@{model.title}"
             android:textColor="@color/colorListTitle"
             android:textSize="15sp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginStart="10dp"
+            tools:text="Facebook"
+            />
         <TextView
             android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minHeight="35dp"
+            android:minHeight="50dp"
             android:text="@{model.description == null ?  @string/not_evaluated:model.description}"
             app:layout_constraintLeft_toLeftOf="@id/title"
             app:layout_constraintTop_toBottomOf="@id/title"
             app:layout_constraintRight_toRightOf="@id/title"
-            android:layout_marginBottom="10dp"
             android:maxLines="10"
             android:ellipsize="end"
+            tools:text="@string/already_added"
             />
         <TextView
             android:id="@+id/date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{model.changeDate}"
-            android:textSize="10sp"
-            app:layout_constraintLeft_toLeftOf="@id/thumbnail"
+            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="@id/thumbnail"
-            app:layout_constraintBottom_toTopOf="@id/delimeter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="9sp"
+            tools:text="01/01/1970"
             />
         <View
             android:id="@+id/delimeter"
