@@ -28,9 +28,21 @@
             android:id="@+id/article_webview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="@{model.isShowingHtml ? View.VISIBLE : View.GONE}"
             app:webContent="@{model.content}"
             app:base_url="@{model.url}"
             >
         </WebView>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{model.isShowingHtml ? View.GONE : View.VISIBLE}">
+            <TextView
+                android:id="@+id/article_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{model.rawContent}"
+                />
+        </ScrollView>
     </LinearLayout>
 </layout>

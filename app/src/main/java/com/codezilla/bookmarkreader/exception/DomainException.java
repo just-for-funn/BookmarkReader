@@ -14,4 +14,5 @@ public class DomainException extends RuntimeException {
     public String getMsg() {
         return msg;
     }
+
 }

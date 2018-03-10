@@ -3,6 +3,7 @@ package com.codezilla.bookmarkreader.weblist;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.annimon.stream.function.Consumer;
 import com.codezilla.bookmarkreader.async.CustomAsyncTaskExecutor;
 import com.codezilla.bookmarkreader.exception.DomainException;
 import com.codezilla.bookmarkreader.exception.UnexpectedException;
@@ -27,7 +28,9 @@ import static org.mockito.Mockito.when;
 public class CustomAsyncTaskExecutorTest
 {
     @Mock
-    CustomAsyncTaskExecutor.TaskExecuteOwner<String> owner;
+    Consumer<String> onSuccess;
+    @Mock
+    Consumer<DomainException> onError;
     @Mock
     Callable<String> callable;
     CustomAsyncTaskExecutor<String> customAsyncTaskExecutor = null;
@@ -36,7 +39,9 @@ public class CustomAsyncTaskExecutorTest
     public void before()
     {
         MockitoAnnotations.initMocks(this);
-        this.customAsyncTaskExecutor = new CustomAsyncTaskExecutor<>(owner , callable);
+        this.customAsyncTaskExecutor = new CustomAsyncTaskExecutor<>(callable)
+            .onSuccess(onSuccess)
+            .onError(onError);
     }
 
 
@@ -47,14 +52,14 @@ public class CustomAsyncTaskExecutorTest
     public void shouldInvokeOnFinishWhenNoErrorOccured() throws Exception {
         when(callable.call()).thenReturn("OK");
         customAsyncTaskExecutor.execute();
-        verify(owner, timeout(500)).onFinish("OK");
+        verify(onSuccess, timeout(500)).accept("OK");
     }
 
     @Test
     public void shouldInvokeUnexpectedExceptionOnNonDomainException() throws Exception {
         when(callable.call()).thenThrow(new RuntimeException("test"));
         customAsyncTaskExecutor.execute();
-        verify(owner , timeout(250)).onError(any(UnexpectedException.class));
+        verify(onError , timeout(250)).accept(any(UnexpectedException.class));
     }
 
     @Test
@@ -62,7 +67,7 @@ public class CustomAsyncTaskExecutorTest
     {
         when(callable.call()).thenThrow(new MyUniqueDomainException());
         customAsyncTaskExecutor.execute();
-        verify(owner , timeout(250)).onError(any(MyUniqueDomainException.class));
+        verify(onError , timeout(250)).accept(any(MyUniqueDomainException.class));
     }
 
     static class MyUniqueDomainException extends DomainException

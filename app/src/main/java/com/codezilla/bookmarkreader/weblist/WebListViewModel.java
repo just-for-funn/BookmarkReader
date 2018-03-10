@@ -4,6 +4,7 @@ import android.databinding.ObservableBoolean;
 import android.util.Log;
 
 import com.annimon.stream.Optional;
+import com.annimon.stream.function.Supplier;
 import com.codezilla.bookmarkreader.async.CustomAsyncTaskExecutor;
 import com.codezilla.bookmarkreader.exception.DomainException;
 
@@ -18,7 +19,7 @@ import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication
  * Created by davut on 7/5/2017.
  */
 
-public class WebListViewModel implements CustomAsyncTaskExecutor.TaskExecuteOwner<List<WebSiteInfo>>
+public class WebListViewModel
 {
     private ObservableBoolean isCompleted = new ObservableBoolean(false);
     private final ObservableBoolean isFabOpened = new ObservableBoolean(false);
@@ -31,8 +32,8 @@ public class WebListViewModel implements CustomAsyncTaskExecutor.TaskExecuteOwne
         this.weblistView = new WeakReference<IWebListView>(weblistView);
     }
 
-    @Override
-    public void onFinish(List<WebSiteInfo> webListViews) {
+
+    private void onFinish(List<WebSiteInfo> webListViews) {
         if(webListViews == null)
             this.webSiteInfos = new ArrayList<>();
         else
@@ -43,8 +44,7 @@ public class WebListViewModel implements CustomAsyncTaskExecutor.TaskExecuteOwne
         isBusy.set(false);
     }
 
-    @Override
-    public void onError(DomainException domainException)
+    private void onError(DomainException domainException)
     {
         isBusy.set(false);
         this.weblistView.get().showError(domainException.getMsg() );
@@ -79,14 +79,17 @@ public class WebListViewModel implements CustomAsyncTaskExecutor.TaskExecuteOwne
         load( () -> myApp().getWebListService().getUnreadWebSitesInfos());
     }
 
-    private void load(Callable<List<WebSiteInfo>> job)
+    private void load(Supplier<List<WebSiteInfo>> job)
     {
         Log.i(getClass().getSimpleName(), "Loading new data");
         lastLoadJob.ifPresent(o->o.cancel(true));
         this.isBusy.set(true);
         this.isFabOpened.set(false);
-        CustomAsyncTaskExecutor<List<WebSiteInfo>> loader =  new CustomAsyncTaskExecutor<List<WebSiteInfo>>(this, job);
-        loader.execute();
+        CustomAsyncTaskExecutor<List<WebSiteInfo>> loader =  CustomAsyncTaskExecutor.async(job);
+                loader
+                        .onSuccess(this::onFinish)
+                        .onError(this::onError)
+                        .execute();
         this.lastLoadJob = Optional.ofNullable(loader);
     }
 

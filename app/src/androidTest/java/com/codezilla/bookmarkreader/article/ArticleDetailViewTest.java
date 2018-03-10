@@ -97,4 +97,18 @@ public class ArticleDetailViewTest extends MainActivityTestBase
                 .assertErrorDisplaying(ANY_ERROR);
     }
 
+    @Test
+    public void shouldSwitchToArticleView()
+    {
+        when(articleService.getArticle(anyString())).thenReturn(ANY_CONTENT);
+        launch();
+        getMainActivityPage()
+                .webListPage()
+                .clickItem(webSiteInfo.getUrl())
+                .clickSwitch()
+                .assertHtmlViewNotDisplaying()
+                .assertArticleViewDisplaying()
+                .assertTextDisplaying(ANY_CONTENT.getContent());
+    }
+
 }

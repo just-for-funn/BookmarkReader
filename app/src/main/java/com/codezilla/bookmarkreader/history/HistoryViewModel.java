@@ -23,23 +23,21 @@ import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication
  * Created by davut on 9/19/2017.
  */
 
-public class HistoryViewModel implements CustomAsyncTaskExecutor.TaskExecuteOwner<List<Log>> {
+public class HistoryViewModel{
     public final ObservableBoolean isBusy = new ObservableBoolean(false);
     public ObservableArrayList<HistoryViewRowModel> rows = new ObservableArrayList<HistoryViewRowModel>();
     final  DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
     public void load()
     {
         isBusy.set(true);
-        new CustomAsyncTaskExecutor<List<Log>>(this, new Callable<List<Log>>() {
-            @Override
-            public List<Log> call() throws Exception {
-                return myApp().getLogRepository().logs();
-            }
-        }).execute();
+        CustomAsyncTaskExecutor.async(()->myApp().getLogRepository().logs())
+                .onSuccess(this::onFinish)
+                .onError(this::onError)
+                .execute();
     }
 
-    @Override
-    public void onFinish(List<Log> logs) {
+
+    private void onFinish(List<Log> logs) {
         isBusy.set(false);
         rows.clear();
         rows.addAll(map(logs));
@@ -75,8 +73,8 @@ public class HistoryViewModel implements CustomAsyncTaskExecutor.TaskExecuteOwne
     }
 
 
-    @Override
-    public void onError(DomainException domainException)
+
+    private void onError(DomainException domainException)
     {
         isBusy.set(false);
     }

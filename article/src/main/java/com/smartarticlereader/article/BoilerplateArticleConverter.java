@@ -2,8 +2,10 @@ package com.smartarticlereader.article;
 
 import android.util.Log;
 
-import com.kohlschutter.boilerpipe.BoilerpipeProcessingException;
 import com.kohlschutter.boilerpipe.extractors.CommonExtractors;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 /**
  * Created by davut on 12/19/2017.
@@ -17,12 +19,18 @@ public class BoilerplateArticleConverter {
     public String convert(String html)
     {
         try {
-            return CommonExtractors.ARTICLE_EXTRACTOR.getText(html);
+            String cleanedHtml = removeUnnecessaryElements(html);
+            return CommonExtractors.ARTICLE_EXTRACTOR.getText(cleanedHtml);
         } catch (Exception e) {
-            e.printStackTrace();
             Log.e(TAG, "cannot convert html", e );
             return null;
         }
+    }
+
+    String removeUnnecessaryElements(String html) {
+         Document doc =  Jsoup.parseBodyFragment(html);
+         doc.select("script, style, .hidden").remove();
+         return doc.html();
     }
 
 

@@ -53,6 +53,11 @@ dependencies {
     androidTestCompile 'org.mockito:mockito-android:2.7.22'
     androidTestCompile 'org.awaitility:awaitility:3.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-text
+    compile group: 'org.apache.commons', name: 'commons-text', version: '1.2'
+
+
 }
 
 apply plugin: 'kotlin-android'
