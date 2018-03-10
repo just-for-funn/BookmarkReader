@@ -4,6 +4,7 @@ package com.codezilla.bookmarkreader.weblist;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.annimon.stream.function.Consumer;
+import com.annimon.stream.function.Supplier;
 import com.codezilla.bookmarkreader.async.CustomAsyncTaskExecutor;
 import com.codezilla.bookmarkreader.exception.DomainException;
 import com.codezilla.bookmarkreader.exception.UnexpectedException;
@@ -32,14 +33,14 @@ public class CustomAsyncTaskExecutorTest
     @Mock
     Consumer<DomainException> onError;
     @Mock
-    Callable<String> callable;
+    Supplier<String> callable;
     CustomAsyncTaskExecutor<String> customAsyncTaskExecutor = null;
 
     @Before
     public void before()
     {
         MockitoAnnotations.initMocks(this);
-        this.customAsyncTaskExecutor = new CustomAsyncTaskExecutor<>(callable)
+        this.customAsyncTaskExecutor = new CustomAsyncTaskExecutor<String>(callable)
             .onSuccess(onSuccess)
             .onError(onError);
     }
@@ -50,14 +51,14 @@ public class CustomAsyncTaskExecutorTest
 
     @Test
     public void shouldInvokeOnFinishWhenNoErrorOccured() throws Exception {
-        when(callable.call()).thenReturn("OK");
+        when(callable.get()).thenReturn("OK");
         customAsyncTaskExecutor.execute();
         verify(onSuccess, timeout(500)).accept("OK");
     }
 
     @Test
     public void shouldInvokeUnexpectedExceptionOnNonDomainException() throws Exception {
-        when(callable.call()).thenThrow(new RuntimeException("test"));
+        when(callable.get()).thenThrow(new RuntimeException("test"));
         customAsyncTaskExecutor.execute();
         verify(onError , timeout(250)).accept(any(UnexpectedException.class));
     }
@@ -65,7 +66,7 @@ public class CustomAsyncTaskExecutorTest
     @Test
     public void shouldInvokeRelatedDomainExceptionError() throws Exception
     {
-        when(callable.call()).thenThrow(new MyUniqueDomainException());
+        when(callable.get()).thenThrow(new MyUniqueDomainException());
         customAsyncTaskExecutor.execute();
         verify(onError , timeout(250)).accept(any(MyUniqueDomainException.class));
     }

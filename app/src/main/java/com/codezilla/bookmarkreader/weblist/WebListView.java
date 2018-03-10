@@ -94,8 +94,9 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
 
     @Override
     public void onResume() {
+        if(!model.isLoaded())
+            model.loadUnreadElements();
         super.onResume();
-        model.loadUnreadElements();
     }
     
     @Override

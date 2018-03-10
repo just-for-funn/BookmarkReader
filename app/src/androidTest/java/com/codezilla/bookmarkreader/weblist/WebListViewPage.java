@@ -8,6 +8,10 @@ import com.codezilla.bookmarkreader.MainActivity;
 import com.codezilla.bookmarkreader.R;
 import com.codezilla.bookmarkreader.article.ArticleDetailPage;
 
+import org.awaitility.Duration;
+
+import java.util.concurrent.TimeUnit;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -16,6 +20,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.equalTo;
 
 /**
@@ -64,7 +69,8 @@ public class WebListViewPage
          return this;
     }
     public WebListViewPage assertErrorDisplaying(int stringResourceId) {
-        onView(withText(stringResourceId)).check(matches(isDisplayed()));
+        await().atMost(new Duration(2 , TimeUnit.SECONDS))
+                .untilAsserted(()->onView(withText(stringResourceId)).check(matches(isDisplayed())));
         return this;
     }
 
