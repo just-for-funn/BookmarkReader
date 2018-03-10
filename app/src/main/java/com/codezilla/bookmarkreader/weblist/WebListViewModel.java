@@ -11,9 +11,9 @@ import com.codezilla.bookmarkreader.exception.DomainException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.myApp;
+import static com.codezilla.bookmarkreader.weblist.WebListViewModel.Filter.UNREAD;
 
 /**
  * Created by davut on 7/5/2017.
@@ -21,6 +21,11 @@ import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication
 
 public class WebListViewModel
 {
+    static enum Filter
+    {
+        READ, UNREAD,ALL
+    }
+    private Filter filter = UNREAD;
     private ObservableBoolean isCompleted = new ObservableBoolean(false);
     private final ObservableBoolean isFabOpened = new ObservableBoolean(false);
     WeakReference<IWebListView> weblistView;
@@ -76,7 +81,23 @@ public class WebListViewModel
     public void loadUnreadElements()
     {
         Log.i(getClass().getSimpleName(),"loadUnreadElements");
-        load( () -> myApp().getWebListService().getUnreadWebSitesInfos());
+        filter = UNREAD;
+        reload();
+    }
+
+    void reload() {
+        switch (filter)
+        {
+            case ALL:
+                load(() -> myApp().getWebListService().getWebSitesInfos());
+                break;
+            case READ:
+                load(() -> myApp().getWebListService().getReadWebSites());
+                break;
+            case UNREAD:
+                load( () -> myApp().getWebListService().getUnreadWebSitesInfos());
+                break;
+        }
     }
 
     private void load(Supplier<List<WebSiteInfo>> job)
@@ -96,13 +117,15 @@ public class WebListViewModel
     public void loadReadElements()
     {
         Log.i(getClass().getSimpleName() , "loadReadElements");
-        load(() -> myApp().getWebListService().getReadWebSites());
+        filter = Filter.READ;
+        reload();
     }
 
     public void loadAllElements()
     {
         Log.i(getClass().getSimpleName() , "loadAllElements");
-        load(() -> myApp().getWebListService().getWebSitesInfos());
+        filter = Filter.ALL;
+        reload();
     }
 
 
