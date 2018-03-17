@@ -42,6 +42,13 @@ public class SettingsFragment extends Fragment {
         return binding.getRoot();
     }
 
+
+    @Override
+    public void onDestroyView() {
+        binding.unbind();
+        super.onDestroyView();
+    }
+
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
@@ -49,5 +56,9 @@ public class SettingsFragment extends Fragment {
         {
             binding.getModel().loadFrom(userService().getLastLoginedUser());
         }
+    }
+
+    public void setNavigator(INavigator navigator) {
+        this.navigator = navigator;
     }
 }

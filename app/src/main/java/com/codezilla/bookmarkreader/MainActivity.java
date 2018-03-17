@@ -3,10 +3,12 @@ package com.codezilla.bookmarkreader;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.codezilla.bookmarkreader.menu.INavigator;
 import com.codezilla.bookmarkreader.sync.MyJopScheduler;
@@ -32,13 +34,26 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         toolbar.setTitle("Bookmark Reader");
         this.toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
         this.navigator = new Navigator(getSupportFragmentManager() , drawerLayout , toolbar );
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.settings_container , new SettingsFragment(navigator) , TAG_SETTINGS_FRAGMENT)
-                .commit();
         setSupportActionBar(toolbar);
         this.getSupportFragmentManager().addOnBackStackChangedListener(this);
-        this.navigator.showHome();
+        initilizeSettingsFragment();
+        initilizeMainFragment();
+    }
+
+    private void initilizeMainFragment() {
+        if(getSupportFragmentManager().findFragmentByTag(TAG_WEBLIST_FRAGMENT) == null)
+             navigator.showHome();
+    }
+
+    private void initilizeSettingsFragment() {
+        SettingsFragment sf = (SettingsFragment) getSupportFragmentManager().findFragmentByTag(TAG_SETTINGS_FRAGMENT);
+        if(sf == null)
+        {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.settings_container , new SettingsFragment(navigator) , TAG_SETTINGS_FRAGMENT)
+                    .commit();
+        }else
+            sf.setNavigator(navigator);
     }
 
     @Override
@@ -47,14 +62,14 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     }
 
     public void shouldDisplayHomeUp(){
+        toolbar.setTitle(R.string.app_name);
         boolean canback = getSupportFragmentManager().getBackStackEntryCount()>0;
         if(canback)
         {
             getSupportActionBar().setDisplayHomeAsUpEnabled(canback);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }else {
-            toolbar.setTitle(R.string.app_name);
-            toggle.setDrawerIndicatorEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             toggle.syncState();
         }
@@ -62,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
-        toggle.syncState();
+        shouldDisplayHomeUp();
         super.onPostCreate(savedInstanceState);
     }
 
