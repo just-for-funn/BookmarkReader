@@ -41,7 +41,7 @@ public class BookmarkReaderApplication extends Application{
         webListService = new WeblistServiceAdapter(realmFacade ,  new BoilerplateArticlConverterAdapter());
         logRepository = new RealmLogRepositoryImp(getApplicationContext());
         cacheService = new SimpleLruCache();
-        articleService = new ArticleServiceImp(new ArticleRepositoryAdapter(realmFacade) , new ArticleLoaderImp(realmFacade , new OkHttpClientImp(), this));
+        articleService = new ArticleServiceImp(new ArticleRepositoryAdapter(realmFacade));
         applicationState = new ApplicationStateSharedPrefencesImp(getApplicationContext());
     }
 

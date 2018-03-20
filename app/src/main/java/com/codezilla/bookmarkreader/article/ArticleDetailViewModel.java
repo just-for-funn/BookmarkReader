@@ -9,6 +9,7 @@ import android.text.Html;
 import android.text.Spanned;
 
 import com.annimon.stream.function.Supplier;
+import com.codezilla.bookmarkreader.R;
 import com.codezilla.bookmarkreader.async.CustomAsyncTaskExecutor;
 import com.codezilla.bookmarkreader.exception.DomainException;
 import com.codezilla.bookmarkreader.sync.BoilerplateArticlConverterAdapter;
@@ -54,7 +55,7 @@ public class ArticleDetailViewModel
 
     private void articleLoadFailed(DomainException e)
     {
-        errorDisplay.show(e.getMsg());
+        errorDisplay.show(myApp().getString(R.string.article_load_error));
         isBusy.set(false);
     }
 
