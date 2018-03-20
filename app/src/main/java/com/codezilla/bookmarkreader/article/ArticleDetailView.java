@@ -121,8 +121,14 @@ public class ArticleDetailView extends Fragment implements IErrorDisplay {
             if(model.isShowingHtml.get())
             {
                 notifyArticleRequired();
+                item.setIcon(R.drawable.icon_web);
+            }
+            else
+            {
+                item.setIcon(R.drawable.article);
             }
             model.isShowingHtml.set(!model.isShowingHtml.get());
+
             return true;
         }
         return super.onOptionsItemSelected(item);
