@@ -12,12 +12,15 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.ValueCallback;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.codezilla.bookmarkreader.R;
 import com.codezilla.bookmarkreader.databinding.FragmentArticleDetailBinding;
@@ -25,6 +28,8 @@ import com.codezilla.bookmarkreader.databinding.FragmentArticleDetailBinding;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.myApp;
+import static com.codezilla.bookmarkreader.article.CustomScaleGestureDetector.bindScaleGesture;
+import static com.codezilla.bookmarkreader.article.TextSizeAdjuster.ITextView.from;
 
 /**
  * Created by davut on 8/3/2017.
@@ -35,7 +40,7 @@ public class ArticleDetailView extends Fragment implements IErrorDisplay {
     FragmentArticleDetailBinding binding = null;
     private ArticleDetailViewModel model;
     private WebView webView;
-
+    private static String TAG = ArticleDetailView.class.getSimpleName();
     public ArticleDetailView() {
         model = new ArticleDetailViewModel(this ,  myApp().getArticleService());
     }
@@ -58,11 +63,19 @@ public class ArticleDetailView extends Fragment implements IErrorDisplay {
     {
 
         binding = DataBindingUtil.inflate(inflater , R.layout.fragment_article_detail , container , false);
-        webView = (WebView) binding.getRoot().findViewById(R.id.article_webview);
+        webView = binding.getRoot().findViewById(R.id.article_webview);
         binding.setModel(model);
         webView.setWebViewClient(customWebViewClient());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setUserAgentString("Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3");
+
+        TextView textView = binding.getRoot().findViewById(R.id.article_textview);
+        ScrollView sw = binding.getRoot().findViewById(R.id.article_textview_container);
+        TextSizeAdjuster textSizeAdjuster = new TextSizeAdjuster(from(textView));
+        bindScaleGesture(sw).onScale(o->{
+            Log.i(TAG, "SCALE: "+o);
+            textSizeAdjuster.onScale(o);
+        });
     }
 
     private WebViewClient customWebViewClient() {

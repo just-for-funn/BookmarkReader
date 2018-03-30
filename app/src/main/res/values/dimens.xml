@@ -15,4 +15,5 @@
     <dimen name="design_fab_image_size" tools:override="true">36dp</dimen>
     <dimen name="fab_text_width">50dp</dimen>
     <dimen name="arc_land_small_height">85dp</dimen>
+    <dimen name="article_text_size">20dp</dimen>
 </resources>
