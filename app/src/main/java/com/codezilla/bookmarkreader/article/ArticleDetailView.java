@@ -7,25 +7,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.ValueCallback;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.codezilla.bookmarkreader.R;
 import com.codezilla.bookmarkreader.databinding.FragmentArticleDetailBinding;
-
-import org.apache.commons.lang3.StringEscapeUtils;
 
 import static com.codezilla.bookmarkreader.application.BookmarkReaderApplication.myApp;
 import static com.codezilla.bookmarkreader.article.CustomScaleGestureDetector.bindScaleGesture;
@@ -70,9 +66,9 @@ public class ArticleDetailView extends Fragment implements IErrorDisplay {
         webView.getSettings().setUserAgentString("Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1A543a Safari/419.3");
 
         TextView textView = binding.getRoot().findViewById(R.id.article_textview);
-        ScrollView sw = binding.getRoot().findViewById(R.id.article_textview_container);
+        textView.setMovementMethod(new ScrollingMovementMethod());
         TextSizeAdjuster textSizeAdjuster = new TextSizeAdjuster(from(textView));
-        bindScaleGesture(sw).onScale(o->{
+        bindScaleGesture(textView).onScale(o->{
             Log.i(TAG, "SCALE: "+o);
             textSizeAdjuster.onScale(o);
         });
