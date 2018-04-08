@@ -37,10 +37,12 @@
                 android:visibility="@{model.isShowingHtml ? View.GONE : View.VISIBLE}"
                 android:id="@+id/article_textview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="@{model.rawContent}"
                 android:textSize="@dimen/article_text_size"
                 android:scrollbars="vertical"
+                android:background="@color/article_background_color"
+                android:textColor="@color/article_text_color"
                 />
     </LinearLayout>
 </layout>

@@ -3,8 +3,7 @@
     android:shape="rectangle">
 
     <corners
-        android:bottomRightRadius="5dp"
-        android:topLeftRadius="5dp"/>
+        android:radius="5dp"/>
     <solid android:color="@color/fab_label_color"/>
     <padding android:right="2dp"></padding>
 

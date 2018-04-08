@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">BookmarkReader</string>
-    <string name="login_screen_title">Please Login</string>
     <string name="add_new">Add new</string>
     <string name="enter_url">Enter url</string>
     <string name="submit">Submit</string>
@@ -10,7 +9,6 @@
     <string name="article_load_error">Cannot load article</string>
     <string name="connection_error">Connection error</string>
     <string name="history">History</string>
-    <string name="recent_activity">Recent activity</string>
     <string name="home">Home</string>
     <string name="none">none</string>
     <string name="refresh_sites">Download all</string>
@@ -22,12 +20,10 @@
     <string name="failed">Failed</string>
     <string name="neww">New</string>
     <string name="successfull">Unchanged</string>
-    <string name="downloading">Downloading</string>
     <string name="download_stopped">Download Stopped</string>
     <string name="nothing_to_read">Nothing to read</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="edit_items">Edit Items</string>
     <string name="delete">Delete</string>
     <string name="logs">Logs</string>
@@ -36,7 +32,6 @@
     <string name="unread">Unread</string>
     <string name="read">Read</string>
     <string name="all">All</string>
-    <string name="lorem_upsum_long">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</string>
     <string name="switch_article">Switch Article</string>
     <string name="url_added">Url added</string>
 </resources>

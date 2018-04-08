@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:minHeight="40dp"
         tools:layout_height="40dp"
-        background_color="@color/colorPrimaryDark"
+        background_color="@color/colorPrimary"
         >
         <TextView
             android:id="@+id/txtUrl"
@@ -25,6 +25,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_toLeftOf="@id/checkbox"
+            android:textColor="@color/text_color"
             />
 
         <android.support.v7.widget.AppCompatCheckBox

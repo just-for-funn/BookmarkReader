@@ -5,7 +5,8 @@
     android:id="@+id/splash_activity_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorLightContent"
+    android:background="@color/colorPrimary"
+    android:padding="60dp"
     tools:context="com.codezilla.bookmarkreader.login.SplashActivity">
 <ImageView
     android:layout_width="match_parent"
@@ -13,5 +14,5 @@
     android:layout_centerHorizontal="true"
     android:layout_centerVertical="true"
     android:scaleType="centerInside"
-    android:src="@drawable/icon512x512" />
+    android:src="@drawable/icon" />
 </RelativeLayout>

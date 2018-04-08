@@ -94,6 +94,7 @@
             android:id="@+id/btnDownloadStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
             android:onClick="@{model.isInprogress ? handler::stopDownload:handler::startDownload}"
             android:text="@{model.isInprogress ?@string/stop:@string/start }"
             app:layout_constraintBottom_toBottomOf="parent"

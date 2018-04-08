@@ -2,11 +2,9 @@ package com.codezilla.bookmarkreader;
 
 import android.databinding.ObservableField;
 
-import com.codezilla.bookmarkreader.history.HistoryView;
 import com.codezilla.bookmarkreader.login.User;
 import com.codezilla.bookmarkreader.menu.INavigator;
 import com.codezilla.bookmarkreader.menu.MenuItemModel;
-import com.codezilla.bookmarkreader.weblist.WebListView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,8 +22,8 @@ public class SettingsFragmentModel {
         menuItems = Arrays.asList(
                 new MenuItemModel(R.string.home , R.drawable.ic_home , menuItemHandler),
                 new MenuItemModel(R.string.history, R.drawable.ic_history , menuItemHandler),
-                new MenuItemModel(R.string.refresh_sites , R.drawable.ic_cloud_download_black_48dp , menuItemHandler),
-                new MenuItemModel(R.string.edit_items , R.drawable.ic_mode_edit_black_24dp , menuItemHandler)
+                new MenuItemModel(R.string.refresh_sites , R.drawable.ic_cloud_download, menuItemHandler),
+                new MenuItemModel(R.string.edit_items , R.drawable.ic_edit, menuItemHandler)
         );
     }
 

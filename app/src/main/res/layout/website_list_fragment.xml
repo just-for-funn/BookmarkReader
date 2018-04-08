@@ -72,7 +72,7 @@
         android:layout_marginRight="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
         android:clickable="true"
-        android:src="@{model.isFabOpened ? @drawable/ic_close_black_24dp : @drawable/ic_filter}"
+        android:src="@{model.isFabOpened ? @drawable/ic_closep : @drawable/ic_filter}"
         android:onClick="@{()->model.toggleFab()}"
         />
     <com.codezilla.bookmarkreader.views.fab.FabMenuItem
@@ -93,7 +93,7 @@
         app:layout_constraintBottom_toTopOf="@id/fab_unread_container"
         android:visibility="@{model.isFabOpened?View.VISIBLE:View.INVISIBLE}"
         app:fab_item_text="@string/read"
-        app:fab_item_src="@drawable/seen_48"
+        app:fab_item_src="@drawable/seen"
         android:onClick="@{()->model.loadReadElements()}"
         />
     <com.codezilla.bookmarkreader.views.fab.FabMenuItem

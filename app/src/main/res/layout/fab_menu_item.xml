@@ -11,7 +11,8 @@
         android:layout_width="@dimen/fab_text_width"
         android:layout_height="wrap_content"
         android:textAlignment="textEnd"
-        android:textColor="@color/fab_label_text_color"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/fab_text_size"
         android:background="@drawable/shape_fab_label"
         android:text="@string/all"/>
     <android.support.v4.widget.Space

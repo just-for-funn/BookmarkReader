@@ -4,7 +4,13 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorAccent">@color/indigo</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/text_color</item>
+    </style>
+    <style name="ToolbarColoredBackArrow" parent="AppTheme">
+        <item name="android:textColorSecondary">@color/colorAccent</item>
     </style>
     <style name="settings_user_name">
         <item name="android:textColor">@color/lightText</item>
@@ -13,12 +19,8 @@
         <item name="android:typeface">serif</item>
     </style>
     <style name="LinearProgress" parent="Theme.AppCompat.Light">
-        <item name="colorAccent">@color/indigo</item>
-        <item name="android:progressBackgroundTint">@color/pink</item>
-    </style>
-    <style name="fab">
-        <item name="colorAccent">@color/indigo</item>
-        <item name="android:progressBackgroundTint">@color/pink</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:progressBackgroundTint">@color/indigo</item>
     </style>
 
     <style name="fab_menu_item">

@@ -12,12 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/container"
-        android:background="#FFFFFF"
+        android:background="@color/colorPrimaryLight"
         android:onClick="@{()->model.onItemSelected()}"
         android:paddingLeft="10dp"
-        android:paddingTop="10dp"
+        android:paddingTop="5dp"
         android:paddingRight="10dp"
-        android:paddingBottom="2dp"
+        android:paddingBottom="5dp"
         >
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -40,14 +40,17 @@
             app:layout_constraintRight_toRightOf="parent"
             android:text="@{model.title}"
             android:textColor="@color/colorListTitle"
-            android:textSize="15sp"
+            android:textSize="17sp"
             android:layout_marginStart="10dp"
             tools:text="Facebook"
+            android:ellipsize="end"
+            android:maxLines="1"
             />
         <TextView
             android:id="@+id/description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColor="@color/weblist_text_color"
             android:minHeight="50dp"
             android:text="@{model.description == null ?  @string/not_evaluated:model.description}"
             app:layout_constraintLeft_toLeftOf="@id/title"
@@ -61,6 +64,7 @@
             android:id="@+id/date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColor="@color/text_color_disabled"
             android:text="@{model.changeDate}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="@id/thumbnail"
@@ -70,6 +74,7 @@
             />
         <View
             android:id="@+id/delimeter"
+            android:layout_marginTop="2dp"
             android:layout_width="0dp"
             android:layout_height="1px"
             app:layout_constraintLeft_toLeftOf="parent"

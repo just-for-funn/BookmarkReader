@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#00695C</color>
-    <color name="colorPrimaryLight">#439889</color>
-    <color name="colorPrimaryDark">#003d33</color>
-    <color name="colorSecondary">#004d40</color>
-    <color name="colorSecondaryLight">#39796b</color>
-    <color name="colorSecondaryDark">#00251a</color>
-    <color name="colorLightContent">#FFFFFF</color>
+    <color name="colorPrimary">#233446</color>
+    <color name="colorPrimaryLight">#4d5d71</color>
+    <color name="colorPrimaryDark">#000d1f</color>
+    <color name="colorSecondary">#f44336</color>
     <color name="colorImageBorder">#000000</color>
     <color name="lightText">#FFFFFF</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">@color/colorSecondary</color>
     <color name="list_delimeter">#000000</color>
-    <color name="colorListTitle">#5C6BC0</color>
+    <color name="colorListTitle">#FFFFFF</color>
     <color name="edittext_background">#FFFFFF</color>
     <color name="indigo">#3F51B5</color>
-    <color name="pink">#EC407A</color>
-    <color name="black">#000000</color>
-    <color name="menu_item_selected">#cccccc</color>
+    <color name="menu_item_selected">#5b6d82</color>
     <color name="matte_green">#a5d6a7</color>
     <color name="matte_yellow">#ffe082</color>
     <color name="matte_red">#EF5350</color>
-    <color name="fab_label_color">@color/black</color>
-    <color name="fab_label_text_color">#FFFFFF</color>
+    <color name="fab_label_color">@color/colorPrimary</color>
+    <color name="text_color">#FFFFFF</color>
+    <color name="text_color_disabled">#838E99</color>
+    <color name="article_background_color">#1A2734</color>
+    <color name="article_text_color">#BBBFC2</color>
+    <color name="weblist_text_color">#BBBFC2</color>
+    <color name="toolbar_text_color">@color/text_color</color>
 </resources>
