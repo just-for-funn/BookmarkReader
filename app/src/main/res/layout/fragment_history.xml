@@ -5,7 +5,7 @@
     <data>
         <variable
             name="model"
-            type="com.codezilla.bookmarkreader.history.HistoryViewModel">
+            type="com.davutozcan.bookmarkreader.history.HistoryViewModel">
         </variable>
         <import type="android.view.View"></import>
     </data>

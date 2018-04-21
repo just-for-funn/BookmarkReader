@@ -5,7 +5,7 @@
     <data >
         <variable
             name="model"
-            type="com.codezilla.bookmarkreader.weblist.WebListViewModel">
+            type="com.davutozcan.bookmarkreader.weblist.WebListViewModel">
         </variable>
         <import type="android.view.View"/>
     </data>
@@ -75,7 +75,7 @@
         android:src="@{model.isFabOpened ? @drawable/ic_closep : @drawable/ic_filter}"
         android:onClick="@{()->model.toggleFab()}"
         />
-    <com.codezilla.bookmarkreader.views.fab.FabMenuItem
+    <com.davutozcan.bookmarkreader.views.fab.FabMenuItem
         style="@style/fab_menu_item"
         android:id="@+id/fab_unread_container"
         app:layout_constraintRight_toRightOf="@id/fab_menu"
@@ -86,7 +86,7 @@
         app:fab_item_src="@drawable/unseen"
         android:onClick="@{()->model.loadUnreadElements()}"
         />
-    <com.codezilla.bookmarkreader.views.fab.FabMenuItem
+    <com.davutozcan.bookmarkreader.views.fab.FabMenuItem
         style="@style/fab_menu_item"
         android:id="@+id/fab_read_container"
         app:layout_constraintRight_toRightOf="@id/fab_menu"
@@ -96,7 +96,7 @@
         app:fab_item_src="@drawable/seen"
         android:onClick="@{()->model.loadReadElements()}"
         />
-    <com.codezilla.bookmarkreader.views.fab.FabMenuItem
+    <com.davutozcan.bookmarkreader.views.fab.FabMenuItem
         style="@style/fab_menu_item"
         android:id="@+id/fab_all_container"
         app:layout_constraintRight_toRightOf="@id/fab_menu"

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:padding="60dp"
-    tools:context="com.codezilla.bookmarkreader.login.SplashActivity">
+    tools:context="com.davutozcan.bookmarkreader.login.SplashActivity">
 <ImageView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

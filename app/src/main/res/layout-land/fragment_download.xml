@@ -7,11 +7,11 @@
     <data>
         <variable
             name="model"
-            type="com.codezilla.bookmarkreader.views.download.DownloadViewModel">
+            type="com.davutozcan.bookmarkreader.views.download.DownloadViewModel">
         </variable>
         <variable
             name="handler"
-            type="com.codezilla.bookmarkreader.views.download.DownloadViewHandler">
+            type="com.davutozcan.bookmarkreader.views.download.DownloadViewHandler">
         </variable>
     </data>
 

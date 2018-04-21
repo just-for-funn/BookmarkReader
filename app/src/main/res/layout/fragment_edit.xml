@@ -3,15 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.codezilla.bookmarkreader.views.edit.EditFragment">
+    tools:context="com.davutozcan.bookmarkreader.views.edit.EditFragment">
     <data>
         <variable
             name="model"
-            type="com.codezilla.bookmarkreader.views.edit.EditFragmentViewModel">
+            type="com.davutozcan.bookmarkreader.views.edit.EditFragmentViewModel">
         </variable>
         <variable
             name="handler"
-            type="com.codezilla.bookmarkreader.views.edit.EditViewHandler">
+            type="com.davutozcan.bookmarkreader.views.edit.EditViewHandler">
         </variable>
     </data>
     <android.support.constraint.ConstraintLayout

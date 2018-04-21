@@ -5,7 +5,7 @@
     <data>
         <variable
             name="model"
-            type="com.codezilla.bookmarkreader.views.edit.EditRowModel">
+            type="com.davutozcan.bookmarkreader.views.edit.EditRowModel">
         </variable>
     </data>
     <RelativeLayout
