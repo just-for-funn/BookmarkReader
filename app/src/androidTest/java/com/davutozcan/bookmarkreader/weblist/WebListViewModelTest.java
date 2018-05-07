@@ -43,28 +43,6 @@ import static org.mockito.Mockito.when;
 @RunWith(AndroidJUnit4.class)
 public class WebListViewModelTest  extends MainActivityTestBase{
 
-
-
-
-    @Before
-    public void before()
-    {
-        myApp().onCreate();
-        myApp().getRealmFacade().clearWebUnits();
-    }
-
-    @Test
-    public void shouldDisplayBusyWhenModelChanged() throws InterruptedException {
-         launch();
-         webListViewPage().setIsBusy(true);
-         untilAsserted(new ThrowingRunnable() {
-             @Override
-             public void run() throws Throwable {
-                 webListViewPage().assertProgressDisplaying();
-             }
-         });
-    }
-
     private WebListViewPage webListViewPage() {
         return getMainActivityPage().webListPage();
     }

@@ -51,4 +51,11 @@ public abstract class MainActivityTestBase {
                 .build();
         myApp().getRealmFacade().add(webUnit);
     }
+
+    @Before
+    public final void before()
+    {
+        myApp().onCreate();
+        myApp().getRealmFacade().clearWebUnits();
+    }
 }

@@ -47,16 +47,6 @@ public class ArticleServiceImpTest
     }
 
 
-    @Test
-    public void shouldLoadFirstIfArticleNotFetched()
-    {
-        when(articleRepository.hasArticle(ANY_URL)).thenReturn(false);
-        when(articleRepository.getArticle(ANY_URL)).thenReturn(ANY_ARTICLE);
-        service.getArticle(ANY_URL);
-        verify(loader).load(ANY_URL);
-    }
-
-
 
     @Test(expected = DomainException.class)
     public void shouldThrowExceptionWhenArticleNotExistInDbAndCannotLoad()
