@@ -1,5 +1,7 @@
 package com.davutozcan.bookmarkreader.domainmodel;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
@@ -20,6 +22,8 @@ public class WebUnit extends RealmObject {
     WebUnitContent previousContent;
     Change change;
     private int status;
+    private int downloadStatus = DownloadStatus.ERROR;
+    Date lastDownloadCheckDate;
 
     public String getUrl() {
         return url;
@@ -69,9 +73,37 @@ public class WebUnit extends RealmObject {
         this.status = status;
     }
 
+    public int getDownloadStatus() {
+        return downloadStatus;
+    }
+
+    public void setDownloadStatus(int downloadStatus) {
+        this.downloadStatus = downloadStatus;
+    }
+
+    public Date getLastDownloadCheckDate() {
+        return lastDownloadCheckDate;
+    }
+
+    public void setLastDownloadCheckDate(Date lastDownloadCheckDate) {
+        this.lastDownloadCheckDate = lastDownloadCheckDate;
+    }
+
+
+    public boolean isDownloadFailed()
+    {
+        return getDownloadStatus() == DownloadStatus.ERROR;
+    }
+
     public static class Status
     {
         public static final int ALREADY_READ = 0;
         public static final int HAS_NEW_CONTENT = 1;
+    }
+    public static class DownloadStatus
+    {
+        public static final int OK = 0;
+        public static final int ERROR = 1;
+
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="model"
@@ -10,18 +11,25 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="50dp"
         app:background_color="@{model.color}">
         <TextView
+            android:paddingTop="3dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="10sp"
             android:text="@{model.date}"
+            tools:text="2015.10.10 12.12.12"
             />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@{model.text}"
             android:textSize="15sp"
+            android:lines="2"
+            android:ellipsize="end"
+            tools:text="www.someverylognurlshouldbehereithink.com"
+            android:paddingBottom="3dp"
             />
     </LinearLayout>
 </layout>
