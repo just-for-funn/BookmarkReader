@@ -9,6 +9,7 @@ import com.davutozcan.bookmarkreader.domainmodel.IWebUnitRepository;
 import com.davutozcan.bookmarkreader.domainmodel.WebUnit;
 import com.davutozcan.bookmarkreader.exception.RecordExistsException;
 import com.davutozcan.bookmarkreader.weblist.IWebListService;
+import com.davutozcan.bookmarkreader.weblist.WebListRowModel;
 import com.davutozcan.bookmarkreader.weblist.WebSiteInfo;
 
 import java.util.ArrayList;
@@ -57,7 +58,6 @@ public class WeblistServiceAdapter implements IWebListService {
     }
 
 
-
     @Override
     public List<WebSiteInfo> getUnreadWebSitesInfos() {
         List<WebUnit> wuts = realmFacade.getUnreadWebUnits();
@@ -104,7 +104,14 @@ public class WeblistServiceAdapter implements IWebListService {
         return url.substring(0,subDirectoryIndex);
     }
 
-    private WebSiteInfo convert(WebUnit webUnit) {
+    @Override
+    public WebSiteInfo load(String url)
+    {
+        WebUnit wu = realmFacade.getWebUnit(url);
+        return eagerLoad(wu);
+    }
+
+    private WebSiteInfo eagerLoad(WebUnit webUnit) {
         WebSiteInfo inf = new WebSiteInfo();
         inf.setUrl(webUnit.getUrl());
         inf.setStatus(webUnit.getStatus());
@@ -114,6 +121,13 @@ public class WeblistServiceAdapter implements IWebListService {
             inf.setChangeDate(new Date(0));
         else
             inf.setChangeDate(webUnit.getLatestContent().getDate());
+        return inf;
+    }
+
+    private WebSiteInfo convert(WebUnit webUnit) {
+        WebSiteInfo inf = new WebSiteInfo();
+        inf.setUrl(webUnit.getUrl());
+        inf.setFaviconUrl(webUnit.getFaviconUrl());
         return inf;
     }
 

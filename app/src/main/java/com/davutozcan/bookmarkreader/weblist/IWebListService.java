@@ -1,7 +1,5 @@
 package com.davutozcan.bookmarkreader.weblist;
 
-import android.databinding.ObservableField;
-
 import java.util.List;
 
 /**
@@ -19,4 +17,6 @@ public interface IWebListService
     void markRead(String url);
 
     List<WebSiteInfo> getReadWebSites();
+
+    WebSiteInfo load(String url);
 }

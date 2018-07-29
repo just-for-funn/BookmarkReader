@@ -113,7 +113,7 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
 
     private void onItemClicked(WebListRowModel wlrm) {
         ArticleDetailView articleDetailView =  new ArticleDetailView();
-        articleDetailView.load(wlrm.getTitle());
+        articleDetailView.load(wlrm.title.get());
         getFragmentManager().beginTransaction().replace(R.id.main_view_content , articleDetailView  , "TAG_ARTICLE_DETAIL")
                 .addToBackStack(null)
                 .commit();
@@ -129,6 +129,7 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
     public void onPause() {
         super.onPause();
         model.getIsFabOpened().set(false);
+        adapter.onPause();
     }
 
 }
