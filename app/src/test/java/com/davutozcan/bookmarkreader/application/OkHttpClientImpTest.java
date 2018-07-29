@@ -12,7 +12,7 @@ import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
  */
 public class OkHttpClientImpTest {
     public static final String A_URL_REDIRECTS = "http://www.androidexperiments.com";
-    public static final String REDIRECTED_URL = "https://experiments.withgoogle.com/android";
+    public static final String REDIRECTED_URL = "https://experiments.withgoogle.com/collection/android";
     public static final String NON_REDIRECT_URL = "https://httpbin.org/";
     OkHttpClientImp client = new OkHttpClientImp();
 

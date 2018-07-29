@@ -1,5 +1,8 @@
 package com.davutozcan.bookmarkreader.domainmodel;
 
+import android.util.*;
+
+import java.util.Date;
 import java.util.List;
 
 import io.realm.RealmList;
@@ -49,13 +52,25 @@ public class WebUnitContentUpdater
     {
         try
         {
+            w.setLastDownloadCheckDate(new Date());
             this.IUpdateListener.onStart(w);
             updateSafe(w);
+            w.setDownloadStatus(WebUnit.DownloadStatus.OK);
             this.IUpdateListener.onComplete(w);
         } catch (Exception e)
         {
+            w.setDownloadStatus(WebUnit.DownloadStatus.ERROR);
             this.IUpdateListener.onFail(w);
             logRepository.error(String.format("Cannot update[%s] cause:%s" , w.getUrl() , e.getMessage()));
+        }
+        updateEntity(w);
+    }
+
+    private void updateEntity(WebUnit w) {
+        try{
+            realmFacade.update(w);
+        }catch (Exception e){
+            android.util.Log.e(getClass().getSimpleName(), "updateEntity: ",e );
         }
     }
 
@@ -79,7 +94,6 @@ public class WebUnitContentUpdater
         {
             w.setFaviconUrl(favicon);
         }
-        realmFacade.update(w);
     }
 
     private void swapLatestContent(WebUnit w) {

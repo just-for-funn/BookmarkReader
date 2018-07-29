@@ -15,6 +15,7 @@ import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
@@ -22,6 +23,7 @@ import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -216,5 +218,36 @@ public class WebUnitContentUpdaterTest
         assertNull(realmFacade.getWebUnit(URL_1).getPreviousContent());
         webUnitContentUpdater.updateAll();
         assertThat(webUnit.getPreviousContent().getContent() ,equalTo("old-content") );
+    }
+
+    @Test
+    public  void shoulUpdateDownloadStatusOnError()
+    {
+        this.webUnit.setDownloadStatus(WebUnit.DownloadStatus.OK);
+        when(httpClient.getHtmlContent(anyString()))
+                .thenThrow(RuntimeException.class);
+        webUnitContentUpdater.updateAll();
+        assertThat(webUnit.getDownloadStatus() , is(WebUnit.DownloadStatus.ERROR));
+
+    }
+
+    @Test
+    public  void shoulUpdateDownloadStatusOnSuccess()
+    {
+        webUnitContentUpdater.updateAll();
+        assertThat(webUnit.getDownloadStatus() , is(WebUnit.DownloadStatus.OK));
+    }
+
+    @Test
+    public void shouldPersistEntityWithDownloadState()
+    {
+        doAnswer(invocation -> {
+            WebUnit wu = (WebUnit) invocation.getArguments()[0];
+            if(wu.isDownloadFailed())
+                throw new RuntimeException("Donwload should not fail here");
+            return null;
+        }).when(realmFacade).update(any());
+        webUnitContentUpdater.updateAll();
+        assertThat(webUnit.getDownloadStatus() , is(WebUnit.DownloadStatus.OK));
     }
 }

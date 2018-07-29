@@ -16,6 +16,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static com.davutozcan.bookmarkreader.domainmodel.TextBlock.textBlock;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -209,5 +210,18 @@ public class RealmRepositoryImpTest {
         realmFacade.add(webUnit("c" , WebUnit.Status.HAS_NEW_CONTENT));
         List<String> urls =  realmFacade.webUnitUrls();
         assertThat(urls , hasItems("a","b","c"));
+    }
+
+    @Test
+    public void shouldPersistDownloadStatusAndDate()
+    {
+        WebUnit webUnit = webUnit("a" , WebUnit.Status.ALREADY_READ);
+        webUnit.setDownloadStatus(WebUnit.DownloadStatus.OK);
+        Date date = new Date();
+        webUnit.setLastDownloadCheckDate(date);
+        realmFacade.add(webUnit);
+        WebUnit fromDb =  realmFacade.getWebUnit("a");
+        assertThat(fromDb.getDownloadStatus() , is(WebUnit.DownloadStatus.OK) );
+        assertThat(fromDb.getLastDownloadCheckDate() , equalTo(date) );
     }
 }

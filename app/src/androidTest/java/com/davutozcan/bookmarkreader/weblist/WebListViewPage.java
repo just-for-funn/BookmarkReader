@@ -9,6 +9,7 @@ import com.davutozcan.bookmarkreader.R;
 import com.davutozcan.bookmarkreader.article.ArticleDetailPage;
 
 import org.awaitility.Duration;
+import org.awaitility.core.ThrowingRunnable;
 
 import java.util.concurrent.TimeUnit;
 
@@ -60,7 +61,12 @@ public class WebListViewPage
     }
 
     public WebListViewPage assertUrlNotDisplaying(String url) {
-        onView(withText(url)).check(doesNotExist());
+        await().atMost(2 , TimeUnit.SECONDS).untilAsserted(new ThrowingRunnable() {
+            @Override
+            public void run() throws Throwable {
+                onView(withText(url)).check(doesNotExist());
+            }
+        });
         return this;
     }
 
@@ -69,7 +75,7 @@ public class WebListViewPage
          return this;
     }
     public WebListViewPage assertErrorDisplaying(int stringResourceId) {
-        await().atMost(new Duration(2 , TimeUnit.SECONDS))
+        await().atMost(new Duration(3 , TimeUnit.SECONDS))
                 .untilAsserted(()->onView(withText(stringResourceId)).check(matches(isDisplayed())));
         return this;
     }

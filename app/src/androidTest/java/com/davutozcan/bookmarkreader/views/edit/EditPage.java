@@ -46,12 +46,20 @@ public class EditPage {
     }
 
     public EditPage assertUrlDisplaying(String url) {
-        onView(withText(url)).check(matches(isDisplayed()));
+        invokeUntill(()->onView(withText(url)).check(matches(isDisplayed())));
         return this;
     }
 
     public EditPage assertErrorDisplaying(int stringResourceId) {
-        onView(withText(stringResourceId)).check(matches(isDisplayed()));
+        invokeUntill(()->onView(withText(stringResourceId)).check(matches(isDisplayed())));
         return this;
+    }
+
+    private void invokeUntill(Runnable r)
+    {
+        await().until(()->{
+            r.run();
+            return true;
+        });
     }
 }

@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import com.davutozcan.bookmarkreader.R;
 import com.davutozcan.bookmarkreader.async.CustomAsyncTaskExecutor;
 import com.davutozcan.bookmarkreader.domainmodel.Log;
+import com.davutozcan.bookmarkreader.domainmodel.WebUnit;
 import com.davutozcan.bookmarkreader.exception.DomainException;
 
 import java.text.DateFormat;
@@ -30,46 +31,41 @@ public class HistoryViewModel{
     public void load()
     {
         isBusy.set(true);
-        CustomAsyncTaskExecutor.async(()->myApp().getLogRepository().logs())
+        CustomAsyncTaskExecutor.async(()->myApp().getRealmFacade().webUnits())
                 .onSuccess(this::onFinish)
                 .onError(this::onError)
                 .execute();
     }
 
 
-    private void onFinish(List<Log> logs) {
+    private void onFinish(List<WebUnit> logs) {
         isBusy.set(false);
         rows.clear();
         rows.addAll(map(logs));
     }
 
-    private java.util.Collection<? extends HistoryViewRowModel> map(List<Log> logs) {
+    private java.util.Collection<? extends HistoryViewRowModel> map(List<WebUnit> logs) {
         List<HistoryViewRowModel> rows = new ArrayList<>();
-        for (Log log :logs) {
+        for (WebUnit log :logs) {
 
             rows.add(transform(log));
         }
         return rows;
     }
 
-    private HistoryViewRowModel transform(Log log) {
+    private HistoryViewRowModel transform(WebUnit log) {
         HistoryViewRowModel rowModel = new HistoryViewRowModel();
-        rowModel.text.set(log.getMsg());
+        rowModel.text.set(log.getUrl());
         rowModel.color.set(getLogColor(log));
-        rowModel.date.set(format.format(log.getDate()));
+        if(log.getLastDownloadCheckDate()!= null)
+            rowModel.date.set(format.format(log.getLastDownloadCheckDate()));
         return rowModel;
     }
 
-    private int getLogColor(Log log) {
-        switch (log.getType())
-        {
-            case Log.INFO:
-                return R.color.matte_green;
-            case Log.WARNING:
-                return R.color.matte_yellow;
-            default:
-                return R.color.matte_red;
-        }
+    private int getLogColor(WebUnit log) {
+        if(log.isDownloadFailed())
+            return R.color.matte_red;
+        return R.color.matte_green;
     }
 
 
