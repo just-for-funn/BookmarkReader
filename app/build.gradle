@@ -57,6 +57,15 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     compile group: 'org.apache.commons', name: 'commons-text', version: '1.2'
 
+    // RX2Java
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.17'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+
+    // Arch components
+    implementation "android.arch.lifecycle:extensions:+"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:+"
+    implementation "androidx.lifecycle:lifecycle-common-java8:+"
+
 
 }
 
