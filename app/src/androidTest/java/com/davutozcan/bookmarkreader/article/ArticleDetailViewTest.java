@@ -83,7 +83,7 @@ public class ArticleDetailViewTest extends MainActivityTestBase
         getMainActivityPage()
                 .webListPage()
                 .clickItem(ANY_URL)
-                .assertErrorDisplaying("Cannot getSummaryFor article");
+                .assertErrorDisplaying("Cannot load article");
     }
 
     @Test

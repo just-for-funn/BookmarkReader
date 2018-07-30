@@ -90,11 +90,6 @@ public class WebListViewModelTest  extends MainActivityTestBase{
                 .assertNotContentDisplaying();
     }
 
-    private WebSiteInfo convert(String url) {
-        return WebSiteInfo.of(url , "");
-    }
-
-
     @Test
     public void shouldListOnlyUnreadElementsWhenFilterSelected()
     {
