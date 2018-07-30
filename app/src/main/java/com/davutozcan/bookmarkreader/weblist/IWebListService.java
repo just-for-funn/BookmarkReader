@@ -18,5 +18,5 @@ public interface IWebListService
 
     List<WebSiteInfo> getReadWebSites();
 
-    WebSiteInfo load(String url);
+    String getSummaryFor(String url);
 }
