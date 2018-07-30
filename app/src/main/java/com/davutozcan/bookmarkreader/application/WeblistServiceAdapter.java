@@ -105,29 +105,20 @@ public class WeblistServiceAdapter implements IWebListService {
     }
 
     @Override
-    public WebSiteInfo load(String url)
+    public String getSummaryFor(String url)
     {
         WebUnit wu = realmFacade.getWebUnit(url);
-        return eagerLoad(wu);
-    }
-
-    private WebSiteInfo eagerLoad(WebUnit webUnit) {
-        WebSiteInfo inf = new WebSiteInfo();
-        inf.setUrl(webUnit.getUrl());
-        inf.setStatus(webUnit.getStatus());
-        inf.setFaviconUrl(webUnit.getFaviconUrl());
-        inf.setSummary(getSummaryFrom(webUnit));
-        if(webUnit.getLatestContent() == null)
-            inf.setChangeDate(new Date(0));
-        else
-            inf.setChangeDate(webUnit.getLatestContent().getDate());
-        return inf;
+        return getSummaryFrom(wu);
     }
 
     private WebSiteInfo convert(WebUnit webUnit) {
         WebSiteInfo inf = new WebSiteInfo();
         inf.setUrl(webUnit.getUrl());
         inf.setFaviconUrl(webUnit.getFaviconUrl());
+        if(webUnit.getLatestContent() == null)
+            inf.setChangeDate(new Date(0));
+        else
+            inf.setChangeDate(webUnit.getLatestContent().getDate());
         return inf;
     }
 
