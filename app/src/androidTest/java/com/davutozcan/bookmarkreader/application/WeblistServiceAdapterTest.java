@@ -97,8 +97,8 @@ public class WeblistServiceAdapterTest {
         wu.setLatestContent(null);
         wu.setUrl( "test");
         when(repository.webUnits()).thenReturn(Arrays.asList(wu));
-        String summary =  weblistServiceAdapter.getWebSitesInfos().get(0).getSummary();
-        assertThat(summary , equalTo("Not evaluated yet"));
+        String summary =  weblistServiceAdapter.getSummaryFor(weblistServiceAdapter.getWebSitesInfos().get(0).getUrl());
+        assertThat(summary , equalTo("Content not downloaded yet"));
     }
 
 

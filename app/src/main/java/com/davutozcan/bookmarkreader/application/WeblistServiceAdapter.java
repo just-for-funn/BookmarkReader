@@ -104,7 +104,7 @@ public class WeblistServiceAdapter implements IWebUnitService {
                 return toSummary(webUnit.getChange());
         }catch (Exception e)
         {
-            return myApp().getApplicationContext().getString(R.string.error);
+            return myApp().getApplicationContext().getString(R.string.no_download_available);
         }
     }
 
