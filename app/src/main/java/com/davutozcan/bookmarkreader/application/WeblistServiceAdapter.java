@@ -1,19 +1,13 @@
 package com.davutozcan.bookmarkreader.application;
 
-import com.annimon.stream.Collectors;
-import com.annimon.stream.Stream;
 import com.davutozcan.bookmarkreader.R;
 import com.davutozcan.bookmarkreader.domainmodel.Change;
 import com.davutozcan.bookmarkreader.domainmodel.IArticleExtractor;
 import com.davutozcan.bookmarkreader.domainmodel.IWebUnitRepository;
 import com.davutozcan.bookmarkreader.domainmodel.WebUnit;
 import com.davutozcan.bookmarkreader.exception.RecordExistsException;
-import com.davutozcan.bookmarkreader.weblist.IWebListService;
-import com.davutozcan.bookmarkreader.weblist.WebListRowModel;
-import com.davutozcan.bookmarkreader.weblist.WebSiteInfo;
+import com.davutozcan.bookmarkreader.weblist.IWebUnitService;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplication.myApp;
@@ -22,7 +16,7 @@ import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplicatio
  * Created by davut on 8/27/2017.
  */
 
-public class WeblistServiceAdapter implements IWebListService {
+public class WeblistServiceAdapter implements IWebUnitService {
     private final IArticleExtractor articleExtractor;
     IWebUnitRepository realmFacade;
 
@@ -32,13 +26,8 @@ public class WeblistServiceAdapter implements IWebListService {
     }
 
     @Override
-    public List<WebSiteInfo> getWebSitesInfos() {
-        List<WebUnit> wuts= realmFacade.webUnits();
-        List<WebSiteInfo> wsinfs = new ArrayList<>(wuts.size());
-        for (int i = 0; i <wuts.size(); i++) {
-                wsinfs.add(convert(wuts.get(i)));
-        }
-        return wsinfs;
+    public List<WebUnit> getWebSitesInfos() {
+        return realmFacade.webUnits();
     }
 
     @Override
@@ -59,11 +48,8 @@ public class WeblistServiceAdapter implements IWebListService {
 
 
     @Override
-    public List<WebSiteInfo> getUnreadWebSitesInfos() {
-        List<WebUnit> wuts = realmFacade.getUnreadWebUnits();
-        return Stream.of(wuts)
-                .map(this::convert)
-                .collect(Collectors.toList());
+    public List<WebUnit> getUnreadWebSitesInfos() {
+        return realmFacade.getUnreadWebUnits();
     }
 
     @Override
@@ -77,11 +63,8 @@ public class WeblistServiceAdapter implements IWebListService {
     }
 
     @Override
-    public List<WebSiteInfo> getReadWebSites() {
-        List<WebUnit> wuts = realmFacade.getByStatus(WebUnit.Status.ALREADY_READ);
-        return Stream.of(wuts)
-                .map(this::convert)
-                .collect(Collectors.toList());
+    public List<WebUnit> getReadWebSites() {
+        return realmFacade.getByStatus(WebUnit.Status.ALREADY_READ);
     }
 
     private String faviconOf(String url) {
@@ -109,17 +92,6 @@ public class WeblistServiceAdapter implements IWebListService {
     {
         WebUnit wu = realmFacade.getWebUnit(url);
         return getSummaryFrom(wu);
-    }
-
-    private WebSiteInfo convert(WebUnit webUnit) {
-        WebSiteInfo inf = new WebSiteInfo();
-        inf.setUrl(webUnit.getUrl());
-        inf.setFaviconUrl(webUnit.getFaviconUrl());
-        if(webUnit.getLatestContent() == null)
-            inf.setChangeDate(new Date(0));
-        else
-            inf.setChangeDate(webUnit.getLatestContent().getDate());
-        return inf;
     }
 
     private String getSummaryFrom(WebUnit webUnit) {

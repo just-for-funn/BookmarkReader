@@ -5,11 +5,14 @@ import android.util.Log;
 
 import com.annimon.stream.Optional;
 import com.annimon.stream.function.Supplier;
+import com.davutozcan.bookmarkreader.R;
 import com.davutozcan.bookmarkreader.async.CustomAsyncTaskExecutor;
+import com.davutozcan.bookmarkreader.domainmodel.WebUnit;
 import com.davutozcan.bookmarkreader.exception.DomainException;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplication.myApp;
@@ -31,20 +34,22 @@ public class WebListViewModel
     WeakReference<IWebListView> weblistView;
     Optional<CustomAsyncTaskExecutor> lastLoadJob = Optional.ofNullable(null);
     public final ObservableBoolean isBusy = new ObservableBoolean(false);
-    List<WebSiteInfo> webSiteInfos = new ArrayList<>();
+    List<WebUnit> webSiteInfos = new ArrayList<>();
 
     public WebListViewModel(IWebListView weblistView) {
         this.weblistView = new WeakReference<IWebListView>(weblistView);
     }
 
 
-    private void onFinish(List<WebSiteInfo> webListViews) {
+    private void onFinish(List<WebUnit> webListViews) {
         if(webListViews == null)
             this.webSiteInfos = new ArrayList<>();
         else
             this.webSiteInfos = webListViews;
         if(this.weblistView.get()!= null)
-            this.weblistView.get().onListChanged(this.webSiteInfos);
+        {
+            this.weblistView.get().onListChanged(convert(webListViews));
+        }
         isCompleted.set(webSiteInfos.size()  == 0 );
         isBusy.set(false);
     }
@@ -100,13 +105,13 @@ public class WebListViewModel
         }
     }
 
-    private void load(Supplier<List<WebSiteInfo>> job)
+    private void load(Supplier<List<WebUnit>> job)
     {
         Log.i(getClass().getSimpleName(), "Loading new data");
         lastLoadJob.ifPresent(o->o.cancel(true));
         this.isBusy.set(true);
         this.isFabOpened.set(false);
-        CustomAsyncTaskExecutor<List<WebSiteInfo>> loader =  CustomAsyncTaskExecutor.async(job);
+        CustomAsyncTaskExecutor<List<WebUnit>> loader =  CustomAsyncTaskExecutor.async(job);
                 loader
                         .onSuccess(this::onFinish)
                         .onError(this::onError)
@@ -129,9 +134,25 @@ public class WebListViewModel
     }
 
 
+    List<WebListRowModel> convert(List<WebUnit> webSiteInfos){
+        Log.i(getClass().getSimpleName() , "List Changed");
+        List<WebListRowModel> rowElements = new ArrayList<>();
+        String notLoaded = myApp().getString(R.string.not_evaluated);
+        for (WebUnit w: webSiteInfos)
+        {
+            WebListRowModel rm =  new WebListRowModel(w.getUrl() , notLoaded , w.getFaviconUrl() , null);
+            if(w.getLatestContent() == null)
+                rm.setChangeDate(new Date(0));
+            else
+                rm.setChangeDate(w.getLatestContent().getDate());
+            rowElements.add(rm);
+        }
+        return rowElements;
+    }
+
     static interface IWebListView
     {
-        void onListChanged(List<WebSiteInfo> webSiteInfos);
+        void onListChanged(List<WebListRowModel> webSiteInfos);
         void showError(String message);
     }
 }

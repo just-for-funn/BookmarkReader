@@ -61,4 +61,8 @@ public class WebListRowModel {
         if(this.onClick != null)
             onClick.accept(this);
     }
+
+    public void setItemClickListener(Consumer<WebListRowModel> onClick) {
+        this.onClick = onClick;
+    }
 }
