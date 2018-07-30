@@ -2,9 +2,9 @@ package com.davutozcan.bookmarkreader.history;
 
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
-import android.databinding.ObservableList;
-import android.support.design.widget.Snackbar;
 
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Stream;
 import com.davutozcan.bookmarkreader.R;
 import com.davutozcan.bookmarkreader.async.CustomAsyncTaskExecutor;
 import com.davutozcan.bookmarkreader.domainmodel.Log;
@@ -15,8 +15,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-
 
 import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplication.myApp;
 
@@ -31,12 +29,23 @@ public class HistoryViewModel{
     public void load()
     {
         isBusy.set(true);
-        CustomAsyncTaskExecutor.async(()->myApp().getRealmFacade().webUnits())
-                .onSuccess(this::onFinish)
+        CustomAsyncTaskExecutor.async(()->myApp().getLogRepository().logs())
+                .onSuccess(this::onLogsLoaded)
                 .onError(this::onError)
                 .execute();
     }
 
+    private void onLogsLoaded(List<Log> logs) {
+        isBusy.set(false);
+        rows.clear();
+        rows.addAll(Stream.of(logs).map(log -> {
+            HistoryViewRowModel model = new HistoryViewRowModel();
+            model.text.set(log.getMsg());
+            model.color.set(R.color.matte_green);
+            model.date.set(format.format(log.getDate()));
+            return model;
+        }).collect(Collectors.toList()));
+    }
 
     private void onFinish(List<WebUnit> logs) {
         isBusy.set(false);
