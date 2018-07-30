@@ -1,17 +1,11 @@
 package com.davutozcan.bookmarkreader.views.download;
 
 import com.davutozcan.bookmarkreader.MainActivityTestBase;
-import com.davutozcan.bookmarkreader.domainmodel.IWebUnitRepository;
 import com.davutozcan.bookmarkreader.domainmodel.WebUnit;
-import com.davutozcan.bookmarkreader.weblist.IWebListService;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.util.stream.Stream;
 
 import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplication.myApp;
 

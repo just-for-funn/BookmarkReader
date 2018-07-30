@@ -12,7 +12,7 @@ import com.davutozcan.bookmarkreader.domainmodel.RealmLogRepositoryImp;
 import com.davutozcan.bookmarkreader.domainmodel.RealmRepositoryImp;
 import com.davutozcan.bookmarkreader.login.IUserService;
 import com.davutozcan.bookmarkreader.sync.BoilerplateArticlConverterAdapter;
-import com.davutozcan.bookmarkreader.weblist.IWebListService;
+import com.davutozcan.bookmarkreader.weblist.IWebUnitService;
 
 /**
  * Created by davut on 7/22/2017.
@@ -21,7 +21,7 @@ import com.davutozcan.bookmarkreader.weblist.IWebListService;
 public class BookmarkReaderApplication extends Application{
     private static BookmarkReaderApplication self;
     IUserService userService;
-    IWebListService webListService;
+    IWebUnitService webListService;
     ICacheService cacheService;
     IArticleService articleService;
     private IWebUnitRepository realmFacade;
@@ -75,11 +75,11 @@ public class BookmarkReaderApplication extends Application{
         return getInstance().getCacheService();
     }
 
-    public IWebListService getWebListService() {
+    public IWebUnitService getWebListService() {
         return webListService;
     }
 
-    public void setWebListService(IWebListService webListService) {
+    public void setWebListService(IWebUnitService webListService) {
         this.webListService = webListService;
     }
 
