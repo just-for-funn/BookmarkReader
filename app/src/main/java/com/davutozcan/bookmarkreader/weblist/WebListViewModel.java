@@ -94,13 +94,13 @@ public class WebListViewModel
         switch (filter)
         {
             case ALL:
-                load(() -> myApp().getWebListService().getWebSitesInfos());
+                load(() -> myApp().getWebunitService().getWebSitesInfos());
                 break;
             case READ:
-                load(() -> myApp().getWebListService().getReadWebSites());
+                load(() -> myApp().getWebunitService().getReadWebSites());
                 break;
             case UNREAD:
-                load( () -> myApp().getWebListService().getUnreadWebSitesInfos());
+                load( () -> myApp().getWebunitService().getUnreadWebSitesInfos());
                 break;
         }
     }

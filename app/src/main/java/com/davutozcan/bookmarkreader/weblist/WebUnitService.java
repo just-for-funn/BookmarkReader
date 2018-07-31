@@ -8,7 +8,7 @@ import java.util.List;
  * Created by davut on 7/28/2017.
  */
 
-public interface IWebUnitService
+public interface WebUnitService
 {
     List<WebUnit> getWebSitesInfos();
     void add(String url);

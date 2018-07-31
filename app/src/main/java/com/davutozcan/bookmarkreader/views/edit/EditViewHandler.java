@@ -1,7 +1,6 @@
 package com.davutozcan.bookmarkreader.views.edit;
 
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.EditText;
 
@@ -35,7 +34,7 @@ public class EditViewHandler {
                 {
                     editFragment.getModel().isBusy.set(true);
                     EditText editText = (EditText) w.findViewById(R.id.txtUrl);
-                    myApp().getWebListService().add(fixUrl(editText.getText().toString()));
+                    myApp().getWebunitService().add(fixUrl(editText.getText().toString()));
                     editFragment.reload();
                 }catch (DomainException e)
                 {
