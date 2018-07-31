@@ -60,7 +60,7 @@ public class ArticleDetailViewModel
     }
 
     private void articleLoaded(IArticleService.ArticleDetail s) {
-        myApp().getWebListService().markRead(url.get());
+        myApp().getWebunitService().markRead(url.get());
         content.set(s.getContent());
         url.set(s.getBaseUrl());
         isBusy.set(false);

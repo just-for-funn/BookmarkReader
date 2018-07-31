@@ -57,7 +57,7 @@ class WebListViewFragmentAdapter extends BaseArrayListAdapter<RowDataViewBinding
     }
     private void loadData(WebListRowModel o){
         Log.i("Observable", "loadData " + Thread.currentThread().getName());
-        o.description.set(myApp().getWebListService().getSummaryFor(o.title.get()));
+        o.description.set(myApp().getWebunitService().getSummaryFor(o.title.get()));
     }
 
 
