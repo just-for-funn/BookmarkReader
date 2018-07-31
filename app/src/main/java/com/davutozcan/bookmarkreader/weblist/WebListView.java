@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.annimon.stream.Stream;
 import com.davutozcan.bookmarkreader.R;
 import com.davutozcan.bookmarkreader.article.ArticleDetailView;
 import com.davutozcan.bookmarkreader.databinding.WebsiteListFragmentBinding;
@@ -99,21 +100,14 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
     }
     
     @Override
-    public void onListChanged(List<WebSiteInfo> webSiteInfos) {
-        Log.i(getClass().getSimpleName() , "List Changed");
-        List<WebListRowModel> rowElements = new ArrayList<>();
-        for (WebSiteInfo w: webSiteInfos)
-        {
-            WebListRowModel rm =  new WebListRowModel(w.getUrl() , w.getSummary() , w.getFaviconUrl() , this::onItemClicked);
-            rm.setChangeDate(w.getChangeDate());
-            rowElements.add(rm);
-        }
-        adapter.setItems(rowElements);
+    public void onListChanged(List<WebListRowModel> webSiteInfos) {
+        Stream.of(webSiteInfos).forEach(o->o.setItemClickListener(this::onItemClicked));
+        adapter.setItems(webSiteInfos);
     }
 
     private void onItemClicked(WebListRowModel wlrm) {
         ArticleDetailView articleDetailView =  new ArticleDetailView();
-        articleDetailView.load(wlrm.getTitle());
+        articleDetailView.load(wlrm.title.get());
         getFragmentManager().beginTransaction().replace(R.id.main_view_content , articleDetailView  , "TAG_ARTICLE_DETAIL")
                 .addToBackStack(null)
                 .commit();
@@ -129,6 +123,7 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
     public void onPause() {
         super.onPause();
         model.getIsFabOpened().set(false);
+        adapter.onPause();
     }
 
 }

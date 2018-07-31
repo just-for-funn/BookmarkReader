@@ -4,7 +4,7 @@
     <string name="enter_url">Enter url</string>
     <string name="submit">Submit</string>
     <string name="cancel">Cancel</string>
-    <string name="not_evaluated">Not evaluated yet</string>
+    <string name="not_evaluated">Loading...</string>
     <string name="already_added">Already added</string>
     <string name="article_load_error">Cannot load article</string>
     <string name="connection_error">Connection error</string>
@@ -34,4 +34,5 @@
     <string name="all">All</string>
     <string name="switch_article">Switch Article</string>
     <string name="url_added">Url added</string>
+    <string name="no_download_available">Content not downloaded yet</string>
 </resources>

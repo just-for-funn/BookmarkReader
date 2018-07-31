@@ -4,38 +4,16 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.davutozcan.bookmarkreader.MainActivityTestBase;
 import com.davutozcan.bookmarkreader.R;
-import com.davutozcan.bookmarkreader.application.BookmarkReaderApplication;
-import com.davutozcan.bookmarkreader.builders.WebUnitTestDataBuilder;
 import com.davutozcan.bookmarkreader.domainmodel.WebUnit;
-import com.davutozcan.bookmarkreader.domainmodel.WebUnitContent;
-import com.davutozcan.bookmarkreader.exception.RecordExistsException;
 
-import org.awaitility.core.ThrowingRunnable;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplication.myApp;
-import static com.davutozcan.bookmarkreader.test.TestExtensions.untilAsserted;
 import static junit.framework.Assert.fail;
 import static org.awaitility.Awaitility.await;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by davut on 7/27/2017.
@@ -62,7 +40,7 @@ public class WebListViewModelTest  extends MainActivityTestBase{
     @Test
     public void shouldDisplayErrorMessageWhenWebListServiceCrushes()
     {
-        myApp().setWebListService(null);
+        myApp().setWebunitService(null);
         launch();
         webListViewPage().assertErrorDisplaying(R.string.unexpected_error);
     }
@@ -89,11 +67,6 @@ public class WebListViewModelTest  extends MainActivityTestBase{
         webListViewPage()
                 .assertNotContentDisplaying();
     }
-
-    private WebSiteInfo convert(String url) {
-        return WebSiteInfo.of(url , "");
-    }
-
 
     @Test
     public void shouldListOnlyUnreadElementsWhenFilterSelected()

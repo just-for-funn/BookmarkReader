@@ -1,6 +1,7 @@
 package com.davutozcan.bookmarkreader.login;
 
 import android.content.Intent;
+import android.support.test.espresso.ViewAssertion;
 import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
@@ -8,6 +9,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.davutozcan.bookmarkreader.R;
 import com.davutozcan.bookmarkreader.application.BookmarkReaderApplication;
+import com.davutozcan.bookmarkreader.assertions.AsyncExtensions;
 import com.davutozcan.bookmarkreader.splash.SplashActivity;
 
 import org.junit.After;
@@ -23,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplication.myApp;
 import static org.hamcrest.Matchers.is;
 
 
@@ -37,28 +40,28 @@ public class SplashActivityTest {
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
+        myApp().getRealmFacade().clearWebUnits();
+        myApp().getState().saveAppInitilized(false);
     }
 
     @After
     public void cleanTest() {
     }
 
-    @Ignore
     @Test
-    public void shouldOpenMainContentWhenAlreadyLogined() throws InterruptedException {
+    public void shouldOpenMainContentWhenAlreadyLogined() {
         launch();
-
-        TimeUnit.SECONDS.sleep(3);
-
-        onView(withId(R.id.main_view_content))
-                .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        AsyncExtensions.invokeUntill(()->onView(withId(R.id.main_view_content))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed())) , 7000);
     }
     
     @Test
     public void should_InitialPayloadCorrect() {
         final int expected = 64;
-        int actual = (int) BookmarkReaderApplication.myApp().getRealmFacade().count();
-
+        launch();
+        AsyncExtensions.invokeUntill(()->onView(withId(R.id.main_view_content))
+                .check(ViewAssertions.matches(ViewMatchers.isDisplayed())) , 7000);
+        int actual = (int) myApp().getRealmFacade().count();
         assertThat(actual, is(expected));
     }
 

@@ -124,6 +124,6 @@ public class SplashViewModel extends ViewModel implements LifecycleObserver {
 
     private void addWebUnit(String url) {
         if(!myApp().getRealmFacade().exists(url))
-            myApp().getWebListService().add(url);
+            myApp().getWebunitService().add(url);
     }
 }

@@ -12,7 +12,7 @@ import com.davutozcan.bookmarkreader.domainmodel.RealmLogRepositoryImp;
 import com.davutozcan.bookmarkreader.domainmodel.RealmRepositoryImp;
 import com.davutozcan.bookmarkreader.login.IUserService;
 import com.davutozcan.bookmarkreader.sync.BoilerplateArticlConverterAdapter;
-import com.davutozcan.bookmarkreader.weblist.IWebListService;
+import com.davutozcan.bookmarkreader.weblist.WebUnitService;
 
 /**
  * Created by davut on 7/22/2017.
@@ -21,7 +21,7 @@ import com.davutozcan.bookmarkreader.weblist.IWebListService;
 public class BookmarkReaderApplication extends Application{
     private static BookmarkReaderApplication self;
     IUserService userService;
-    IWebListService webListService;
+    WebUnitService webunitService;
     ICacheService cacheService;
     IArticleService articleService;
     private IWebUnitRepository realmFacade;
@@ -38,7 +38,7 @@ public class BookmarkReaderApplication extends Application{
     public void initilizeServices() {
         this.realmFacade = new RealmRepositoryImp(getApplicationContext());
         userService = new MockUserService();
-        webListService = new WeblistServiceAdapter(realmFacade ,  new BoilerplateArticlConverterAdapter());
+        webunitService = new WebunitServiceImp(realmFacade ,  new BoilerplateArticlConverterAdapter());
         logRepository = new RealmLogRepositoryImp(getApplicationContext());
         cacheService = new SimpleLruCache();
         articleService = new ArticleServiceImp(new ArticleRepositoryAdapter(realmFacade));
@@ -75,12 +75,12 @@ public class BookmarkReaderApplication extends Application{
         return getInstance().getCacheService();
     }
 
-    public IWebListService getWebListService() {
-        return webListService;
+    public WebUnitService getWebunitService() {
+        return webunitService;
     }
 
-    public void setWebListService(IWebListService webListService) {
-        this.webListService = webListService;
+    public void setWebunitService(WebUnitService webunitService) {
+        this.webunitService = webunitService;
     }
 
     public ICacheService getCacheService() {

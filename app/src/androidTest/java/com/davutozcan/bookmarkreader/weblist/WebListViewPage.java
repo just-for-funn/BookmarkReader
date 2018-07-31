@@ -7,6 +7,7 @@ import android.widget.ProgressBar;
 import com.davutozcan.bookmarkreader.MainActivity;
 import com.davutozcan.bookmarkreader.R;
 import com.davutozcan.bookmarkreader.article.ArticleDetailPage;
+import com.davutozcan.bookmarkreader.assertions.AsyncExtensions;
 
 import org.awaitility.Duration;
 import org.awaitility.core.ThrowingRunnable;
@@ -50,7 +51,7 @@ public class WebListViewPage
     }
 
     public WebListViewPage assertUrlDisplaying(String url) {
-        onView(withText(url)).check(matches(isDisplayed()));
+        AsyncExtensions.invokeUntill(()-> onView(withText(url)).check(matches(isDisplayed())));
         return this;
     }
 

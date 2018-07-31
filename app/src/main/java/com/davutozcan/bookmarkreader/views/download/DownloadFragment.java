@@ -65,7 +65,7 @@ public class DownloadFragment extends Fragment
     }
 
     private void setMax() {
-        int count = (int) myApp().getWebListService().count();
+        int count = (int) myApp().getWebunitService().count();
         arcCompleted.setMax(count);
         arcFailed.setMax(count);
         arcTotal.setMax(count);

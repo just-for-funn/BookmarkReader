@@ -10,6 +10,7 @@ import android.support.test.rule.ActivityTestRule;
 import com.davutozcan.bookmarkreader.MainActivity;
 import com.davutozcan.bookmarkreader.MainActivityPage;
 import com.davutozcan.bookmarkreader.R;
+import com.davutozcan.bookmarkreader.assertions.AsyncExtensions;
 import com.davutozcan.bookmarkreader.views.download.DownloadPage;
 
 import org.hamcrest.BaseMatcher;
@@ -61,7 +62,7 @@ public class ArticleDetailPage {
     }
 
     public void assertErrorDisplaying(String msg) {
-        onView(withText(msg)).check(matches(isDisplayed()));
+        AsyncExtensions.invokeUntill(()->onView(withText(msg)).check(matches(isDisplayed())));
     }
 
     public ArticleDetailPage clickSwitch() {
