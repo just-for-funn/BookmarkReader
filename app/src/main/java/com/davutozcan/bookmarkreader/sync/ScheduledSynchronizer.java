@@ -1,46 +1,39 @@
 package com.davutozcan.bookmarkreader.sync;
 
-import android.app.job.JobParameters;
-import android.app.job.JobService;
-import android.util.Log;
 
 import com.davutozcan.bookmarkreader.domainmodel.IUpdateListener;
 import com.davutozcan.bookmarkreader.domainmodel.RealmLogRepositoryImp;
-
-import java.util.concurrent.Callable;
+import com.firebase.jobdispatcher.JobParameters;
+import com.firebase.jobdispatcher.JobService;
 
 /**
  * Created by davut on 9/4/2017.
  */
 
-public class ScheduledSynchronizer extends JobService
-{
+public class ScheduledSynchronizer extends JobService {
+
     final static String TAG = ScheduledSynchronizer.class.getSimpleName();
     private BackgroundUpdaterTask bAckgroundUpdaterTask;
 
     @Override
-    public boolean onStartJob(final JobParameters params)
-    {
-
+    public boolean onStartJob(final JobParameters params) {
         RealmLogRepositoryImp realmLogRepositoryImp = new RealmLogRepositoryImp(getApplicationContext());
         realmLogRepositoryImp.info("Scheduled Sycronizer onStartJob");
 
-        this.bAckgroundUpdaterTask = new BackgroundUpdaterTask(getApplicationContext() , IUpdateListener.NULL)
-        {
+        this.bAckgroundUpdaterTask = new BackgroundUpdaterTask(getApplicationContext(), IUpdateListener.NULL) {
             @Override
             protected void onPostExecute(Boolean aBoolean) {
-                jobFinished(params , false);
+                jobFinished(params, false);
             }
         };
+
         bAckgroundUpdaterTask.execute();
         return true;
     }
 
     @Override
-    public boolean onStopJob(JobParameters params)
-    {
-        if(bAckgroundUpdaterTask!= null)
-        {
+    public boolean onStopJob(JobParameters params) {
+        if (bAckgroundUpdaterTask != null) {
             bAckgroundUpdaterTask.stop();
             bAckgroundUpdaterTask.cancel(true);
         }
