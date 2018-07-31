@@ -6,7 +6,9 @@ import com.davutozcan.bookmarkreader.R;
 import com.davutozcan.bookmarkreader.bindings.recyclerview.BaseArrayListAdapter;
 import com.davutozcan.bookmarkreader.databinding.RowDataViewBinding;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -21,6 +23,7 @@ import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplicatio
 class WebListViewFragmentAdapter extends BaseArrayListAdapter<RowDataViewBinding , WebListRowModel>
 {
     private Disposable disposable;
+    Map<String , String> cachedSummaries  = new HashMap<>();
 
     public WebListViewFragmentAdapter(List<WebListRowModel> rowElements) {
         super(rowElements);
@@ -47,7 +50,6 @@ class WebListViewFragmentAdapter extends BaseArrayListAdapter<RowDataViewBinding
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(Schedulers.newThread())
                 .doOnNext(o->loadData(o))
-                .map(o->getItems().indexOf(o))
                 .subscribe();
     }
 
@@ -57,7 +59,11 @@ class WebListViewFragmentAdapter extends BaseArrayListAdapter<RowDataViewBinding
     }
     private void loadData(WebListRowModel o){
         Log.i("Observable", "loadData " + Thread.currentThread().getName());
-        o.description.set(myApp().getWebunitService().getSummaryFor(o.title.get()));
+        if(!cachedSummaries.containsKey(o.title.get())){
+            String summary = myApp().getWebunitService().getSummaryFor(o.title.get());
+            cachedSummaries.put(o.title.get() , summary );
+        }
+        o.description.set(cachedSummaries.get(o.title.get()));
     }
 
 
