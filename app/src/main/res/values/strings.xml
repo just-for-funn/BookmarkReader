@@ -35,4 +35,5 @@
     <string name="switch_article">Switch Article</string>
     <string name="url_added">Url added</string>
     <string name="no_download_available">Content not downloaded yet</string>
+    <string name="new_content_awailable">New content available!</string>
 </resources>
