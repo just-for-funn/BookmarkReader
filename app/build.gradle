@@ -74,6 +74,7 @@ dependencies {
 
     // Firebase job dispatcher
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
+    implementation "android.arch.work:work-runtime:1.0+"
 }
 
 apply plugin: 'kotlin-android'
