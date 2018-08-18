@@ -37,10 +37,11 @@ public class MyJopScheduler {
     }
 
     public void schedule() {
+        cancel();
         Log.i("MyJopScheduler" , "No previous scheduled job found recheduling");
         WorkManager mWorkManager = WorkManager.getInstance();
         PeriodicWorkRequest.Builder notificationWorkBuilder =
-                new PeriodicWorkRequest.Builder(BackgroundWorker.class,3, TimeUnit.HOURS)
+                new PeriodicWorkRequest.Builder(BackgroundWorker.class,4, TimeUnit.HOURS)
                         .addTag(JOB_TAG);
         PeriodicWorkRequest request = notificationWorkBuilder.build();
         mWorkManager.enqueueUniquePeriodicWork(JOB_TAG , ExistingPeriodicWorkPolicy.KEEP, request);
@@ -48,6 +49,7 @@ public class MyJopScheduler {
 
 
     public void cancel() {
+        WorkManager.getInstance().cancelAllWorkByTag(JOB_TAG);
 //        WorkManager mWorkManager = WorkManager.getInstance();
 //        mWorkManager.cancelAllWork();
     }
