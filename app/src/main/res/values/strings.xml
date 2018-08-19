@@ -37,4 +37,5 @@
     <string name="no_download_available">Content not downloaded yet</string>
     <string name="new_content_awailable">New content available!</string>
     <string name="completed">Completed</string>
+    <string name="clear_all">clear all</string>
 </resources>

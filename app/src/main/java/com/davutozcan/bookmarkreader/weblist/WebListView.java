@@ -11,6 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -51,6 +54,7 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
         fapCloseAnimation = AnimationUtils.loadAnimation(getContext() , R.anim.fab_close );
         if(binding == null)
         {
+            setHasOptionsMenu(true);
             this.binding = DataBindingUtil.inflate(inflater , layout.website_list_fragment , container , false );
             this.recyclerView = (RecyclerView) binding.getRoot().findViewById(id.web_site_list_fragment);
             recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
@@ -108,6 +112,7 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
         Stream.of(webSiteInfos).forEach(o->o.setItemClickListener(this::onItemClicked));
         adapter.setItems(webSiteInfos);
         toolbar.setTitle(model.getFilterString());
+        getActivity().invalidateOptionsMenu();
     }
 
     private void onItemClicked(WebListRowModel wlrm) {
@@ -129,6 +134,31 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
         super.onPause();
         model.getIsFabOpened().set(false);
         adapter.onPause();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.weblist_menu, menu);
+        MenuItem item = menu.findItem(id.action_clear_all);
+        if(model.getFilter() != WebListViewModel.Filter.UNREAD)
+            item.setVisible(false);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == id.action_clear_all)
+        {
+            Log.i(getClass().getSimpleName(), "onOptionsItemSelected: ");
+            return true;
+        }
+        else
+            return super.onOptionsItemSelected(item);
     }
 
 }
