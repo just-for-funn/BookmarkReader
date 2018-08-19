@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.annimon.stream.Stream;
+import com.davutozcan.bookmarkreader.MainActivity;
 import com.davutozcan.bookmarkreader.R;
 import com.davutozcan.bookmarkreader.article.ArticleDetailView;
 import com.davutozcan.bookmarkreader.databinding.WebsiteListFragmentBinding;
@@ -39,6 +41,7 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
     WebsiteListFragmentBinding binding;
     private WebListViewModel model;
     private WebListViewFragmentAdapter adapter;
+    private Toolbar toolbar;
 
     @Nullable
     @Override
@@ -61,6 +64,7 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
             this.adapter = new WebListViewFragmentAdapter( Collections.<WebListRowModel>emptyList());
             recyclerView.setAdapter(adapter);
             this.binding.setModel(model);
+            this.toolbar = getActivity().findViewById(R.id.toolBar);
         }
         return binding.getRoot();
     }
@@ -103,6 +107,7 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
     public void onListChanged(List<WebListRowModel> webSiteInfos) {
         Stream.of(webSiteInfos).forEach(o->o.setItemClickListener(this::onItemClicked));
         adapter.setItems(webSiteInfos);
+        toolbar.setTitle(model.getFilterString());
     }
 
     private void onItemClicked(WebListRowModel wlrm) {

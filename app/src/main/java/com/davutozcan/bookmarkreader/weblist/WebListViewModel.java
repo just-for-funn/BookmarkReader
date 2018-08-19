@@ -24,6 +24,8 @@ import static com.davutozcan.bookmarkreader.weblist.WebListViewModel.Filter.UNRE
 
 public class WebListViewModel
 {
+
+
     static enum Filter
     {
         READ, UNREAD,ALL
@@ -148,6 +150,22 @@ public class WebListViewModel
             rowElements.add(rm);
         }
         return rowElements;
+    }
+    public String getFilterString() {
+        switch (getFilter())
+        {
+            case ALL:
+                return myApp().getString(R.string.all);
+            case READ:
+                return myApp().getString(R.string.read);
+            case UNREAD:
+                return myApp().getString(R.string.unread);
+            default:
+                throw new RuntimeException("invalid filter");
+        }
+    }
+    public Filter getFilter() {
+        return filter;
     }
 
     static interface IWebListView

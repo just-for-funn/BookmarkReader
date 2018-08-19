@@ -29,11 +29,12 @@
     <string name="logs">Logs</string>
     <string name="download">Download</string>
     <string name="edit">Edit</string>
-    <string name="unread">Unread</string>
-    <string name="read">Read</string>
+    <string name="unread">New</string>
+    <string name="read">Completed</string>
     <string name="all">All</string>
     <string name="switch_article">Switch Article</string>
     <string name="url_added">Url added</string>
     <string name="no_download_available">Content not downloaded yet</string>
     <string name="new_content_awailable">New content available!</string>
+    <string name="completed">Completed</string>
 </resources>

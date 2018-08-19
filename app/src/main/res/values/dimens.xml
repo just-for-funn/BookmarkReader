@@ -11,7 +11,7 @@
     <dimen name="fab_small_height">40dp</dimen>
     <dimen name="fab_menu_margin">10dp</dimen>
     <dimen name="design_fab_image_size" tools:override="true">36dp</dimen>
-    <dimen name="fab_text_width">70dp</dimen>
+    <dimen name="fab_text_width">100dp</dimen>
     <dimen name="arc_land_small_height">85dp</dimen>
     <dimen name="article_text_size">20dp</dimen>
     <dimen name="fab_text_size">17dp</dimen>
