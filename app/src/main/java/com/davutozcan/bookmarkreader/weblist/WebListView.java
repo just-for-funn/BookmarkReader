@@ -110,6 +110,7 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
     @Override
     public void onListChanged(List<WebListRowModel> webSiteInfos) {
         Stream.of(webSiteInfos).forEach(o->o.setItemClickListener(this::onItemClicked));
+        adapter.setSwipeEnabled(WebListViewModel.Filter.UNREAD == model.getFilter());
         adapter.setItems(webSiteInfos);
         toolbar.setTitle(model.getFilterString());
         getActivity().invalidateOptionsMenu();
