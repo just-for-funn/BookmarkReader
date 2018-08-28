@@ -155,6 +155,7 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
         if(item.getItemId() == id.action_clear_all)
         {
             Log.i(getClass().getSimpleName(), "onOptionsItemSelected: ");
+            model.markAllRead();
             return true;
         }
         else

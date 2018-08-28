@@ -14,6 +14,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Observable;
 
 import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplication.myApp;
 import static com.davutozcan.bookmarkreader.weblist.WebListViewModel.Filter.UNREAD;
@@ -24,7 +25,6 @@ import static com.davutozcan.bookmarkreader.weblist.WebListViewModel.Filter.UNRE
 
 public class WebListViewModel
 {
-
 
     static enum Filter
     {
@@ -166,6 +166,19 @@ public class WebListViewModel
     }
     public Filter getFilter() {
         return filter;
+    }
+    public void markAllRead() {
+        this.isBusy.set(true);
+        io.reactivex.Observable.fromArray(webSiteInfos)
+                .doOnNext(o->{
+                    for (WebUnit m:o) {
+                        myApp().getWebunitService().markRead(m.getUrl());
+                    }
+                })
+                .subscribe(o->{
+                    this.isBusy.set(false);
+                    reload();
+                });
     }
 
     static interface IWebListView
