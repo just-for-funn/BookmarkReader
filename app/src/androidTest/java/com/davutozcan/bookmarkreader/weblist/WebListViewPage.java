@@ -22,6 +22,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.davutozcan.bookmarkreader.assertions.AsyncExtensions.invokeUntill;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -51,7 +52,7 @@ public class WebListViewPage
     }
 
     public WebListViewPage assertUrlDisplaying(String url) {
-        AsyncExtensions.invokeUntill(()-> onView(withText(url)).check(matches(isDisplayed())));
+        invokeUntill(()-> onView(withText(url)).check(matches(isDisplayed())));
         return this;
     }
 
@@ -72,7 +73,7 @@ public class WebListViewPage
     }
 
     public WebListViewPage assertNotContentDisplaying() {
-         onView(withText("Nothing to read")).check(matches(isDisplayed()));
+          invokeUntill(()->         onView(withText("Nothing to read")).check(matches(isDisplayed())));
          return this;
     }
     public WebListViewPage assertErrorDisplaying(int stringResourceId) {
