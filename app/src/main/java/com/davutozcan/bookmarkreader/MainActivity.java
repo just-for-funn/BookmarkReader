@@ -1,15 +1,23 @@
 package com.davutozcan.bookmarkreader;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.davutozcan.bookmarkreader.menu.INavigator;
 import com.davutozcan.bookmarkreader.sync.MyJopScheduler;
+import com.davutozcan.bookmarkreader.util.AppConstants;
+import com.davutozcan.bookmarkreader.util.Logger;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 
 
 public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
@@ -107,4 +115,28 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         super.onPause();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Logger.i("onActivityResult-> "+ resultCode);
+        if(requestCode == AppConstants.RC_SIGN_IN)
+        {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            SettingsFragment sf = (SettingsFragment)getSupportFragmentManager().findFragmentByTag(TAG_SETTINGS_FRAGMENT);
+            sf.getModel().isLogined.set(true);
+            sf.getModel().userName.set(account.getDisplayName());
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Logger.w("signInResult:failed code=" + e.getStatusCode());
+            Log.e("BookMarkReader" , "signinfailed" , e);
+        }catch (Exception e){
+            Logger.e("Error during processing sign in" , e.getMessage());
+        }
+    }
 }

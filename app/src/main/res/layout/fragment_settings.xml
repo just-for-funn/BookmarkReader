@@ -5,6 +5,7 @@
             name="model"
             type="com.davutozcan.bookmarkreader.SettingsFragmentModel" >
         </variable>
+        <import type="android.view.View"/>
     </data>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
@@ -34,6 +35,14 @@
                 android:layout_marginLeft="@dimen/settings_horizontal_margin"
                 android:text="@{model.userName}"
                 style="@style/settings_user_name"
+                android:visibility="@{ model.isLogined ? View.VISIBLE:View.GONE }"
+                />
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/sign_in_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:visibility="@{ model.isLogined ? View.GONE:View.VISIBLE }"
                 />
         </LinearLayout>
         <LinearLayout

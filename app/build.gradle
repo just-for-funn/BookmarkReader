@@ -3,7 +3,7 @@ android {
     compileSdkVersion 27
     buildToolsVersion '26.0.2'
     defaultConfig {
-        applicationId "com.codezilla.bookmarkreader"
+        applicationId "com.davutozcan.bookmarkreader"
         minSdkVersion 22
         targetSdkVersion 26
         versionCode 1
@@ -76,6 +76,7 @@ dependencies {
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
     implementation "android.arch.work:work-runtime:1.0+"
     implementation 'ru.rambler.android:swipe-layout:1.0.15'
+    implementation 'com.google.android.gms:play-services-auth:16.0.0'
 }
 
 apply plugin: 'kotlin-android'

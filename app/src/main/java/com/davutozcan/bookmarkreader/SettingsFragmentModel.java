@@ -1,10 +1,12 @@
 package com.davutozcan.bookmarkreader;
 
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 
 import com.davutozcan.bookmarkreader.login.User;
 import com.davutozcan.bookmarkreader.menu.INavigator;
 import com.davutozcan.bookmarkreader.menu.MenuItemModel;
+import com.davutozcan.bookmarkreader.util.Logger;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +18,11 @@ import java.util.List;
 public class SettingsFragmentModel {
     INavigator navigator;
     private final MenuItemHandler menuItemHandler;
+    ObservableField<String> name = new ObservableField<>("initial");
+    ObservableField<String> userName = new ObservableField<>("Login to display name");
+
+    public final ObservableBoolean isLogined = new ObservableBoolean(false);
+
     public SettingsFragmentModel(INavigator navigator) {
         this.navigator = navigator;
         menuItemHandler = new MenuItemHandler(navigator);
@@ -35,8 +42,6 @@ public class SettingsFragmentModel {
         return name;
     }
 
-    ObservableField<String> name = new ObservableField<String>("initial");
-
     public ObservableField<String> getUserName() {
         return userName;
     }
@@ -45,8 +50,6 @@ public class SettingsFragmentModel {
         this.userName = userName;
     }
 
-    ObservableField<String> userName = new ObservableField<String>("Login To Syncronize");
-
     public void loadFrom(User user)
     {
         getUserName().set(user.getName()+" "+user.getSurname());
@@ -54,7 +57,9 @@ public class SettingsFragmentModel {
 
 
     public List<MenuItemModel> menuItems;
-
+    public void doLogin(){
+        Logger.e("do Login clicked");
+    }
     static class MenuItemHandler implements MenuItemModel.MenuItemClickListener
     {
 
