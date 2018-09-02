@@ -47,6 +47,7 @@ public class SettingsFragment extends Fragment {
             this.binding =  FragmentSettingsBinding.inflate(inflater , container , false);
             binding.setModel(new SettingsFragmentModel(navigator));
             SignInButton signInButton = binding.getRoot().findViewById(R.id.sign_in_button);
+            signInButton.setSize(SignInButton.SIZE_WIDE);
             signInButton.setOnClickListener(o->this.signInClicked(o));
         }
         return binding.getRoot();
