@@ -14,6 +14,7 @@ public class GoogleSignInHelper {
     public static void requestSignIn(Activity activity ) {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+                .requestProfile()
                 .build();
         GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(activity, gso);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();

@@ -17,10 +17,12 @@ import com.davutozcan.bookmarkreader.google_sign_in.GoogleSignInHelper;
 import com.davutozcan.bookmarkreader.login.User;
 import com.davutozcan.bookmarkreader.menu.INavigator;
 import com.davutozcan.bookmarkreader.util.Logger;
+import com.davutozcan.bookmarkreader.util.SessionManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
+import com.squareup.picasso.Picasso;
 
 import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplication.userService;
 
@@ -70,7 +72,8 @@ public class SettingsFragment extends Fragment {
         super.onViewStateRestored(savedInstanceState);
         if(binding != null)
         {
-            binding.getModel().loadFrom(userService().getLastLoginedUser());
+            //binding.getModel().loadFrom(userService().getLastLoginedUser());
+            loadLogin();
         }
     }
 
@@ -80,5 +83,15 @@ public class SettingsFragment extends Fragment {
 
     public SettingsFragmentModel getModel(){
         return this.binding.getModel();
+    }
+
+    public void loadLogin() {
+        SessionManager sessionManager = new SessionManager(getActivity());
+        String loginedUser = sessionManager.getStringDataByKey(SessionManager.Keys.GMAIL_USER_NAME);
+        if(loginedUser != null){
+            binding.getModel().isLogined.set(true);
+            binding.getModel().userName.set(loginedUser);
+            binding.getModel().imageUrl.set(sessionManager.getStringDataByKey(SessionManager.Keys.GMAIL_PHOTO_URL) );
+        }
     }
 }

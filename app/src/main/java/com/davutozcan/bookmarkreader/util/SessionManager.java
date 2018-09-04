@@ -25,7 +25,7 @@ public class SessionManager {
     }
 
     public String getStringDataByKey(String key) {
-        return pref.getString(key, "");
+        return pref.getString(key, null);
     }
 
     public int getIntegerDataByKey(String key) {
@@ -39,5 +39,11 @@ public class SessionManager {
     public void setBooleanDataByKey(String key, boolean isTrue) {
         editor.putBoolean(key, isTrue);
         editor.commit();
+    }
+
+    public static class Keys{
+
+        public static final String GMAIL_USER_NAME = "GMAIL_USER_NAME";
+        public static final String GMAIL_PHOTO_URL = "GMAIL_PHOTO_URL";
     }
 }

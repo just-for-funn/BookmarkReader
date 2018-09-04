@@ -1,15 +1,25 @@
 package com.davutozcan.bookmarkreader;
 
+import android.databinding.BindingAdapter;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
+import android.net.Uri;
+import android.util.Log;
+import android.widget.ImageView;
 
 import com.davutozcan.bookmarkreader.login.User;
 import com.davutozcan.bookmarkreader.menu.INavigator;
 import com.davutozcan.bookmarkreader.menu.MenuItemModel;
 import com.davutozcan.bookmarkreader.util.Logger;
+import com.davutozcan.bookmarkreader.weblist.UrlImageLoader;
+import com.jakewharton.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by davut on 28.02.2017.
@@ -18,10 +28,11 @@ import java.util.List;
 public class SettingsFragmentModel {
     INavigator navigator;
     private final MenuItemHandler menuItemHandler;
-    ObservableField<String> name = new ObservableField<>("initial");
-    ObservableField<String> userName = new ObservableField<>("Login to display name");
-
+    public final ObservableField<String> userName = new ObservableField<>("Login to display name");
     public final ObservableBoolean isLogined = new ObservableBoolean(false);
+    public final ObservableField<String> imageUrl = new ObservableField<>();
+    public List<MenuItemModel> menuItems;
+
 
     public SettingsFragmentModel(INavigator navigator) {
         this.navigator = navigator;
@@ -34,32 +45,17 @@ public class SettingsFragmentModel {
         );
     }
 
-    public void setName(ObservableField<String> name) {
-        this.name = name;
-    }
 
-    public ObservableField<String> getName() {
-        return name;
-    }
 
     public ObservableField<String> getUserName() {
         return userName;
     }
 
-    public void setUserName(ObservableField<String> userName) {
-        this.userName = userName;
-    }
-
-    public void loadFrom(User user)
-    {
-        getUserName().set(user.getName()+" "+user.getSurname());
-    }
 
 
-    public List<MenuItemModel> menuItems;
-    public void doLogin(){
-        Logger.e("do Login clicked");
-    }
+
+
+
     static class MenuItemHandler implements MenuItemModel.MenuItemClickListener
     {
 
@@ -90,5 +86,18 @@ public class SettingsFragmentModel {
             }
 
         }
+    }
+
+    @BindingAdapter({"bind:imageUrl"})
+    public static void loadImage(ImageView view, final String imageUrl)
+    {
+        Picasso picasso = new Picasso.Builder(view.getContext())
+                .listener((picasso1, uri, exception) -> Logger.e("onImageLoadFailed: "+uri.toString()+", "+exception.getMessage() ))
+                .downloader(new OkHttp3Downloader(view.getContext()))
+                .build();
+        picasso.load(imageUrl)
+                .placeholder(R.drawable.circular_user)
+                .error(R.drawable.circular_user)
+                .into(view);
     }
 }

@@ -14,6 +14,7 @@ import com.davutozcan.bookmarkreader.menu.INavigator;
 import com.davutozcan.bookmarkreader.sync.MyJopScheduler;
 import com.davutozcan.bookmarkreader.util.AppConstants;
 import com.davutozcan.bookmarkreader.util.Logger;
+import com.davutozcan.bookmarkreader.util.SessionManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
@@ -31,9 +32,11 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     INavigator navigator;
+    SessionManager sessionManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sessionManager = new SessionManager(this);
         setContentView(R.layout.activity_main);
         drawerLayout = (DrawerLayout) findViewById(R.id.main_drawer);
         toolbar = (Toolbar)findViewById(R.id.toolBar);
@@ -127,9 +130,10 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            sessionManager.setStringDataByKey(SessionManager.Keys.GMAIL_USER_NAME , account.getDisplayName());
+            sessionManager.setStringDataByKey(SessionManager.Keys.GMAIL_PHOTO_URL, account.getPhotoUrl().toString() );
             SettingsFragment sf = (SettingsFragment)getSupportFragmentManager().findFragmentByTag(TAG_SETTINGS_FRAGMENT);
-            sf.getModel().isLogined.set(true);
-            sf.getModel().userName.set(account.getDisplayName());
+            sf.loadLogin();
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.

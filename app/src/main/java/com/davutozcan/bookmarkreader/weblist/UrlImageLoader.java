@@ -19,7 +19,7 @@ import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplicatio
  * Created by davut on 8/1/2017.
  */
 
-class UrlImageLoader {
+public class UrlImageLoader {
     final static String TAG = UrlImageLoader.class.getSimpleName();
     private final ImageView view;
     private final String imageUrl;
