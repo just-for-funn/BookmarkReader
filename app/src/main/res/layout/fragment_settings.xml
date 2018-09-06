@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="model"
@@ -13,7 +14,7 @@
         android:layout_height="match_parent"
         android:padding="0dp"
         android:background="@color/colorPrimaryLight">
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="175dp"
             android:orientation="vertical"
@@ -23,28 +24,37 @@
                android:layout_height="100dp"
                android:layout_marginTop="@dimen/settings_horizontal_margin"
                android:layout_marginLeft="@dimen/settings_horizontal_margin"
-               android:layout_centerInParent="true"
+               android:layout_alignParentTop="true"
+               android:layout_alignParentLeft="true"
                app:imageUrl="@{model.imageUrl}"
+               android:src="@drawable/circular_user"
                app:civ_border_color="@color/colorImageBorder"
                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginBottom="@dimen/settings_vertical_margin"
+                android:layout_marginBottom="@dimen/settings_horizontal_margin"
                 android:layout_marginLeft="@dimen/settings_horizontal_margin"
                 android:text="@{model.userName}"
                 style="@style/settings_user_name"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
                 android:visibility="@{ model.isLogined ? View.VISIBLE:View.GONE }"
+                tools:text="Albert Einstein"
                 />
             <com.google.android.gms.common.SignInButton
                 android:id="@+id/sign_in_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="@dimen/settings_vertical_margin"
+                android:layout_marginLeft="@dimen/settings_horizontal_margin"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
                 android:visibility="@{ model.isLogined ? View.GONE:View.VISIBLE }"
+                tools:visibility="gone"
                 />
-        </LinearLayout>
+        </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

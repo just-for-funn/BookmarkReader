@@ -91,6 +91,11 @@ public class SettingsFragmentModel {
     @BindingAdapter({"bind:imageUrl"})
     public static void loadImage(ImageView view, final String imageUrl)
     {
+        if(imageUrl == null || imageUrl.length() == 0)
+        {
+            view.setImageResource(R.drawable.circular_user);
+            return;
+        }
         Picasso picasso = new Picasso.Builder(view.getContext())
                 .listener((picasso1, uri, exception) -> Logger.e("onImageLoadFailed: "+uri.toString()+", "+exception.getMessage() ))
                 .downloader(new OkHttp3Downloader(view.getContext()))
