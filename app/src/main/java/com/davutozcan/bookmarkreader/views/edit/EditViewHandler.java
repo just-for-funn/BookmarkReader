@@ -49,6 +49,7 @@ public class EditViewHandler {
 
             }
         });
+
         dialog.show(editFragment.getFragmentManager() , ADD_NEW_FRAGMENT_DIALOG);
     }
 

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -33,7 +34,7 @@ public class SubmitCancelDialog extends DialogFragment
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         createView();
-        return new AlertDialog.Builder(getContext())
+        return new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.alert_dialog))
                 .setTitle(R.string.add_new)
                 .setMessage(" ")
                 .setView(view)
@@ -49,6 +50,7 @@ public class SubmitCancelDialog extends DialogFragment
                         onclickListener.onCancel(view);
                     }
                 })
+
                 .create();
     }
 
