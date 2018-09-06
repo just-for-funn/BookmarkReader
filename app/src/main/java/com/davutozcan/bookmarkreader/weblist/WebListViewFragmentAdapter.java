@@ -1,9 +1,15 @@
 package com.davutozcan.bookmarkreader.weblist;
 
+import android.databinding.DataBindingUtil;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.annimon.stream.Stream;
 import com.davutozcan.bookmarkreader.R;
 import com.davutozcan.bookmarkreader.bindings.recyclerview.BaseArrayListAdapter;
+import com.davutozcan.bookmarkreader.bindings.recyclerview.DataBindedViewHolder;
 import com.davutozcan.bookmarkreader.databinding.RowDataViewBinding;
 
 import java.util.HashMap;
@@ -14,6 +20,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import ru.rambler.libs.swipe_layout.SwipeLayout;
 
 import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplication.myApp;
 
@@ -24,6 +31,15 @@ class WebListViewFragmentAdapter extends BaseArrayListAdapter<RowDataViewBinding
 {
     private Disposable disposable;
     Map<String , String> cachedSummaries  = new HashMap<>();
+    boolean swipeEnabled = false;
+
+    public boolean isSwipeEnabled() {
+        return swipeEnabled;
+    }
+
+    public void setSwipeEnabled(boolean swipeEnabled) {
+        this.swipeEnabled = swipeEnabled;
+    }
 
     public WebListViewFragmentAdapter(List<WebListRowModel> rowElements) {
         super(rowElements);
@@ -69,5 +85,53 @@ class WebListViewFragmentAdapter extends BaseArrayListAdapter<RowDataViewBinding
 
     public void onPause() {
         disposeBackgroundJob();
+    }
+
+    @Override
+    public DataBindedViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        RowDataViewBinding binding = DataBindingUtil.inflate(layoutInflater, getLayoutId(), parent, false);
+        SwipeLayout swipeLayout = binding.getRoot().findViewById(R.id.row_view_swipe_layout);
+        //swipeLayout.reset();
+        swipeLayout.setOnSwipeListener(new SwipeLayout.OnSwipeListener() {
+            @Override
+            public void onBeginSwipe(SwipeLayout swipeLayout, boolean moveToRight) {
+            }
+
+            @Override
+            public void onSwipeClampReached(SwipeLayout swipeLayout, boolean moveToRight) {
+                if(isSwipeEnabled()) {
+                    Toast.makeText(swipeLayout.getContext(), binding.getModel().title.get() + " marked read!!",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                    removeByTitle(binding.getModel().title.get());
+                }
+                swipeLayout.reset();
+            }
+
+            @Override
+            public void onLeftStickyEdge(SwipeLayout swipeLayout, boolean moveToRight) {
+            }
+
+            @Override
+            public void onRightStickyEdge(SwipeLayout swipeLayout, boolean moveToRight) {
+            }
+        });
+        //swipeLayout.setSwipeEnabled(isSwipeEnabled());
+        return new DataBindedViewHolder<>(binding);
+    }
+
+    private void removeByTitle(String title) {
+        Observable.just(title)
+                .doOnNext(o->myApp().getWebunitService().markRead(title))
+                .map(t ->
+                        Stream.of(getItems()).filter(item->item.title.get().equals(t))
+                                .findFirst()
+                                .orElse(null))
+                .subscribe(o->{
+                    if(o!=null)
+                        getItems().remove(o);
+                        notifyDataSetChanged();
+                });
     }
 }

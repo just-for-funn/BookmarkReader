@@ -8,14 +8,19 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import com.annimon.stream.Stream;
+import com.davutozcan.bookmarkreader.MainActivity;
 import com.davutozcan.bookmarkreader.R;
 import com.davutozcan.bookmarkreader.article.ArticleDetailView;
 import com.davutozcan.bookmarkreader.databinding.WebsiteListFragmentBinding;
@@ -39,6 +44,7 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
     WebsiteListFragmentBinding binding;
     private WebListViewModel model;
     private WebListViewFragmentAdapter adapter;
+    private Toolbar toolbar;
 
     @Nullable
     @Override
@@ -48,6 +54,7 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
         fapCloseAnimation = AnimationUtils.loadAnimation(getContext() , R.anim.fab_close );
         if(binding == null)
         {
+            setHasOptionsMenu(true);
             this.binding = DataBindingUtil.inflate(inflater , layout.website_list_fragment , container , false );
             this.recyclerView = (RecyclerView) binding.getRoot().findViewById(id.web_site_list_fragment);
             recyclerView.setLayoutManager(new LinearLayoutManager(container.getContext()));
@@ -61,6 +68,7 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
             this.adapter = new WebListViewFragmentAdapter( Collections.<WebListRowModel>emptyList());
             recyclerView.setAdapter(adapter);
             this.binding.setModel(model);
+            this.toolbar = getActivity().findViewById(R.id.toolBar);
         }
         return binding.getRoot();
     }
@@ -102,7 +110,10 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
     @Override
     public void onListChanged(List<WebListRowModel> webSiteInfos) {
         Stream.of(webSiteInfos).forEach(o->o.setItemClickListener(this::onItemClicked));
+        adapter.setSwipeEnabled(WebListViewModel.Filter.UNREAD == model.getFilter());
         adapter.setItems(webSiteInfos);
+        toolbar.setTitle(model.getFilterString());
+        getActivity().invalidateOptionsMenu();
     }
 
     private void onItemClicked(WebListRowModel wlrm) {
@@ -124,6 +135,32 @@ public class WebListView extends Fragment implements WebListViewModel.IWebListVi
         super.onPause();
         model.getIsFabOpened().set(false);
         adapter.onPause();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.weblist_menu, menu);
+        MenuItem item = menu.findItem(id.action_clear_all);
+        if(model.getFilter() != WebListViewModel.Filter.UNREAD)
+            item.setVisible(false);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == id.action_clear_all)
+        {
+            Log.i(getClass().getSimpleName(), "onOptionsItemSelected: ");
+            model.markAllRead();
+            return true;
+        }
+        else
+            return super.onOptionsItemSelected(item);
     }
 
 }

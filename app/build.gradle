@@ -1,9 +1,9 @@
 apply plugin: 'com.android.application'
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion '26.0.2'
     defaultConfig {
-        applicationId "com.codezilla.bookmarkreader"
+        applicationId "com.davutozcan.bookmarkreader"
         minSdkVersion 22
         targetSdkVersion 26
         versionCode 1
@@ -32,10 +32,10 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:support-v4:26.1.0'
+    implementation 'com.android.support:support-v4:27.1.1'
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:26+'
-    compile 'com.android.support:design:26+'
+    compile 'com.android.support:appcompat-v7:27+'
+    compile 'com.android.support:design:27+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
@@ -74,6 +74,9 @@ dependencies {
 
     // Firebase job dispatcher
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
+    implementation "android.arch.work:work-runtime:1.0+"
+    implementation 'ru.rambler.android:swipe-layout:1.0.15'
+    implementation 'com.google.android.gms:play-services-auth:16.0.0'
 }
 
 apply plugin: 'kotlin-android'

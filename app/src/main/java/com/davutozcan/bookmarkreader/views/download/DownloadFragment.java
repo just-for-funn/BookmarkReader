@@ -4,6 +4,8 @@ import android.databinding.DataBindingUtil;
 import android.databinding.Observable;
 import android.databinding.ObservableField;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -59,7 +61,7 @@ public class DownloadFragment extends Fragment
         field.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
-                runOnUiThread(()->arcTotal.setProgress(field.get()));
+                    runOnUiThread(()->arcTotal.setProgress(field.get()));
             }
         });
     }
@@ -75,15 +77,15 @@ public class DownloadFragment extends Fragment
 
     void runOnUiThread(Runnable runnable)
     {
-        getActivity().runOnUiThread(runnable);
+        new Handler(Looper.getMainLooper()).post(runnable);
     }
 
     @Override
     public void onPause() {
-        super.onPause();
         if(binding != null)
         {
             binding.getHandler().stopDownload(binding.getRoot());
         }
+        super.onPause();
     }
 }

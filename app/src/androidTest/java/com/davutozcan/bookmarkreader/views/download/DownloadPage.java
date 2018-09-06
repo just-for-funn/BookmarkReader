@@ -21,6 +21,7 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.davutozcan.bookmarkreader.assertions.AsyncExtensions.invokeUntill;
 import static org.awaitility.Awaitility.await;
 
 /**
@@ -40,7 +41,7 @@ public class DownloadPage {
 
     public DownloadPage assertCompletedCount(int count)
     {
-        onView(withId(R.id.arc_total)).check(ViewAssertions.matches(arcProcess(count)));
+        invokeUntill(()->onView(withId(R.id.arc_total)).check(ViewAssertions.matches(arcProcess(count))));
         return this;
     }
 
@@ -62,7 +63,7 @@ public class DownloadPage {
     }
 
     public DownloadPage assertNewCount(int count) {
-        onView(withId(R.id.arc_new)).check(ViewAssertions.matches(arcProcess(count)));
+        invokeUntill(()->        onView(withId(R.id.arc_new)).check(ViewAssertions.matches(arcProcess(count))));
         return this;
     }
 
@@ -72,7 +73,7 @@ public class DownloadPage {
     }
 
     public DownloadPage assertTotalCount(int count) {
-        onView(withId(R.id.arc_total)).check(ViewAssertions.matches(arcProcess(count)));
+        invokeUntill(()->        onView(withId(R.id.arc_total)).check(ViewAssertions.matches(arcProcess(count))));
         return this;
     }
 
@@ -88,7 +89,7 @@ public class DownloadPage {
 
     public DownloadPage assertText(String txt)
     {
-        onView(withText(txt)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        invokeUntill(()->        onView(withText(txt)).check(ViewAssertions.matches(ViewMatchers.isDisplayed())));
         return this;
     }
 }
