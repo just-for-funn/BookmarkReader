@@ -52,6 +52,7 @@ public class SettingsFragment extends Fragment {
             binding.setModel(new SettingsFragmentModel(navigator));
             SignInButton signInButton = binding.getRoot().findViewById(R.id.sign_in_button);
             signInButton.setSize(SignInButton.SIZE_WIDE);
+            signInButton.setColorScheme(SignInButton.COLOR_DARK);
             signInButton.setOnClickListener(o->this.signInClicked(o));
         }
         return binding.getRoot();

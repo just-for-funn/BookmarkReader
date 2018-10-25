@@ -26,7 +26,7 @@
                android:layout_marginLeft="@dimen/settings_horizontal_margin"
                android:layout_alignParentTop="true"
                android:layout_alignParentLeft="true"
-               app:imageUrl="@{model.imageUrl}"
+               app:profilePicture="@{model.imageUrl}"
                android:src="@drawable/circular_user"
                app:civ_border_color="@color/colorImageBorder"
                />

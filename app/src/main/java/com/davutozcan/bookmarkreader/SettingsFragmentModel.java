@@ -88,7 +88,7 @@ public class SettingsFragmentModel {
         }
     }
 
-    @BindingAdapter({"bind:imageUrl"})
+    @BindingAdapter({"bind:profilePicture"})
     public static void loadImage(ImageView view, final String imageUrl)
     {
         if(imageUrl == null || imageUrl.length() == 0)

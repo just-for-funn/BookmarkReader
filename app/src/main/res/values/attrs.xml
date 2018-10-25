@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="customAttrs">
         <attr name="imageUrl" format="string" />
+        <attr name="profilePicture" format="string" />
         <attr name="webContent" format="string" />
         <attr name="base_url" format="string" />
         <attr name="menuitems" format="reference"/>
