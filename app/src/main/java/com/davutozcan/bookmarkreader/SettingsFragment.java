@@ -37,8 +37,10 @@ public class SettingsFragment extends Fragment {
     public SettingsFragment() {
     }
 
-    public SettingsFragment(INavigator navigator) {
-        this.navigator = navigator;
+    public static SettingsFragment settingsFragment(INavigator navigator) {
+        SettingsFragment fragment = new SettingsFragment();
+        fragment.setNavigator(navigator);
+        return fragment;
     }
 
     @Nullable

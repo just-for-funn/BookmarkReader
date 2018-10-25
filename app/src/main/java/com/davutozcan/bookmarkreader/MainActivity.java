@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.davutozcan.bookmarkreader.menu.INavigator;
 import com.davutozcan.bookmarkreader.sync.MyJopScheduler;
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         if(sf == null)
         {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.settings_container , new SettingsFragment(navigator) , TAG_SETTINGS_FRAGMENT)
+                    .replace(R.id.settings_container , SettingsFragment.settingsFragment(navigator) , TAG_SETTINGS_FRAGMENT)
                     .commit();
         }else
             sf.setNavigator(navigator);
@@ -134,13 +135,11 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
             sessionManager.setStringDataByKey(SessionManager.Keys.GMAIL_PHOTO_URL, account.getPhotoUrl().toString() );
             SettingsFragment sf = (SettingsFragment)getSupportFragmentManager().findFragmentByTag(TAG_SETTINGS_FRAGMENT);
             sf.loadLogin();
-        } catch (ApiException e) {
+        } catch (Exception e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Logger.w("signInResult:failed code=" + e.getStatusCode());
-            Log.e("BookMarkReader" , "signinfailed" , e);
-        }catch (Exception e){
-            Logger.e("Error during processing sign in" , e.getMessage());
+            Log.e("BookMarkReader" , "google sign in failed" , e);
+            Toast.makeText(this , "Cannot login" , Toast.LENGTH_SHORT);
         }
     }
 }

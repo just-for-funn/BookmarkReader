@@ -19,12 +19,19 @@ import com.davutozcan.bookmarkreader.domainmodel.WebUnitContentUpdater;
 import com.davutozcan.bookmarkreader.summary.HtmlComparerImp;
 
 import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 
 import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplication.myApp;
 
 public class BackgroundWorker extends Worker {
+
     private WebUnitContentUpdater contentUpdater;
     static final String TAG = BackgroundWorker.class.getSimpleName();
+
+    public BackgroundWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+        super(context, workerParams);
+    }
+
     @NonNull
     @Override
     public Result doWork() {
