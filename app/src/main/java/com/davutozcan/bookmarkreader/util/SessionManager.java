@@ -45,5 +45,9 @@ public class SessionManager {
 
         public static final String GMAIL_USER_NAME = "GMAIL_USER_NAME";
         public static final String GMAIL_PHOTO_URL = "GMAIL_PHOTO_URL";
+        public static final String GOOGLE_ID = "GOOGLE_ID";
+        public static final String EMAIL = "EMAIL";
+        public static final String SURNAME = "SURNAME";
+
     }
 }

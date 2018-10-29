@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.davutozcan.bookmarkreader.menu.INavigator;
+import com.davutozcan.bookmarkreader.sync.BackgroundTasks;
 import com.davutozcan.bookmarkreader.sync.MyJopScheduler;
 import com.davutozcan.bookmarkreader.util.AppConstants;
 import com.davutozcan.bookmarkreader.util.Logger;
@@ -19,7 +20,10 @@ import com.davutozcan.bookmarkreader.util.SessionManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.util.Strings;
 import com.google.android.gms.tasks.Task;
+
+import kotlin.text.StringsKt;
 
 
 public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
@@ -116,7 +120,17 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     @Override
     protected void onPause() {
         new MyJopScheduler(getApplicationContext()).schedule();
+        if(islogined()) {
+            BackgroundTasks.scheduleUpload(this);
+        }
         super.onPause();
+    }
+
+    private boolean islogined() {
+        String gmailId = sessionManager.getStringDataByKey(SessionManager.Keys.GOOGLE_ID);
+        if(gmailId == null || gmailId.length() == 0)
+            return false;
+        return true;
     }
 
     @Override
@@ -133,6 +147,9 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             sessionManager.setStringDataByKey(SessionManager.Keys.GMAIL_USER_NAME , account.getDisplayName());
             sessionManager.setStringDataByKey(SessionManager.Keys.GMAIL_PHOTO_URL, account.getPhotoUrl().toString() );
+            sessionManager.setStringDataByKey( SessionManager.Keys.GOOGLE_ID , account.getId());
+            sessionManager.setStringDataByKey( SessionManager.Keys.EMAIL , account.getEmail());
+            sessionManager.setStringDataByKey( SessionManager.Keys.SURNAME , account.getFamilyName());
             SettingsFragment sf = (SettingsFragment)getSupportFragmentManager().findFragmentByTag(TAG_SETTINGS_FRAGMENT);
             sf.loadLogin();
         } catch (Exception e) {
