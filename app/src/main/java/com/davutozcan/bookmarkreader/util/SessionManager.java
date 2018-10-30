@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.annimon.stream.Optional;
 import com.davutozcan.bookmarkreader.R;
+
 
 
 public class SessionManager {
@@ -39,6 +41,10 @@ public class SessionManager {
     public void setBooleanDataByKey(String key, boolean isTrue) {
         editor.putBoolean(key, isTrue);
         editor.commit();
+    }
+
+    public Optional<String> gmailId(){
+        return Optional.ofNullable(getStringDataByKey(SessionManager.Keys.GOOGLE_ID));
     }
 
     public static class Keys{

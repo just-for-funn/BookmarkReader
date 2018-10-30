@@ -4,8 +4,16 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.arch.lifecycle.ViewModel;
+import android.content.Context;
 
+import com.annimon.stream.Optional;
 import com.davutozcan.bookmarkreader.MainActivity;
+import com.davutozcan.bookmarkreader.backend.User;
+import com.davutozcan.bookmarkreader.util.Logger;
+import com.davutozcan.bookmarkreader.util.SessionManager;
+
+
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -14,14 +22,17 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplication.myApp;
+import static com.davutozcan.bookmarkreader.backend.BackendSyncronizationService.backendService;
 
 public class SplashViewModel extends ViewModel implements LifecycleObserver {
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private SplashContacts.IView view;
+    private Context context;
 
-    public void setView(SplashContacts.IView view) {
+    public void init(SplashContacts.IView view , Context context) {
         this.view = view;
+        this.context = context;
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -29,6 +40,7 @@ public class SplashViewModel extends ViewModel implements LifecycleObserver {
         Disposable d = Completable.fromAction(() -> perform())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                //.timeout(5000 , TimeUnit.MILLISECONDS)
                 .subscribe(() -> view.onLoadFinished(MainActivity.class),
                         throwable -> view.onLoadFailed(throwable));
 
@@ -41,17 +53,42 @@ public class SplashViewModel extends ViewModel implements LifecycleObserver {
     }
 
     private void perform() {
+        long now = System.currentTimeMillis();
+        try
+        {
+            SessionManager sessionManager = new SessionManager(context);
+            Optional<String> gmailId = sessionManager.gmailId();
+            if(gmailId.isPresent())
+                loadFromBackend(gmailId.get());
+        }catch (Exception e)
+        {
+            Logger.e("Cannot get data from backend");
+            Logger.e(e.getMessage());
+        }finally {
+            long current = System.currentTimeMillis();
+            long required = 1000 - (current - now );
+            if(required > 0)
+                doWait(required);
+        }
+    }
+
+    private void doWait(long required) {
         try {
-            if(!myApp().getState().isAppInitlized())
-            {
-                initWebSites();
-                myApp().getState().saveAppInitilized(true);
-            }
-            Thread.sleep(500);
+            Thread.sleep(required);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
+
+    private void loadFromBackend(String gmailID) {
+        Logger.i("Starting to load from server -> " + gmailID);
+        User user = backendService().loadFromServerSync(gmailID , context);
+        Logger.i("Received user has " + user.getBookmarks().size() + " urls");
+        UserSyncronizationHelper helper = new UserSyncronizationHelper(myApp().getWebunitService());
+        helper.syncronize(user);
+    }
+
+
 
     private void initWebSites() {
         addWebUnit("https://developers.google.com/training/android/");

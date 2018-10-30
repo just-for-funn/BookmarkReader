@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.annimon.stream.Optional;
 import com.davutozcan.bookmarkreader.menu.INavigator;
 import com.davutozcan.bookmarkreader.sync.BackgroundTasks;
 import com.davutozcan.bookmarkreader.sync.MyJopScheduler;
@@ -22,6 +23,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.util.Strings;
 import com.google.android.gms.tasks.Task;
+
 
 import kotlin.text.StringsKt;
 
@@ -127,8 +129,8 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     }
 
     private boolean islogined() {
-        String gmailId = sessionManager.getStringDataByKey(SessionManager.Keys.GOOGLE_ID);
-        if(gmailId == null || gmailId.length() == 0)
+        Optional<String> gmailId = sessionManager.gmailId();
+        if(!gmailId.isPresent())
             return false;
         return true;
     }

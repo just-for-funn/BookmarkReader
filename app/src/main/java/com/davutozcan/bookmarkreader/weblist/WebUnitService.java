@@ -17,4 +17,6 @@ public interface WebUnitService
     void markRead(String url);
     List<WebUnit> getReadWebSites();
     String getSummaryFor(String url);
+
+    void remove(String url);
 }

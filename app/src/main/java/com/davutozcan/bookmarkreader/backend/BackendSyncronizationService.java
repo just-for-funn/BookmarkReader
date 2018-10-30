@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.davutozcan.bookmarkreader.util.Logger;
 
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -31,5 +33,14 @@ public class BackendSyncronizationService {
                 Logger.e(t.getMessage());
             }
         });
+    }
+
+    public User loadFromServerSync(String gmailId , Context context){
+        BookmarkReaderService service = BackendHttpClient.create(context);
+        try {
+            return service.get(gmailId).execute().body();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

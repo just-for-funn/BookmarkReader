@@ -94,6 +94,11 @@ public class WebunitServiceImp implements WebUnitService {
         return getSummaryFrom(wu);
     }
 
+    @Override
+    public void remove(String url) {
+        realmFacade.remove(url);
+    }
+
     private String getSummaryFrom(WebUnit webUnit) {
         try{
             if(webUnit.getLatestContent() == null)
