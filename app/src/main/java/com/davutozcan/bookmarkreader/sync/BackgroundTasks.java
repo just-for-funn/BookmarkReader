@@ -2,16 +2,20 @@ package com.davutozcan.bookmarkreader.sync;
 
 import android.content.Context;
 
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Stream;
 import com.davutozcan.bookmarkreader.backend.BookmarkReaderService;
 import com.davutozcan.bookmarkreader.backend.Result;
 import com.davutozcan.bookmarkreader.backend.SslUtils;
 import com.davutozcan.bookmarkreader.backend.User;
+import com.davutozcan.bookmarkreader.domainmodel.WebUnit;
 import com.davutozcan.bookmarkreader.util.Logger;
 import com.davutozcan.bookmarkreader.util.SessionManager;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
@@ -21,6 +25,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplication.myApp;
 
 public class BackgroundTasks {
     public static void scheduleUpload(Context context){
@@ -83,6 +89,11 @@ public class BackgroundTasks {
         user.setEmail(sessionManager.getStringDataByKey(SessionManager.Keys.EMAIL));
         user.setSurname(sessionManager.getStringDataByKey(SessionManager.Keys.SURNAME));
         user.setBookmarks(new ArrayList<>());
+
+        List<String> urls = Stream.of(myApp().getWebunitService().getWebSitesInfos())
+                .map(WebUnit::getUrl)
+                .collect(Collectors.toList());
+        user.setBookmarks(urls);
         return user;
     }
 }
