@@ -1,4 +1,7 @@
-package com.davutozcan.bookmarkreader.backend;
+package com.davutozcan.bookmarkreader.backend.imp;
+
+import com.davutozcan.bookmarkreader.backend.Result;
+import com.davutozcan.bookmarkreader.backend.User;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -13,4 +16,7 @@ public interface BookmarkReaderService {
 
     @GET("users/{googleId}")
     Call<User> get(@Path("googleId") String googleId);
+
+    @POST("users/{googleId}")
+    Call<User> addBookmarks(@Path("googleId")String googleId);
 }

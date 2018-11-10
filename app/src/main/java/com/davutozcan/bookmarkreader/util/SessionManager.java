@@ -43,6 +43,13 @@ public class SessionManager {
         editor.commit();
     }
 
+    private boolean islogined() {
+        Optional<String> gmailId = gmailId();
+        if(!gmailId.isPresent())
+            return false;
+        return true;
+    }
+
     public Optional<String> gmailId(){
         return Optional.ofNullable(getStringDataByKey(SessionManager.Keys.GOOGLE_ID));
     }

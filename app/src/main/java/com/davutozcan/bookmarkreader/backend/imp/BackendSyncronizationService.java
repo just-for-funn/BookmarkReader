@@ -1,7 +1,10 @@
-package com.davutozcan.bookmarkreader.backend;
+package com.davutozcan.bookmarkreader.backend.imp;
 
 import android.content.Context;
 
+import com.davutozcan.bookmarkreader.backend.IBookmarkReaderService;
+import com.davutozcan.bookmarkreader.backend.Result;
+import com.davutozcan.bookmarkreader.backend.User;
 import com.davutozcan.bookmarkreader.util.Logger;
 
 import java.io.IOException;
@@ -9,14 +12,14 @@ import java.io.IOException;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-public class BackendSyncronizationService {
+public class BackendSyncronizationService implements IBookmarkReaderService {
     private static final BackendSyncronizationService ourInstance = new BackendSyncronizationService();
 
     public static BackendSyncronizationService backendService() {
         return ourInstance;
     }
 
-    private BackendSyncronizationService() {
+    public BackendSyncronizationService() {
     }
 
     public void sendToServer(User user , Context context){

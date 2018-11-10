@@ -13,8 +13,6 @@ import com.davutozcan.bookmarkreader.util.Logger;
 import com.davutozcan.bookmarkreader.util.SessionManager;
 
 
-import java.util.concurrent.TimeUnit;
-
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -22,7 +20,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplication.myApp;
-import static com.davutozcan.bookmarkreader.backend.BackendSyncronizationService.backendService;
+import static com.davutozcan.bookmarkreader.backend.imp.BackendSyncronizationService.backendService;
 
 public class SplashViewModel extends ViewModel implements LifecycleObserver {
 

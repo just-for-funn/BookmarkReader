@@ -11,9 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.annimon.stream.Optional;
 import com.davutozcan.bookmarkreader.menu.INavigator;
-import com.davutozcan.bookmarkreader.sync.BackgroundTasks;
 import com.davutozcan.bookmarkreader.sync.MyJopScheduler;
 import com.davutozcan.bookmarkreader.util.AppConstants;
 import com.davutozcan.bookmarkreader.util.Logger;
@@ -21,11 +19,7 @@ import com.davutozcan.bookmarkreader.util.SessionManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.util.Strings;
 import com.google.android.gms.tasks.Task;
-
-
-import kotlin.text.StringsKt;
 
 
 public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
@@ -122,17 +116,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     @Override
     protected void onPause() {
         new MyJopScheduler(getApplicationContext()).schedule();
-        if(islogined()) {
-            BackgroundTasks.scheduleUpload(this);
-        }
         super.onPause();
-    }
-
-    private boolean islogined() {
-        Optional<String> gmailId = sessionManager.gmailId();
-        if(!gmailId.isPresent())
-            return false;
-        return true;
     }
 
     @Override
