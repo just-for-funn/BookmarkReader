@@ -17,6 +17,6 @@ public interface WebUnitService
     void markRead(String url);
     List<WebUnit> getReadWebSites();
     String getSummaryFor(String url);
-
+    List<String> getBookmarks();
     void remove(String url);
 }

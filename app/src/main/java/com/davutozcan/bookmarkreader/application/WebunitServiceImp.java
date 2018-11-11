@@ -1,5 +1,7 @@
 package com.davutozcan.bookmarkreader.application;
 
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Stream;
 import com.davutozcan.bookmarkreader.R;
 import com.davutozcan.bookmarkreader.domainmodel.Change;
 import com.davutozcan.bookmarkreader.domainmodel.IArticleExtractor;
@@ -7,6 +9,7 @@ import com.davutozcan.bookmarkreader.domainmodel.IWebUnitRepository;
 import com.davutozcan.bookmarkreader.domainmodel.WebUnit;
 import com.davutozcan.bookmarkreader.exception.RecordExistsException;
 import com.davutozcan.bookmarkreader.weblist.WebUnitService;
+
 
 import java.util.List;
 
@@ -92,6 +95,14 @@ public class WebunitServiceImp implements WebUnitService {
     {
         WebUnit wu = realmFacade.getWebUnit(url);
         return getSummaryFrom(wu);
+    }
+
+    @Override
+    public List<String> getBookmarks() {
+        //TODO pls replace this with a more performing one.
+        return Stream.of(this.getWebSitesInfos())
+                .map(WebUnit::getUrl)
+                .collect(Collectors.toList());
     }
 
     @Override

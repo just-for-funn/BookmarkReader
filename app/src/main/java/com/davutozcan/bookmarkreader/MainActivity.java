@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.davutozcan.bookmarkreader.backend.IBookmarkReaderService;
 import com.davutozcan.bookmarkreader.menu.INavigator;
 import com.davutozcan.bookmarkreader.sync.MyJopScheduler;
 import com.davutozcan.bookmarkreader.util.AppConstants;
@@ -22,6 +23,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplication.myApp;
+import static com.davutozcan.bookmarkreader.backend.CreateNewUserTask.createNewUserTask;
 import static com.davutozcan.bookmarkreader.util.GmailUser.fromGmailAccount;
 
 
@@ -135,6 +138,9 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             GmailUser user = fromGmailAccount(account);
+            createNewUserTask(IBookmarkReaderService.newInstance() , this )
+                    .execute(user , ()->myApp().getWebunitService().getBookmarks() )
+                    .subscribe(o-> Logger.e("User send to backend"));
             sessionManager.save(user);
             SettingsFragment sf = (SettingsFragment)getSupportFragmentManager().findFragmentByTag(TAG_SETTINGS_FRAGMENT);
             sf.loadLogin();
