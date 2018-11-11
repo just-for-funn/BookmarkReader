@@ -1,30 +1,21 @@
 package com.davutozcan.bookmarkreader;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.davutozcan.bookmarkreader.application.BookmarkReaderApplication;
-import com.davutozcan.bookmarkreader.databinding.*;
+import com.annimon.stream.Optional;
 import com.davutozcan.bookmarkreader.databinding.FragmentSettingsBinding;
 import com.davutozcan.bookmarkreader.google_sign_in.GoogleSignInHelper;
-import com.davutozcan.bookmarkreader.login.User;
 import com.davutozcan.bookmarkreader.menu.INavigator;
+import com.davutozcan.bookmarkreader.util.GmailUser;
 import com.davutozcan.bookmarkreader.util.Logger;
 import com.davutozcan.bookmarkreader.util.SessionManager;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
-import com.squareup.picasso.Picasso;
 
-import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplication.userService;
 
 /**
  * Created by davut on 28.02.2017.
@@ -90,11 +81,11 @@ public class SettingsFragment extends Fragment {
 
     public void loadLogin() {
         SessionManager sessionManager = new SessionManager(getActivity());
-        String loginedUser = sessionManager.getStringDataByKey(SessionManager.Keys.GMAIL_USER_NAME);
-        if(loginedUser != null){
+        Optional<GmailUser> loginedUser= sessionManager.getUser();
+        if(loginedUser.isPresent()){
             binding.getModel().isLogined.set(true);
-            binding.getModel().userName.set(loginedUser);
-            binding.getModel().imageUrl.set(sessionManager.getStringDataByKey(SessionManager.Keys.GMAIL_PHOTO_URL) );
+            binding.getModel().userName.set(loginedUser.get().getName()+" "+loginedUser.get().getSurname());
+            binding.getModel().imageUrl.set(loginedUser.get().getPhotoUrl());
         }
     }
 }

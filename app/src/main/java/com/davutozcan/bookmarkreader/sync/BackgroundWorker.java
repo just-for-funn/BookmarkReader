@@ -47,7 +47,7 @@ public class BackgroundWorker extends Worker {
                             IUpdateListener.NULL));
             contentUpdater.updateAll();
             Log.i("BackgroundWorker", "Background updater task finished");
-            if(isCancelled() || isStopped())
+            if(isStopped())
                 return Result.RETRY;
             notifyUnreadContent(()->getApplicationContext());
             return Result.SUCCESS;
@@ -61,7 +61,7 @@ public class BackgroundWorker extends Worker {
     }
 
     @Override
-    public void onStopped(boolean cancelled) {
+    public void onStopped() {
         if(this.contentUpdater!= null)
             this.contentUpdater.stop();
     }

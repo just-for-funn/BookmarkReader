@@ -7,6 +7,11 @@ import android.content.SharedPreferences.Editor;
 import com.annimon.stream.Optional;
 import com.davutozcan.bookmarkreader.R;
 
+import static com.davutozcan.bookmarkreader.util.GmailUser.EMAIL;
+import static com.davutozcan.bookmarkreader.util.GmailUser.GMAIL_PHOTO_URL;
+import static com.davutozcan.bookmarkreader.util.GmailUser.GMAIL_USER_NAME;
+import static com.davutozcan.bookmarkreader.util.GmailUser.GOOGLE_ID;
+import static com.davutozcan.bookmarkreader.util.GmailUser.SURNAME;
 
 
 public class SessionManager {
@@ -30,37 +35,25 @@ public class SessionManager {
         return pref.getString(key, null);
     }
 
-    public int getIntegerDataByKey(String key) {
-        return pref.getInt(key, 0);
+    public void save(GmailUser user){
+        this.setStringDataByKey(GMAIL_USER_NAME , user.getName());
+        this.setStringDataByKey( SURNAME , user.getSurname());
+        this.setStringDataByKey(GMAIL_PHOTO_URL, user.getPhotoUrl() );
+        this.setStringDataByKey( GOOGLE_ID , user.getGoogleId());
+        this.setStringDataByKey( EMAIL , user.email);
     }
 
-    public boolean getBooleanDataByKey(String key) {
-        return pref.getBoolean(key, false);
-    }
 
-    public void setBooleanDataByKey(String key, boolean isTrue) {
-        editor.putBoolean(key, isTrue);
-        editor.commit();
-    }
-
-    private boolean islogined() {
-        Optional<String> gmailId = gmailId();
-        if(!gmailId.isPresent())
-            return false;
-        return true;
-    }
-
-    public Optional<String> gmailId(){
-        return Optional.ofNullable(getStringDataByKey(SessionManager.Keys.GOOGLE_ID));
-    }
-
-    public static class Keys{
-
-        public static final String GMAIL_USER_NAME = "GMAIL_USER_NAME";
-        public static final String GMAIL_PHOTO_URL = "GMAIL_PHOTO_URL";
-        public static final String GOOGLE_ID = "GOOGLE_ID";
-        public static final String EMAIL = "EMAIL";
-        public static final String SURNAME = "SURNAME";
-
+    public Optional<GmailUser> getUser(){
+        String googleId = getStringDataByKey(GOOGLE_ID);
+        if(googleId == null || googleId.length() == 0)
+            return Optional.empty();
+        GmailUser gmailUser = new GmailUser();
+        gmailUser.setGoogleId(googleId);
+        gmailUser.setName( getStringDataByKey(GMAIL_USER_NAME));
+        gmailUser.setSurname(getStringDataByKey(SURNAME));
+        gmailUser.setPhotoUrl(getStringDataByKey(GMAIL_PHOTO_URL) );
+        gmailUser.setEmail(getStringDataByKey(EMAIL));
+        return Optional.of(gmailUser);
     }
 }

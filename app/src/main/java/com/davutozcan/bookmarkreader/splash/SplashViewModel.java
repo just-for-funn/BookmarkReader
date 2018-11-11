@@ -9,6 +9,7 @@ import android.content.Context;
 import com.annimon.stream.Optional;
 import com.davutozcan.bookmarkreader.MainActivity;
 import com.davutozcan.bookmarkreader.backend.User;
+import com.davutozcan.bookmarkreader.util.GmailUser;
 import com.davutozcan.bookmarkreader.util.Logger;
 import com.davutozcan.bookmarkreader.util.SessionManager;
 
@@ -55,9 +56,9 @@ public class SplashViewModel extends ViewModel implements LifecycleObserver {
         try
         {
             SessionManager sessionManager = new SessionManager(context);
-            Optional<String> gmailId = sessionManager.gmailId();
+            Optional<GmailUser> gmailId = sessionManager.getUser();
             if(gmailId.isPresent())
-                loadFromBackend(gmailId.get());
+                loadFromBackend(gmailId.get().getGoogleId());
         }catch (Exception e)
         {
             Logger.e("Cannot get data from backend");

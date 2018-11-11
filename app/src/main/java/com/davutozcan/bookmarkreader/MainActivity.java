@@ -14,12 +14,15 @@ import android.widget.Toast;
 import com.davutozcan.bookmarkreader.menu.INavigator;
 import com.davutozcan.bookmarkreader.sync.MyJopScheduler;
 import com.davutozcan.bookmarkreader.util.AppConstants;
+import com.davutozcan.bookmarkreader.util.GmailUser;
 import com.davutozcan.bookmarkreader.util.Logger;
 import com.davutozcan.bookmarkreader.util.SessionManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+
+import static com.davutozcan.bookmarkreader.util.GmailUser.fromGmailAccount;
 
 
 public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
@@ -131,11 +134,8 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            sessionManager.setStringDataByKey(SessionManager.Keys.GMAIL_USER_NAME , account.getDisplayName());
-            sessionManager.setStringDataByKey(SessionManager.Keys.GMAIL_PHOTO_URL, account.getPhotoUrl().toString() );
-            sessionManager.setStringDataByKey( SessionManager.Keys.GOOGLE_ID , account.getId());
-            sessionManager.setStringDataByKey( SessionManager.Keys.EMAIL , account.getEmail());
-            sessionManager.setStringDataByKey( SessionManager.Keys.SURNAME , account.getFamilyName());
+            GmailUser user = fromGmailAccount(account);
+            sessionManager.save(user);
             SettingsFragment sf = (SettingsFragment)getSupportFragmentManager().findFragmentByTag(TAG_SETTINGS_FRAGMENT);
             sf.loadLogin();
         } catch (Exception e) {
