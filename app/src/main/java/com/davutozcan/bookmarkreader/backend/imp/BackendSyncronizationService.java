@@ -8,6 +8,7 @@ import com.davutozcan.bookmarkreader.backend.User;
 import com.davutozcan.bookmarkreader.util.Logger;
 
 import java.io.IOException;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,6 +43,17 @@ public class BackendSyncronizationService implements IBookmarkReaderService {
         BookmarkReaderService service = BackendHttpClient.create(context);
         try {
             return service.get(gmailId).execute().body();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public User addBookmark(String googleId, List<String> bookmark , Context context) {
+        Logger.i(String.format("Sending bookmark to backend[%s , %s]" , googleId , bookmark));
+        BookmarkReaderService service = BackendHttpClient.create(context);
+        try {
+            return service.addBookmarks(googleId , bookmark).execute().body();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

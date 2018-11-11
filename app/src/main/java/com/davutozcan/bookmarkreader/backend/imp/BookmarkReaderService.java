@@ -3,6 +3,8 @@ package com.davutozcan.bookmarkreader.backend.imp;
 import com.davutozcan.bookmarkreader.backend.Result;
 import com.davutozcan.bookmarkreader.backend.User;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -17,6 +19,6 @@ public interface BookmarkReaderService {
     @GET("users/{googleId}")
     Call<User> get(@Path("googleId") String googleId);
 
-    @POST("users/{googleId}")
-    Call<User> addBookmarks(@Path("googleId")String googleId);
+    @POST("users/{googleId}/bookmarks")
+    Call<User> addBookmarks(@Path("googleId")String googleId ,@Body List<String> bookmarks);
 }

@@ -4,11 +4,24 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.EditText;
 
+import com.annimon.stream.Optional;
 import com.davutozcan.bookmarkreader.R;
+import com.davutozcan.bookmarkreader.backend.AddBookmarkTask;
+import com.davutozcan.bookmarkreader.backend.IBookmarkReaderService;
 import com.davutozcan.bookmarkreader.dialog.SubmitCancelDialog;
 import com.davutozcan.bookmarkreader.exception.DomainException;
+import com.davutozcan.bookmarkreader.util.GmailUser;
+import com.davutozcan.bookmarkreader.util.Logger;
+import com.davutozcan.bookmarkreader.util.SessionManager;
+
+import java.util.Arrays;
+
+import androidx.work.impl.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplication.myApp;
+import static com.davutozcan.bookmarkreader.backend.AddBookmarkTask.addBookmarkTask;
 
 /**
  * Created by davut on 17.02.2018.
@@ -33,14 +46,12 @@ public class EditViewHandler {
                 try
                 {
                     editFragment.getModel().isBusy.set(true);
-                    EditText editText = (EditText) w.findViewById(R.id.txtUrl);
-                    myApp().getWebunitService().add(fixUrl(editText.getText().toString()));
+                    EditText editText = w.findViewById(R.id.txtUrl);
+                    EditViewHandler.this.addBookmark(editText.getText().toString());
                     editFragment.reload();
-                }catch (DomainException e)
+                }catch (Exception e)
                 {
-                    editFragment.getModel().isBusy.set(false);
-                    Snackbar.make(editFragment.getView(), e.getMsg(), Snackbar.LENGTH_LONG)
-                            .show();
+                   EditViewHandler.this.onFailed(e);
                 }
             }
 
@@ -51,6 +62,31 @@ public class EditViewHandler {
         });
 
         dialog.show(editFragment.getFragmentManager() , ADD_NEW_FRAGMENT_DIALOG);
+    }
+
+    private void addBookmark(String url) {
+        String fixedUrl = this.fixUrl(url);
+        SessionManager sessionManager = new SessionManager(myApp());
+        Optional<GmailUser> user = sessionManager.getUser();
+        if(user.isPresent()) {
+            addBookmarkTask(IBookmarkReaderService.newInstance() ,myApp() )
+                    .addBookmarks(user.get().getGoogleId() , Arrays.asList(fixedUrl))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(u-> myApp().getWebunitService().add(fixedUrl) , this::onFailed);
+        }else {
+            myApp().getWebunitService().add(fixedUrl);
+        }
+
+
+    }
+
+    private void onFailed(Throwable e) {
+        String message = e instanceof DomainException ? e.getMessage() : "Failed";
+        Logger.e(e.getMessage());
+        editFragment.getModel().isBusy.set(false);
+        Snackbar.make(editFragment.getView(), message, Snackbar.LENGTH_LONG)
+                .show();
     }
 
     private String fixUrl(String url) {
