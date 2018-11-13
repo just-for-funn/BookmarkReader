@@ -8,6 +8,7 @@ import com.annimon.stream.Optional;
 import com.davutozcan.bookmarkreader.R;
 import com.davutozcan.bookmarkreader.backend.AddBookmarkTask;
 import com.davutozcan.bookmarkreader.backend.IBookmarkReaderService;
+import com.davutozcan.bookmarkreader.backend.User;
 import com.davutozcan.bookmarkreader.dialog.SubmitCancelDialog;
 import com.davutozcan.bookmarkreader.exception.DomainException;
 import com.davutozcan.bookmarkreader.util.GmailUser;
@@ -17,7 +18,11 @@ import com.davutozcan.bookmarkreader.util.SessionManager;
 import java.util.Arrays;
 
 import androidx.work.impl.Scheduler;
+import io.reactivex.CompletableObserver;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.internal.operators.observable.ObservableAll;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.davutozcan.bookmarkreader.application.BookmarkReaderApplication.myApp;
@@ -66,19 +71,31 @@ public class EditViewHandler {
 
     private void addBookmark(String url) {
         String fixedUrl = this.fixUrl(url);
+
+        Observable.concat(this.sendToBackend(fixedUrl) , this.addUrlToLocal(fixedUrl) )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(u-> Logger.i("Url added "+fixedUrl) , this::onFailed);
+
+    }
+
+    private Observable<User> sendToBackend(String url) {
         SessionManager sessionManager = new SessionManager(myApp());
         Optional<GmailUser> user = sessionManager.getUser();
         if(user.isPresent()) {
-            addBookmarkTask(IBookmarkReaderService.newInstance() ,myApp() )
-                    .addBookmarks(user.get().getGoogleId() , Arrays.asList(fixedUrl))
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(u-> myApp().getWebunitService().add(fixedUrl) , this::onFailed);
+            return addBookmarkTask(IBookmarkReaderService.newInstance() ,myApp() )
+                    .addBookmarks(user.get().getGoogleId() , Arrays.asList(url));
         }else {
-            myApp().getWebunitService().add(fixedUrl);
+            return Observable.empty();
         }
+    }
 
 
+    Observable<Boolean> addUrlToLocal(String url){
+        return Observable.fromCallable(()->{
+            myApp().getWebunitService().add(url);
+            return true;
+        });
     }
 
     private void onFailed(Throwable e) {

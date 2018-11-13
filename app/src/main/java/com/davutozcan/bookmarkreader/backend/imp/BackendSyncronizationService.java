@@ -55,6 +55,7 @@ public class BackendSyncronizationService implements IBookmarkReaderService {
         try {
             return service.addBookmarks(googleId , bookmark).execute().body();
         } catch (IOException e) {
+            Logger.e(e);
             throw new RuntimeException(e);
         }
     }

@@ -5,6 +5,7 @@ import java.util.List;
 
 
 public class User {
+    String _id;
     String name;
     String surname;
     String googleId;

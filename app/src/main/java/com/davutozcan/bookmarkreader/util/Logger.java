@@ -15,6 +15,10 @@ public class Logger {
         LogIt(Log.ERROR, Tag, Msg);
     }
 
+    public static void e(Exception e) {
+      Log.e(TAG, e.getMessage() , e );
+    }
+
     public static void i(String Msg) {
         LogIt(Log.INFO, TAG, Msg);
     }

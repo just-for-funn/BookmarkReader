@@ -2,6 +2,8 @@ package com.davutozcan.bookmarkreader.backend;
 
 import android.content.Context;
 
+import com.davutozcan.bookmarkreader.exception.DomainException;
+
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -26,6 +28,10 @@ public class AddBookmarkTask {
     }
 
     private User doWork(String googleId, List<String> bookmarks) {
-        return service.addBookmark(googleId , bookmarks , this.context );
+        try{
+            return service.addBookmark(googleId , bookmarks , this.context );
+        }catch ( Exception e){
+            throw new DomainException("Cannot connect to internet");
+        }
     }
 }
