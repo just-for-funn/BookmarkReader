@@ -11,6 +11,8 @@ public interface IBookmarkReaderService {
     void sendToServer(User user , Context context);
     User loadFromServerSync(String gmailId , Context context);
     User addBookmark(String googleId , List<String> bookmark , Context context);
+    User deleteBookmarks(String googleId , List<String> bookmark , Context context);
+
     static IBookmarkReaderService newInstance(){
         return new BackendSyncronizationService();
     }

@@ -3,6 +3,7 @@ package com.davutozcan.bookmarkreader.views.edit;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,10 +15,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.annimon.stream.Optional;
 import com.davutozcan.bookmarkreader.R;
+import com.davutozcan.bookmarkreader.backend.IBookmarkReaderService;
 import com.davutozcan.bookmarkreader.databinding.FragmentEditBinding;
+import com.davutozcan.bookmarkreader.exception.DomainException;
+import com.davutozcan.bookmarkreader.util.GmailUser;
+import com.davutozcan.bookmarkreader.util.Logger;
+import com.davutozcan.bookmarkreader.util.SessionManager;
 
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
+import static com.davutozcan.bookmarkreader.backend.DeleteBookmarkTask.deleteBookmarkTask;
 
 
 public class EditFragment extends Fragment {
@@ -79,10 +92,44 @@ public class EditFragment extends Fragment {
 
     private void delete() {
         List<String> items =  this.listAdapter.getSelected();
-        model.remove(items);
-        listAdapter.setItems(model.urls);
-        listAdapter.notifyDataSetChanged();
+        this.model.isBusy.set(true);
+        Observable.concat(this.deleteFromBackend( items) , this.deleteLocal( items))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(()->{
+                    model.isBusy.set(false);
+                    listAdapter.setItems(model.urls);
+                    listAdapter.notifyDataSetChanged();
+                })
+                .subscribe(result-> {} , this::deleteFailed);
     }
+
+    private void deleteFailed(Throwable throwable) {
+        Logger.e(throwable);
+        String message  = throwable instanceof DomainException ? ((DomainException) throwable).getMsg() : "Delete failed";
+        Snackbar.make(this.getView() , message , Snackbar.LENGTH_SHORT ).show();
+    }
+
+    Observable<?> deleteLocal(List<String> items){
+        return Observable.fromCallable(()->{
+            model.remove(items);
+            return true;
+        });
+    }
+
+    Observable<?> deleteFromBackend(List<String > bookmarks){
+        SessionManager sessionManager = new SessionManager(this.getActivity());
+        Optional<GmailUser> gUser = sessionManager.getUser();
+        if(gUser.isPresent())
+        {
+            return deleteBookmarkTask(IBookmarkReaderService.newInstance() , this.getActivity())
+                    .doWork(gUser.get().getGoogleId() , bookmarks );
+        }else
+        {
+            return Observable.empty();
+        }
+    }
+
 
     public EditFragmentViewModel getModel() {
         return model;

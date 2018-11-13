@@ -7,7 +7,9 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -21,4 +23,7 @@ public interface BookmarkReaderService {
 
     @POST("users/{googleId}/bookmarks")
     Call<User> addBookmarks(@Path("googleId")String googleId ,@Body List<String> bookmarks);
+
+    @HTTP(method = "DELETE", path = "users/{googleId}/bookmarks", hasBody = true)
+    Call<User> deleteBookmarks(@Path("googleId")String googleId ,@Body List<String> bookmarks);
 }

@@ -59,4 +59,16 @@ public class BackendSyncronizationService implements IBookmarkReaderService {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public User deleteBookmarks(String googleId, List<String> bookmark, Context context) {
+        Logger.i(String.format("deleting bookmark to backend[%s , %s]" , googleId , bookmark));
+        BookmarkReaderService service = BackendHttpClient.create(context);
+        try {
+            return service.deleteBookmarks(googleId , bookmark).execute().body();
+        } catch (IOException e) {
+            Logger.e(e);
+            throw new RuntimeException(e);
+        }
+    }
 }
