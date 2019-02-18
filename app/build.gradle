@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.davutozcan.bookmarkreader"
         minSdkVersion 22
@@ -29,13 +29,16 @@ android {
         // but continue the build even when errors are found:
         abortOnError false
     }
+    dexOptions {
+        incremental true
+    }
 }
 
 dependencies {
     implementation 'com.android.support:support-v4:27.1.1'
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:27+'
-    compile 'com.android.support:design:27+'
+    compile 'com.android.support:appcompat-v7:27.1.1'
+    compile 'com.android.support:design:27.1.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
@@ -44,7 +47,7 @@ dependencies {
     compile 'com.annimon:stream:1.1.9'
     compile 'com.github.lzyzsd:circleprogress:1.2.1'
     // https://mvnrepository.com/artifact/com.googlecode.java-diff-utils/diffutils
-    compile group: 'com.googlecode.java-diff-utils', name: 'diffutils', version: '1.3.0'
+    compile 'com.googlecode.java-diff-utils:diffutils:1.3.0'
     compile project(path: ':domain')
     compile project(path: ':article')
     //Tests
@@ -61,20 +64,17 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
-    compile group: 'org.apache.commons', name: 'commons-text', version: '1.2'
-
+    compile 'org.apache.commons:commons-text:1.2'
     // RX2Java
     implementation 'io.reactivex.rxjava2:rxjava:2.1.17'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-
     // Arch components
-    implementation "android.arch.lifecycle:extensions:+"
+    implementation 'android.arch.lifecycle:extensions:+'
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:+"
-    implementation "androidx.lifecycle:lifecycle-common-java8:+"
-
+    implementation 'androidx.lifecycle:lifecycle-common-java8:+'
     // Firebase job dispatcher
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
-    implementation "android.arch.work:work-runtime:1.0+"
+    implementation 'android.arch.work:work-runtime:1.0+'
     implementation 'ru.rambler.android:swipe-layout:1.0.15'
     implementation 'com.google.android.gms:play-services-auth:16.0.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'

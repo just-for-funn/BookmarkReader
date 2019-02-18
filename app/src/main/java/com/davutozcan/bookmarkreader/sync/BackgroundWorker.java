@@ -48,15 +48,15 @@ public class BackgroundWorker extends Worker {
             contentUpdater.updateAll();
             Log.i("BackgroundWorker", "Background updater task finished");
             if(isStopped())
-                return Result.RETRY;
+                return Result.retry();
             notifyUnreadContent(()->getApplicationContext());
-            return Result.SUCCESS;
+            return Result.success();
         }
         catch (Exception e)
         {
             logRepository.error("Syncronization failed:"+e.getMessage());
             createNotification(()->getApplicationContext() , "Failure" , e.getLocalizedMessage());
-            return Result.RETRY;
+            return Result.retry();
         }
     }
 
